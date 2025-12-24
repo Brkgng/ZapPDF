@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		D48CA0052EFB500000C8D9A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D48C9FD62EFB1D9900C8D9A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D48C9FDD2EFB1D9900C8D9A1;
+			remoteInfo = ZapPDF;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		D48C9FDE2EFB1D9900C8D9A1 /* ZapPDF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZapPDF.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D48CA0012EFB500000C8D9A1 /* ZapPDFTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZapPDFTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +27,32 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		D48C9FEC2EFB22F000C8D9A1 /* Common */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Common;
+			sourceTree = "<group>";
+		};
+		D48C9FED2EFB22FE00C8D9A1 /* Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D48CA0102EFB500000C8D9A1 /* ZapPDFTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ZapPDFTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D48C9FDB2EFB1D9900C8D9A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D48CA0022EFB500000C8D9A1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -39,6 +72,7 @@
 				D48C9FED2EFB22FE00C8D9A1 /* Models */,
 				D48C9FEC2EFB22F000C8D9A1 /* Common */,
 				D48C9FE02EFB1D9900C8D9A1 /* App */,
+				D48CA0102EFB500000C8D9A1 /* ZapPDFTests */,
 				D48C9FDF2EFB1D9900C8D9A1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,26 +81,12 @@
 			isa = PBXGroup;
 			children = (
 				D48C9FDE2EFB1D9900C8D9A1 /* ZapPDF.app */,
+				D48CA0012EFB500000C8D9A1 /* ZapPDFTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D48C9FEC2EFB22F000C8D9A1 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				D48C9FF82EFB248400C8D9A1 /* Utils */,
-				D48C9FF72EFB247E00C8D9A1 /* Extensions */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
-		D48C9FED2EFB22FE00C8D9A1 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
+
 		D48C9FEE2EFB23F200C8D9A1 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,6 +186,8 @@
 			);
 			fileSystemSynchronizedGroups = (
 				D48C9FE02EFB1D9900C8D9A1 /* App */,
+				D48C9FEC2EFB22F000C8D9A1 /* Common */,
+				D48C9FED2EFB22FE00C8D9A1 /* Models */,
 			);
 			name = ZapPDF;
 			packageProductDependencies = (
@@ -173,6 +195,29 @@
 			productName = ZapPDF;
 			productReference = D48C9FDE2EFB1D9900C8D9A1 /* ZapPDF.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D48CA0002EFB500000C8D9A1 /* ZapPDFTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D48CA0072EFB500000C8D9A1 /* Build configuration list for PBXNativeTarget "ZapPDFTests" */;
+			buildPhases = (
+				D48CA0032EFB500000C8D9A1 /* Sources */,
+				D48CA0022EFB500000C8D9A1 /* Frameworks */,
+				D48CA0042EFB500000C8D9A1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D48CA0062EFB500000C8D9A1 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D48CA0102EFB500000C8D9A1 /* ZapPDFTests */,
+			);
+			name = ZapPDFTests;
+			packageProductDependencies = (
+			);
+			productName = ZapPDFTests;
+			productReference = D48CA0012EFB500000C8D9A1 /* ZapPDFTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -186,6 +231,10 @@
 				TargetAttributes = {
 					D48C9FDD2EFB1D9900C8D9A1 = {
 						CreatedOnToolsVersion = 26.2;
+					};
+					D48CA0002EFB500000C8D9A1 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = D48C9FDD2EFB1D9900C8D9A1;
 					};
 				};
 			};
@@ -204,12 +253,20 @@
 			projectRoot = "";
 			targets = (
 				D48C9FDD2EFB1D9900C8D9A1 /* ZapPDF */,
+				D48CA0002EFB500000C8D9A1 /* ZapPDFTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D48C9FDC2EFB1D9900C8D9A1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D48CA0042EFB500000C8D9A1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -226,7 +283,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D48CA0032EFB500000C8D9A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D48CA0062EFB500000C8D9A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D48C9FDD2EFB1D9900C8D9A1 /* ZapPDF */;
+			targetProxy = D48CA0052EFB500000C8D9A1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		D48C9FE72EFB1D9A00C8D9A1 /* Debug */ = {
@@ -441,6 +513,48 @@
 			};
 			name = Release;
 		};
+		D48CA0082EFB500000C8D9A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 894AUNHU54;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brkgng.ZapPDFTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ZapPDF.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ZapPDF";
+			};
+			name = Debug;
+		};
+		D48CA0092EFB500000C8D9A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 894AUNHU54;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brkgng.ZapPDFTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ZapPDF.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ZapPDF";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -458,6 +572,15 @@
 			buildConfigurations = (
 				D48C9FEA2EFB1D9A00C8D9A1 /* Debug */,
 				D48C9FEB2EFB1D9A00C8D9A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D48CA0072EFB500000C8D9A1 /* Build configuration list for PBXNativeTarget "ZapPDFTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D48CA0082EFB500000C8D9A1 /* Debug */,
+				D48CA0092EFB500000C8D9A1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -85,14 +85,14 @@
 - [x] Add entitlements (sandbox, file access)
 - [x] Configure build settings for Release/Debug
 
-### Phase 1: Core Models & Extensions
+### Phase 1: Core Models & Extensions ✅
 
-**Duration: 1-2 days**
+**Duration: 1-2 days** | Completed: 2024-12-24
 
-- [ ] `PDFFile.swift` – Identifiable wrapper for PDF URLs
-- [ ] `UserAction.swift` – Enum for merge/split/compress/convert
-- [ ] `URL+Security.swift` – Security-scoped resource helpers
-- [ ] `View+Modifiers.swift` – Shared view modifiers
+- [x] `PDFFile.swift` – Identifiable wrapper for PDF URLs
+- [x] `UserAction.swift` – Enum for merge/split/compress/convert
+- [x] `URL+Security.swift` – Security-scoped resource helpers
+- [x] `View+Modifiers.swift` – Shared view modifiers
 
 ### Phase 2: PDF Engine (Services)
 
