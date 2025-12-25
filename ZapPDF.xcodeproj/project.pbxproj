@@ -21,6 +21,18 @@
 		D48CA0012EFB500000C8D9A1 /* ZapPDFTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZapPDFTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D48CA0722EFDD25200C8D9A1 /* Exceptions for "Services" folder in "ZapPDF" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				PDFEngine/PDFEngineError.swift,
+				PDFEngine/PDFMerger.swift,
+				PDFEngine/PDFSplitter.swift,
+			);
+			target = D48C9FDD2EFB1D9900C8D9A1 /* ZapPDF */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D48C9FE02EFB1D9900C8D9A1 /* App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -40,6 +52,29 @@
 		D48CA0102EFB500000C8D9A1 /* ZapPDFTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ZapPDFTests;
+			sourceTree = "<group>";
+		};
+		D48CA06B2EFDD1EC00C8D9A1 /* Services */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D48CA0722EFDD25200C8D9A1 /* Exceptions for "Services" folder in "ZapPDF" target */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		D48CA06F2EFDD23A00C8D9A1 /* UI */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UI;
+			sourceTree = "<group>";
+		};
+		D48CA0702EFDD23C00C8D9A1 /* Monetization */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Monetization;
+			sourceTree = "<group>";
+		};
+		D48CA0712EFDD24100C8D9A1 /* ViewModels */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -65,10 +100,10 @@
 		D48C9FD52EFB1D9900C8D9A1 = {
 			isa = PBXGroup;
 			children = (
-				D48C9FF62EFB244900C8D9A1 /* Monetization */,
-				D48C9FF22EFB242600C8D9A1 /* UI */,
-				D48C9FEF2EFB240000C8D9A1 /* Services */,
-				D48C9FEE2EFB23F200C8D9A1 /* ViewModels */,
+				D48CA0702EFDD23C00C8D9A1 /* Monetization */,
+				D48CA06F2EFDD23A00C8D9A1 /* UI */,
+				D48CA06B2EFDD1EC00C8D9A1 /* Services */,
+				D48CA0712EFDD24100C8D9A1 /* ViewModels */,
 				D48C9FED2EFB22FE00C8D9A1 /* Models */,
 				D48C9FEC2EFB22F000C8D9A1 /* Common */,
 				D48C9FE02EFB1D9900C8D9A1 /* App */,
@@ -84,89 +119,6 @@
 				D48CA0012EFB500000C8D9A1 /* ZapPDFTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-
-		D48C9FEE2EFB23F200C8D9A1 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		D48C9FEF2EFB240000C8D9A1 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				D48C9FF12EFB241C00C8D9A1 /* Persistence */,
-				D48C9FF02EFB241100C8D9A1 /* PDFEngine */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		D48C9FF02EFB241100C8D9A1 /* PDFEngine */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = PDFEngine;
-			sourceTree = "<group>";
-		};
-		D48C9FF12EFB241C00C8D9A1 /* Persistence */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Persistence;
-			sourceTree = "<group>";
-		};
-		D48C9FF22EFB242600C8D9A1 /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				D48C9FF52EFB243D00C8D9A1 /* Representables */,
-				D48C9FF42EFB243500C8D9A1 /* Screens */,
-				D48C9FF32EFB242E00C8D9A1 /* Components */,
-			);
-			path = UI;
-			sourceTree = "<group>";
-		};
-		D48C9FF32EFB242E00C8D9A1 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		D48C9FF42EFB243500C8D9A1 /* Screens */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Screens;
-			sourceTree = "<group>";
-		};
-		D48C9FF52EFB243D00C8D9A1 /* Representables */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Representables;
-			sourceTree = "<group>";
-		};
-		D48C9FF62EFB244900C8D9A1 /* Monetization */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Monetization;
-			sourceTree = "<group>";
-		};
-		D48C9FF72EFB247E00C8D9A1 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		D48C9FF82EFB248400C8D9A1 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -422,12 +374,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = App/ZapPDF.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = "App/ZapPDF-iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = "App/ZapPDF-iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 894AUNHU54;
-				CODE_SIGN_ENTITLEMENTS = "App/ZapPDF.entitlements";
-				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = "App/ZapPDF-iOS.entitlements";
-				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = "App/ZapPDF-iOS.entitlements";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -470,12 +422,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = App/ZapPDF.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = "App/ZapPDF-iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = "App/ZapPDF-iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 894AUNHU54;
-				CODE_SIGN_ENTITLEMENTS = "App/ZapPDF.entitlements";
-				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = "App/ZapPDF-iOS.entitlements";
-				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = "App/ZapPDF-iOS.entitlements";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;

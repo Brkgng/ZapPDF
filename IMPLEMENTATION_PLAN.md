@@ -96,12 +96,12 @@
 
 ### Phase 2: PDF Engine (Services)
 
-**Duration: 3-5 days**
+**Duration: 3-5 days** | Completed: 2024-12-25
 
-- [ ] `PDFMerger.swift` – Combine multiple PDFs
-- [ ] `PDFSplitter.swift` – Extract page ranges
-- [ ] `PDFCompressor.swift` – Reduce file size via Quartz
-- [ ] `PDFRenderer.swift` – Thumbnail generation
+- [x] `PDFMerger.swift` – Combine multiple PDFs
+- [x] `PDFSplitter.swift` – Extract page ranges
+- [/] `PDFCompressor.swift` – Reduce file size via Quartz (Deferred)
+- [x] `PDFRenderer.swift` – Thumbnail generation
 
 ### Phase 3: Persistence & Usage Tracking
 
