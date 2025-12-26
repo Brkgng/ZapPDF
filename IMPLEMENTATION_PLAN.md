@@ -1,6 +1,6 @@
 # ZapPDF Implementation Plan
 
-> **Living Document** – Update as development progresses. Last updated: 2024-12-24
+> **Living Document** – Update as development progresses. Last updated: 2025-12-26
 
 ---
 
@@ -120,12 +120,13 @@
 
 ### Phase 5: UI Components
 
-**Duration: 3-4 days**
+**Duration: 3-4 days** | Completed: 2024-12-26
 
-- [ ] `FileDropZone.swift` – Drag & drop (macOS)
-- [ ] `PDFThumbnailView.swift` – Async thumbnail loading
-- [ ] `ActionButton.swift` – Styled action buttons
-- [ ] `PDFKitView.swift` – NSViewRepresentable/UIViewRepresentable
+- [x] `FileDropZone.swift` – Drag & drop (macOS)
+- [x] `PDFThumbnailView.swift` – Async thumbnail loading
+- [x] `ActionButton.swift` – Styled action buttons
+- [x] `PDFFileRow.swift` – List row component for PDF files
+- [x] `PDFKitView.swift` – NSViewRepresentable/UIViewRepresentable
 
 ### Phase 6: Screens
 
