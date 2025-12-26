@@ -28,6 +28,8 @@
 				PDFEngine/PDFEngineError.swift,
 				PDFEngine/PDFMerger.swift,
 				PDFEngine/PDFSplitter.swift,
+				Persistence/KeychainHelper.swift,
+				Persistence/UsageManager.swift,
 			);
 			target = D48C9FDD2EFB1D9900C8D9A1 /* ZapPDF */;
 		};

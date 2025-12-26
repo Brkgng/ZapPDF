@@ -105,10 +105,10 @@
 
 ### Phase 3: Persistence & Usage Tracking
 
-**Duration: 1-2 days**
+**Duration: 1-2 days** | Completed: 2024-12-25
 
-- [ ] `KeychainHelper.swift` – Secure storage wrapper
-- [ ] `UsageManager.swift` – Track/decrement free actions
+- [x] `KeychainHelper.swift` – Secure storage wrapper
+- [x] `UsageManager.swift` – Track/decrement free actions
 
 ### Phase 4: ViewModels
 
