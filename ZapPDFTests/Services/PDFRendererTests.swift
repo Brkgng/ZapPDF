@@ -17,7 +17,8 @@ struct PDFRendererTests {
     
     @Test("Generates thumbnail for valid PDF")
     func generatesThumbnailForValidPDF() async throws {
-        let url = try PDFTestHelpers.createTestPDF(pageCount: 1, identifier: "thumbnail_test")
+        let identifier = UUID().uuidString
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 1, identifier: "thumbnail_test_\(identifier)")
         defer { PDFTestHelpers.cleanup(url: url) }
         
         let renderer = PDFRenderer()
@@ -32,7 +33,8 @@ struct PDFRendererTests {
     
     @Test("Thumbnail has correct size")
     func thumbnailHasCorrectSize() async throws {
-        let url = try PDFTestHelpers.createTestPDF(pageCount: 1, identifier: "size_test")
+        let identifier = UUID().uuidString
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 1, identifier: "size_test_\(identifier)")
         defer { PDFTestHelpers.cleanup(url: url) }
         
         let renderer = PDFRenderer()
@@ -56,7 +58,8 @@ struct PDFRendererTests {
     
     @Test("Cached thumbnail returned on second call")
     func cachedThumbnailReturnedOnSecondCall() async throws {
-        let url = try PDFTestHelpers.createTestPDF(pageCount: 1, identifier: "cache_test")
+        let identifier = UUID().uuidString
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 1, identifier: "cache_test_\(identifier)")
         defer { PDFTestHelpers.cleanup(url: url) }
         
         let renderer = PDFRenderer()
@@ -81,7 +84,8 @@ struct PDFRendererTests {
     
     @Test("Clear cache removes cached thumbnails")
     func clearCacheRemovesCachedThumbnails() async throws {
-        let url = try PDFTestHelpers.createTestPDF(pageCount: 1, identifier: "clear_cache_test")
+        let identifier = UUID().uuidString
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 1, identifier: "clear_cache_test_\(identifier)")
         defer { PDFTestHelpers.cleanup(url: url) }
         
         let renderer = PDFRenderer()

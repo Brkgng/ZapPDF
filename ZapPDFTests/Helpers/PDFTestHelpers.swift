@@ -47,8 +47,9 @@ enum PDFTestHelpers {
     /// - Throws: Error if any PDF creation fails
     static func createTestPDFs(counts: [Int]) throws -> [URL] {
         var urls: [URL] = []
+        let runID = UUID().uuidString
         for (index, count) in counts.enumerated() {
-            let url = try createTestPDF(pageCount: count, identifier: "multi_\(index)")
+            let url = try createTestPDF(pageCount: count, identifier: "multi_\(runID)_\(index)")
             urls.append(url)
         }
         return urls

@@ -112,11 +112,11 @@
 
 ### Phase 4: ViewModels
 
-**Duration: 2-3 days**
+**Duration: 2-3 days** | Completed: 2024-12-26
 
-- [ ] `DashboardViewModel.swift` – File selection state
-- [ ] `ProcessingViewModel.swift` – Progress/cancellation
-- [ ] `PaywallViewModel.swift` – Purchase state
+- [x] `DashboardViewModel.swift` – File selection state
+- [x] `ProcessingViewModel.swift` – Progress/cancellation
+- [x] `PaywallViewModel.swift` – Purchase state
 
 ### Phase 5: UI Components
 

@@ -142,6 +142,7 @@
 				D48C9FE02EFB1D9900C8D9A1 /* App */,
 				D48C9FEC2EFB22F000C8D9A1 /* Common */,
 				D48C9FED2EFB22FE00C8D9A1 /* Models */,
+				D48CA0712EFDD24100C8D9A1 /* ViewModels */,
 			);
 			name = ZapPDF;
 			packageProductDependencies = (
