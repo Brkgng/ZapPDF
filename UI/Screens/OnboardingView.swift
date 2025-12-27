@@ -44,6 +44,80 @@ struct OnboardingPage: View {
     }
 }
 
+// MARK: - Page Indicator
+
+/// Custom page indicator dots for navigation.
+struct PageIndicator: View {
+    let pageCount: Int
+    @Binding var currentPage: Int
+    
+    var body: some View {
+        HStack(spacing: 8) {
+            ForEach(0..<pageCount, id: \.self) { index in
+                Circle()
+                    .fill(index == currentPage ? Color.accentColor : Color.secondary.opacity(0.5))
+                    .frame(width: 8, height: 8)
+                    .onTapGesture {
+                        withAnimation {
+                            currentPage = index
+                        }
+                    }
+            }
+        }
+    }
+}
+
+// MARK: - Navigation Controls
+
+/// Navigation controls for macOS onboarding.
+struct OnboardingNavigationControls: View {
+    let pageCount: Int
+    @Binding var currentPage: Int
+    let onComplete: () -> Void
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            // Previous button
+            Button {
+                withAnimation {
+                    currentPage = max(0, currentPage - 1)
+                }
+            } label: {
+                Label("Previous", systemImage: "chevron.left")
+            }
+            .disabled(currentPage == 0)
+            .opacity(currentPage == 0 ? 0.3 : 1)
+            
+            Spacer()
+            
+            // Page indicator
+            PageIndicator(pageCount: pageCount, currentPage: $currentPage)
+            
+            Spacer()
+            
+            // Next/Get Started button
+            if currentPage < pageCount - 1 {
+                Button {
+                    withAnimation {
+                        currentPage = min(pageCount - 1, currentPage + 1)
+                    }
+                } label: {
+                    Label("Next", systemImage: "chevron.right")
+                }
+            } else {
+                Button("Get Started") {
+                    onComplete()
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        }
+        .padding(.horizontal, 32)
+        .padding(.bottom, 24)
+    }
+}
+
+// MARK: - Final Page
+
 /// Final onboarding page with Get Started button.
 struct OnboardingFinalPage: View {
     let onComplete: () -> Void
@@ -73,7 +147,8 @@ struct OnboardingFinalPage: View {
             
             Spacer()
             
-            // Get Started Button
+            // Get Started Button (iOS only - macOS uses navigation controls)
+            #if os(iOS)
             Button {
                 onComplete()
             } label: {
@@ -87,6 +162,7 @@ struct OnboardingFinalPage: View {
             }
             .buttonStyle(.plain)
             .padding(.horizontal, 32)
+            #endif
             
             Spacer()
         }
@@ -191,7 +267,19 @@ struct OnboardingView: View {
                 .tabViewStyle(.page(indexDisplayMode: .always))
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
                 #endif
+                
+                // Navigation controls for macOS
+                #if os(macOS)
+                OnboardingNavigationControls(
+                    pageCount: Self.pageCount,
+                    currentPage: $currentPage,
+                    onComplete: completeOnboarding
+                )
+                #endif
             }
+            #if os(macOS)
+            .frame(minWidth: 700, minHeight: 500)
+            #endif
         }
     }
     
