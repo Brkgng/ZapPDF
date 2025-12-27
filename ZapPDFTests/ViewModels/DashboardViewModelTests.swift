@@ -9,53 +9,7 @@ import Testing
 import Foundation
 @testable import ZapPDF
 
-// MARK: - Mock UsageManager
 
-/// Mock UsageManager for testing ViewModels.
-actor MockUsageManager: UsageManaging {
-    var mockCanPerform: Bool = true
-    var mockRemaining: Int = 5
-    var recordActionCalled: Bool = false
-    var recordActionShouldFail: Bool = false
-    
-    func canPerformAction() async -> Bool {
-        mockCanPerform
-    }
-    
-    func remainingActions() async -> Int {
-        mockRemaining
-    }
-    
-    func recordAction() async throws {
-        recordActionCalled = true
-        if recordActionShouldFail {
-            throw UsageError.noActionsRemaining
-        }
-    }
-    
-    func setMockCanPerform(_ value: Bool) {
-        mockCanPerform = value
-    }
-    
-    func setMockRemaining(_ value: Int) {
-        mockRemaining = value
-    }
-    
-    func setRecordActionShouldFail(_ value: Bool) {
-        recordActionShouldFail = value
-    }
-    
-    func wasRecordActionCalled() -> Bool {
-        recordActionCalled
-    }
-    
-    func reset() {
-        mockCanPerform = true
-        mockRemaining = 5
-        recordActionCalled = false
-        recordActionShouldFail = false
-    }
-}
 
 @Suite("DashboardViewModel Tests")
 struct DashboardViewModelTests {
@@ -207,7 +161,7 @@ struct DashboardViewModelTests {
     @MainActor
     func shouldShowPaywallWhenExhausted() async throws {
         let mockUsageManager = MockUsageManager()
-        await mockUsageManager.setMockCanPerform(false)
+        await mockUsageManager.setMockRemaining(0)
         
         let viewModel = createViewModel(usageManager: mockUsageManager)
         
@@ -220,7 +174,7 @@ struct DashboardViewModelTests {
     @MainActor
     func shouldNotShowPaywallWhenActionsRemain() async throws {
         let mockUsageManager = MockUsageManager()
-        await mockUsageManager.setMockCanPerform(true)
+        await mockUsageManager.setMockRemaining(5)
         
         let viewModel = createViewModel(usageManager: mockUsageManager)
         

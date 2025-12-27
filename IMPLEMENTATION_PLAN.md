@@ -130,12 +130,12 @@
 
 ### Phase 6: Screens
 
-**Duration: 3-4 days**
+**Duration: 3-4 days** | Completed: 2024-12-27
 
-- [ ] `DashboardView.swift` – Main file picker UI
-- [ ] `ProcessingView.swift` – Progress + cancel
-- [ ] `PaywallView.swift` – Subscription UI
-- [ ] `OnboardingView.swift` – Privacy-first intro
+- [x] `DashboardView.swift` – Main file picker UI
+- [x] `ProcessingView.swift` – Progress + cancel
+- [x] `PaywallView.swift` – Subscription UI
+- [x] `OnboardingView.swift` – Privacy-first intro
 
 ### Phase 7: Monetization Integration
 
