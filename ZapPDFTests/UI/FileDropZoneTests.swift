@@ -29,7 +29,7 @@ final class FileDropZoneTests: XCTestCase {
         
         // Then
         XCTAssertTrue(dropZone.isEmpty)
-        XCTAssertEqual(dropZone.acceptedTypes, [.pdf])
+        XCTAssertEqual(dropZone.acceptedTypes, [.pdf, .fileURL])
     }
     
     func testCustomAcceptedTypes() {

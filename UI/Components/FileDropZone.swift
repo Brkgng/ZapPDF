@@ -46,8 +46,10 @@ struct FileDropZone: View {
     /// Callback when the file picker button is tapped.
     var onPickerRequested: () -> Void
     
-    /// Accepted file types (defaults to PDF only).
-    var acceptedTypes: [UTType] = [.pdf]
+    /// Accepted file types (defaults to PDF and generic file URLs).
+    /// Note: We include .fileURL to accept generic file drops from Finder,
+    /// and rely on handleDrop to filter for actual PDF files.
+    var acceptedTypes: [UTType] = [.pdf, .fileURL]
     
     // MARK: - Body
     
@@ -133,18 +135,40 @@ struct FileDropZone: View {
     // MARK: - Drop Handler
     
     private func handleDrop(urls: [URL]) {
-        // Filter to only PDF files
-        let pdfURLs = urls.filter { url in
-            guard let typeIdentifier = try? url.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier else {
-                // Fallback to extension check
-                return url.pathExtension.lowercased() == "pdf"
+        // Filter to only PDF files, handling URL normalization for Finder drops
+        let pdfURLs = urls.compactMap { url -> URL? in
+            // Normalize URL: Finder drops may include trailing slashes
+            // which cause pathExtension to return empty string
+            let normalizedURL: URL
+            if url.hasDirectoryPath {
+                // Remove trailing slash by reconstructing the URL
+                normalizedURL = URL(fileURLWithPath: url.path)
+            } else {
+                normalizedURL = url
             }
             
-            if let utType = UTType(typeIdentifier) {
-                return utType.conforms(to: .pdf)
+            // Primary check: file extension (fast, no security scope needed)
+            // This works for the vast majority of PDF files
+            if normalizedURL.pathExtension.lowercased() == "pdf" {
+                return normalizedURL
             }
             
-            return url.pathExtension.lowercased() == "pdf"
+            // Secondary check: use UTType via resourceValues
+            // This requires file access, so we need security scope
+            let didStartAccess = normalizedURL.startAccessingSecurityScopedResource()
+            defer {
+                if didStartAccess {
+                    normalizedURL.stopAccessingSecurityScopedResource()
+                }
+            }
+            
+            if let typeIdentifier = try? normalizedURL.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier,
+               let utType = UTType(typeIdentifier),
+               utType.conforms(to: .pdf) {
+                return normalizedURL
+            }
+            
+            return nil
         }
         
         if !pdfURLs.isEmpty {
@@ -180,24 +204,94 @@ private struct DropHandlerModifier: ViewModifier {
     
     #if os(macOS)
     private func handleProviders(_ providers: [NSItemProvider]) -> Bool {
+        let syncQueue = DispatchQueue(label: "com.zappdf.drophandler", attributes: .concurrent)
         var loadedURLs: [URL] = []
         let group = DispatchGroup()
         
         for provider in providers {
-            if provider.canLoadObject(ofClass: URL.self) {
+            // Check which type identifiers are available and try to load
+            var didLoad = false
+            
+            // First: Try loading from accepted types (e.g., com.adobe.pdf)
+            // When dragging from Finder, the provider exposes the content type, not file-url
+            for acceptedType in acceptedTypes {
+                if provider.hasItemConformingToTypeIdentifier(acceptedType.identifier) {
+                    didLoad = true
+                    group.enter()
+                    
+                    provider.loadItem(forTypeIdentifier: acceptedType.identifier, options: nil) { item, error in
+                        defer { group.leave() }
+                        
+                        // The item can be Data (file URL bytes), URL, or file path String
+                        var fileURL: URL?
+                        
+                        if let url = item as? URL {
+                            fileURL = url
+                        } else if let data = item as? Data {
+                            // Could be URL data representation or file contents
+                            // Try URL first
+                            if let url = URL(dataRepresentation: data, relativeTo: nil) {
+                                fileURL = url
+                            }
+                        } else if let string = item as? String,
+                                  FileManager.default.fileExists(atPath: string) {
+                            fileURL = URL(fileURLWithPath: string)
+                        }
+                        
+                        if let url = fileURL {
+                            syncQueue.async(flags: .barrier) {
+                                loadedURLs.append(url)
+                            }
+                        }
+                    }
+                    break // Only load once per provider
+                }
+            }
+            
+            // Second: Try public.file-url if accepted types didn't work
+            if !didLoad && provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
+                didLoad = true
+                group.enter()
+                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
+                    defer { group.leave() }
+                    
+                    var fileURL: URL?
+                    
+                    if let data = item as? Data {
+                        fileURL = URL(dataRepresentation: data, relativeTo: nil)
+                    } else if let url = item as? URL {
+                        fileURL = url
+                    } else if let string = item as? String {
+                        fileURL = URL(fileURLWithPath: string)
+                    }
+                    
+                    if let url = fileURL {
+                        syncQueue.async(flags: .barrier) {
+                            loadedURLs.append(url)
+                        }
+                    }
+                }
+            }
+            
+            // Third: Try loadObject as last resort
+            if !didLoad && provider.canLoadObject(ofClass: URL.self) {
                 group.enter()
                 _ = provider.loadObject(ofClass: URL.self) { url, error in
+                    defer { group.leave() }
                     if let url = url {
-                        loadedURLs.append(url)
+                        syncQueue.async(flags: .barrier) {
+                            loadedURLs.append(url)
+                        }
                     }
-                    group.leave()
                 }
             }
         }
         
         group.notify(queue: .main) {
-            if !loadedURLs.isEmpty {
-                onDrop(loadedURLs)
+            syncQueue.sync {
+                if !loadedURLs.isEmpty {
+                    self.onDrop(loadedURLs)
+                }
             }
         }
         
