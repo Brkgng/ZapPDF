@@ -236,15 +236,7 @@ struct DashboardView: View {
                 handleActionTap(.split)
             }
             
-            // Compress button
-            StyledActionButton(
-                action: .compress,
-                isEnabled: viewModel.canPerform(action: .compress)
-            ) {
-                handleActionTap(.compress)
-            }
-            
-            // Convert button (Pro)
+// Convert button (Pro)
             StyledActionButton(
                 action: .convert,
                 isEnabled: viewModel.canPerform(action: .convert)
@@ -316,10 +308,6 @@ struct DashboardView: View {
                     case .split:
                         // Show split options sheet
                         showSplitOptions = true
-                        
-                    case .compress:
-                        // Show processing directly for compress (default level)
-                        startAction(.compress, options: ProcessingOptions())
                         
                     case .convert:
                         // TODO: Show convert options sheet in future

@@ -17,7 +17,6 @@ struct UserActionTests {
     func displayNamesAreHumanReadable() {
         #expect(UserAction.merge.displayName == "Merge PDFs")
         #expect(UserAction.split.displayName == "Split PDF")
-        #expect(UserAction.compress.displayName == "Compress PDF")
         #expect(UserAction.convert.displayName == "Convert PDF")
     }
     
@@ -25,7 +24,6 @@ struct UserActionTests {
     func iconNamesAreValid() {
         #expect(UserAction.merge.iconName == "doc.on.doc")
         #expect(UserAction.split.iconName == "scissors")
-        #expect(UserAction.compress.iconName == "arrow.down.doc")
         #expect(UserAction.convert.iconName == "arrow.triangle.2.circlepath")
     }
     
@@ -52,13 +50,6 @@ struct UserActionTests {
         #expect(UserAction.split.maximumFileCount == 1)
     }
     
-    @Test("Compress requires single file")
-    func compressRequiresSingleFile() {
-        #expect(UserAction.compress.requiresMultipleFiles == false)
-        #expect(UserAction.compress.minimumFileCount == 1)
-        #expect(UserAction.compress.maximumFileCount == 1)
-    }
-    
     @Test("Convert requires single file")
     func convertRequiresSingleFile() {
         #expect(UserAction.convert.requiresMultipleFiles == false)
@@ -79,7 +70,7 @@ struct UserActionTests {
     
     @Test("isValidFileCount for single file actions")
     func isValidFileCountForSingleFileActions() {
-        let singleFileActions: [UserAction] = [.split, .compress, .convert]
+        let singleFileActions: [UserAction] = [.split, .convert]
         
         for action in singleFileActions {
             #expect(action.isValidFileCount(0) == false)
@@ -114,10 +105,9 @@ struct UserActionTests {
     
     @Test("All cases are iterable")
     func allCasesAreIterable() {
-        #expect(UserAction.allCases.count == 4)
+        #expect(UserAction.allCases.count == 3)
         #expect(UserAction.allCases.contains(.merge))
         #expect(UserAction.allCases.contains(.split))
-        #expect(UserAction.allCases.contains(.compress))
         #expect(UserAction.allCases.contains(.convert))
     }
     
@@ -125,10 +115,9 @@ struct UserActionTests {
     
     @Test("Free tier actions are correct")
     func freeTierActionsAreCorrect() {
-        #expect(UserAction.freeActions.count == 3)
+        #expect(UserAction.freeActions.count == 2)
         #expect(UserAction.freeActions.contains(.merge))
         #expect(UserAction.freeActions.contains(.split))
-        #expect(UserAction.freeActions.contains(.compress))
         #expect(!UserAction.freeActions.contains(.convert))
     }
     
@@ -136,7 +125,7 @@ struct UserActionTests {
     func isFreeTierActionReturnsCorrectValue() {
         #expect(UserAction.merge.isFreeTierAction == true)
         #expect(UserAction.split.isFreeTierAction == true)
-        #expect(UserAction.compress.isFreeTierAction == true)
         #expect(UserAction.convert.isFreeTierAction == false)
     }
 }
+

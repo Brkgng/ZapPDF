@@ -64,13 +64,6 @@ final class ActionButtonTests: XCTestCase {
         XCTAssertEqual(button.action.accentColor, .orange)
     }
     
-    func testCompressAction() {
-        let button = ActionButton(action: .compress, isEnabled: true, onTap: {})
-        XCTAssertEqual(button.action.displayName, "Compress PDF")
-        XCTAssertEqual(button.action.iconName, "arrow.down.doc")
-        XCTAssertEqual(button.action.accentColor, .green)
-    }
-    
     func testConvertAction() {
         let button = ActionButton(action: .convert, isEnabled: true, onTap: {})
         XCTAssertEqual(button.action.displayName, "Convert PDF")
@@ -111,7 +104,7 @@ final class ActionButtonTests: XCTestCase {
     
     func testFreeTierActionsDoNotShowProBadge() {
         // Given
-        let freeActions: [UserAction] = [.merge, .split, .compress]
+        let freeActions: [UserAction] = [.merge, .split]
         
         for action in freeActions {
             // Then

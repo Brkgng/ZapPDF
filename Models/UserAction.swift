@@ -22,7 +22,6 @@ import SwiftUI
 enum UserAction: String, CaseIterable, Identifiable, Sendable {
     case merge
     case split
-    case compress
     case convert  // Future: PDF to image, etc.
     
     // MARK: - Identifiable
@@ -38,8 +37,6 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
             return "Merge PDFs"
         case .split:
             return "Split PDF"
-        case .compress:
-            return "Compress PDF"
         case .convert:
             return "Convert PDF"
         }
@@ -52,8 +49,6 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
             return "doc.on.doc"
         case .split:
             return "scissors"
-        case .compress:
-            return "arrow.down.doc"
         case .convert:
             return "arrow.triangle.2.circlepath"
         }
@@ -66,8 +61,6 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
             return "Combine multiple PDFs into one document"
         case .split:
             return "Extract pages or split into multiple documents"
-        case .compress:
-            return "Reduce file size while preserving quality"
         case .convert:
             return "Convert PDF to other formats"
         }
@@ -80,7 +73,7 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .merge:
             return true
-        case .split, .compress, .convert:
+        case .split, .convert:
             return false
         }
     }
@@ -96,7 +89,7 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .merge:
             return nil  // No limit for merging
-        case .split, .compress, .convert:
+        case .split, .convert:
             return 1  // Single file operations
         }
     }
@@ -134,8 +127,6 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
             return .blue
         case .split:
             return .orange
-        case .compress:
-            return .green
         case .convert:
             return .purple
         }
@@ -147,7 +138,7 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
 extension UserAction {
     /// Actions available in the free tier.
     static var freeActions: [UserAction] {
-        [.merge, .split, .compress]
+        [.merge, .split]
     }
     
     /// Actions that require Pro subscription.

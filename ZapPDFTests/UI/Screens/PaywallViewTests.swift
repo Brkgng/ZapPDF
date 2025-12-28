@@ -96,7 +96,6 @@ struct FeatureComparisonTests {
         
         #expect(freeActions.contains(.merge))
         #expect(freeActions.contains(.split))
-        #expect(freeActions.contains(.compress))
         #expect(!freeActions.contains(.convert))
     }
     
@@ -112,7 +111,6 @@ struct FeatureComparisonTests {
     func isFreeTierActionValues() {
         #expect(UserAction.merge.isFreeTierAction == true)
         #expect(UserAction.split.isFreeTierAction == true)
-        #expect(UserAction.compress.isFreeTierAction == true)
         #expect(UserAction.convert.isFreeTierAction == false)
     }
 }

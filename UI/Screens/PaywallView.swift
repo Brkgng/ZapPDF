@@ -169,7 +169,6 @@ struct PaywallView: View {
             // Feature rows
             FeatureComparisonRow(feature: "Merge PDFs", isFreeIncluded: true, isProIncluded: true)
             FeatureComparisonRow(feature: "Split PDFs", isFreeIncluded: true, isProIncluded: true)
-            FeatureComparisonRow(feature: "Compress PDFs", isFreeIncluded: true, isProIncluded: true)
             FeatureComparisonRow(feature: "Convert PDFs", isFreeIncluded: false, isProIncluded: true)
             
             Divider()

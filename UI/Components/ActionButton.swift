@@ -2,7 +2,7 @@
 //  ActionButton.swift
 //  ZapPDF
 //
-//  Styled button component for PDF actions (merge, split, compress, convert).
+//  Styled button component for PDF actions (merge, split, convert).
 //
 
 import SwiftUI
@@ -295,7 +295,7 @@ struct StyledActionButton: View {
     VStack(spacing: 20) {
         StyledActionButton(action: .merge, isEnabled: false) {}
         StyledActionButton(action: .split, isEnabled: false, style: .secondary) {}
-        StyledActionButton(action: .compress, isEnabled: false, style: .compact) {}
+        StyledActionButton(action: .convert, isEnabled: false, style: .compact) {}
     }
     .padding()
 }

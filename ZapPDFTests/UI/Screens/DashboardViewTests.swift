@@ -189,7 +189,6 @@ struct DashboardActionButtonStateTests {
         
         // Single-file actions should be enabled
         #expect(viewModel.canPerform(action: .split) == true)
-        #expect(viewModel.canPerform(action: .compress) == true)
         #expect(viewModel.canPerform(action: .convert) == true)
         
         // Multi-file actions should be disabled
@@ -211,7 +210,6 @@ struct DashboardActionButtonStateTests {
         
         // Single-file actions should be disabled
         #expect(viewModel.canPerform(action: .split) == false)
-        #expect(viewModel.canPerform(action: .compress) == false)
         #expect(viewModel.canPerform(action: .convert) == false)
     }
 }

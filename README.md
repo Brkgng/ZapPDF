@@ -6,7 +6,6 @@ A powerful, privacy-first PDF utility app for macOS, iOS, and iPadOS.
 
 - **Merge PDFs** – Combine multiple PDF files into one
 - **Split PDFs** – Extract page ranges or split into individual pages
-- **Compress PDFs** – Reduce file size using Quartz filters
 - **Convert PDFs** – Transform PDFs to/from other formats
 
 ## Requirements
@@ -45,7 +44,6 @@ See [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) for detailed technical sp
 ### Key Technical Highlights
 
 - **PDFKit** for all PDF operations
-- **Quartz filters** for compression
 - **Security-scoped resources** for sandboxed file access
 - **async/await** with cancellation support
 - **RevenueCat** for subscription management

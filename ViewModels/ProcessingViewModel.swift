@@ -247,10 +247,6 @@ final class ProcessingViewModel: ObservableObject {
             )
             return outputURLs
             
-        case .compress:
-            // TODO: Implement when PDFCompressor is ready
-            throw PDFEngineError.emptyInput
-            
         case .convert:
             // TODO: Implement in future phase
             throw PDFEngineError.emptyInput
@@ -269,8 +265,6 @@ final class ProcessingViewModel: ObservableObject {
             return percentage > 0 ? "Merging PDFs... \(percentage)%" : "Merging PDFs..."
         case .split:
             return percentage > 0 ? "Splitting PDF... \(percentage)%" : "Splitting PDF..."
-        case .compress:
-            return percentage > 0 ? "Compressing PDF... \(percentage)%" : "Compressing PDF..."
         case .convert:
             return percentage > 0 ? "Converting PDF... \(percentage)%" : "Converting PDF..."
         }

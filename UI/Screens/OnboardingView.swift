@@ -235,7 +235,7 @@ struct OnboardingView: View {
                         iconName: "doc.text.fill",
                         iconColor: .accentColor,
                         title: "Welcome to ZapPDF",
-                        description: "Powerful PDF tools with zero compromises.\nMerge, split, compress, and convert with ease."
+                        description: "Powerful PDF tools with zero compromises.\nMerge, split, and convert with ease."
                     )
                     .tag(0)
                     
@@ -253,7 +253,7 @@ struct OnboardingView: View {
                         iconName: "square.grid.2x2.fill",
                         iconColor: .orange,
                         title: "Everything You Need",
-                        description: "Merge multiple PDFs into one.\nSplit PDFs by page range.\nCompress to reduce file size.\nConvert to other formats."
+                        description: "Merge multiple PDFs into one.\nSplit PDFs by page range.\nConvert to other formats."
                     )
                     .tag(2)
                     

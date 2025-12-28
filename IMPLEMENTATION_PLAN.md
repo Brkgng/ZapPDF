@@ -90,7 +90,7 @@
 **Duration: 1-2 days** | Completed: 2024-12-24
 
 - [x] `PDFFile.swift` – Identifiable wrapper for PDF URLs
-- [x] `UserAction.swift` – Enum for merge/split/compress/convert
+- [x] `UserAction.swift` – Enum for merge/split/convert
 - [x] `URL+Security.swift` – Security-scoped resource helpers
 - [x] `View+Modifiers.swift` – Shared view modifiers
 
@@ -100,7 +100,7 @@
 
 - [x] `PDFMerger.swift` – Combine multiple PDFs
 - [x] `PDFSplitter.swift` – Extract page ranges
-- [/] `PDFCompressor.swift` – Reduce file size via Quartz (Deferred)
+- [ ] `PDFCompressor.swift` – Reduce file size via Quartz (Removed from v1.0 – planned for future release)
 - [x] `PDFRenderer.swift` – Thumbnail generation
 
 ### Phase 3: Persistence & Usage Tracking
