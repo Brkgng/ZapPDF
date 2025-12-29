@@ -250,6 +250,10 @@ final class ProcessingViewModel: ObservableObject {
         case .convert:
             // TODO: Implement in future phase
             throw PDFEngineError.emptyInput
+            
+        case .reorder:
+            // Reorder is handled by PageReorderView, not ProcessingView
+            throw PDFEngineError.emptyInput
         }
     }
     
@@ -265,6 +269,8 @@ final class ProcessingViewModel: ObservableObject {
             return percentage > 0 ? "Merging PDFs... \(percentage)%" : "Merging PDFs..."
         case .split:
             return percentage > 0 ? "Splitting PDF... \(percentage)%" : "Splitting PDF..."
+        case .reorder:
+            return percentage > 0 ? "Reordering pages... \(percentage)%" : "Reordering pages..."
         case .convert:
             return percentage > 0 ? "Converting PDF... \(percentage)%" : "Converting PDF..."
         }

@@ -39,6 +39,7 @@ struct DashboardView: View {
     @State private var processingOptions: ProcessingOptions?
     @State private var showProcessingView = false
     @State private var showSplitOptions = false
+    @State private var showReorderView = false
     @State private var splitMode: PDFSplitter.SplitMode = .splitEvery(n: 1)
     
     // MARK: - Body
@@ -78,6 +79,11 @@ struct DashboardView: View {
                         splitMode: $splitMode
                     ) {
                         startAction(.split, options: .split(mode: splitMode))
+                    }
+                }
+                .navigationDestination(isPresented: $showReorderView) {
+                    if let file = viewModel.selectedFiles.first {
+                        PageReorderView(file: file)
                     }
                 }
                 .alert("Error", isPresented: hasError) {
@@ -236,7 +242,15 @@ struct DashboardView: View {
                 handleActionTap(.split)
             }
             
-// Convert button (Pro)
+            // Reorder button
+            StyledActionButton(
+                action: .reorder,
+                isEnabled: viewModel.canPerform(action: .reorder)
+            ) {
+                handleActionTap(.reorder)
+            }
+            
+            // Convert button (Pro)
             StyledActionButton(
                 action: .convert,
                 isEnabled: viewModel.canPerform(action: .convert)
@@ -308,6 +322,10 @@ struct DashboardView: View {
                     case .split:
                         // Show split options sheet
                         showSplitOptions = true
+                        
+                    case .reorder:
+                        // Show reorder view
+                        showReorderView = true
                         
                     case .convert:
                         // TODO: Show convert options sheet in future

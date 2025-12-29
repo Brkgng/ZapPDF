@@ -17,6 +17,7 @@ struct UserActionTests {
     func displayNamesAreHumanReadable() {
         #expect(UserAction.merge.displayName == "Merge PDFs")
         #expect(UserAction.split.displayName == "Split PDF")
+        #expect(UserAction.reorder.displayName == "Reorder Pages")
         #expect(UserAction.convert.displayName == "Convert PDF")
     }
     
@@ -24,6 +25,7 @@ struct UserActionTests {
     func iconNamesAreValid() {
         #expect(UserAction.merge.iconName == "doc.on.doc")
         #expect(UserAction.split.iconName == "scissors")
+        #expect(UserAction.reorder.iconName == "arrow.up.arrow.down")
         #expect(UserAction.convert.iconName == "arrow.triangle.2.circlepath")
     }
     
@@ -70,7 +72,7 @@ struct UserActionTests {
     
     @Test("isValidFileCount for single file actions")
     func isValidFileCountForSingleFileActions() {
-        let singleFileActions: [UserAction] = [.split, .convert]
+        let singleFileActions: [UserAction] = [.split, .reorder, .convert]
         
         for action in singleFileActions {
             #expect(action.isValidFileCount(0) == false)
@@ -105,9 +107,10 @@ struct UserActionTests {
     
     @Test("All cases are iterable")
     func allCasesAreIterable() {
-        #expect(UserAction.allCases.count == 3)
+        #expect(UserAction.allCases.count == 4)
         #expect(UserAction.allCases.contains(.merge))
         #expect(UserAction.allCases.contains(.split))
+        #expect(UserAction.allCases.contains(.reorder))
         #expect(UserAction.allCases.contains(.convert))
     }
     
@@ -115,9 +118,10 @@ struct UserActionTests {
     
     @Test("Free tier actions are correct")
     func freeTierActionsAreCorrect() {
-        #expect(UserAction.freeActions.count == 2)
+        #expect(UserAction.freeActions.count == 3)
         #expect(UserAction.freeActions.contains(.merge))
         #expect(UserAction.freeActions.contains(.split))
+        #expect(UserAction.freeActions.contains(.reorder))
         #expect(!UserAction.freeActions.contains(.convert))
     }
     
@@ -125,6 +129,7 @@ struct UserActionTests {
     func isFreeTierActionReturnsCorrectValue() {
         #expect(UserAction.merge.isFreeTierAction == true)
         #expect(UserAction.split.isFreeTierAction == true)
+        #expect(UserAction.reorder.isFreeTierAction == true)
         #expect(UserAction.convert.isFreeTierAction == false)
     }
 }

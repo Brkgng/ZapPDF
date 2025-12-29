@@ -52,12 +52,6 @@ struct ActionButton: View {
     /// The action to perform when tapped.
     var onTap: () -> Void
     
-    // MARK: - Environment
-    
-    #if os(iOS)
-    @Environment(\.feedbackGenerator) private var feedbackGenerator
-    #endif
-    
     // MARK: - Body
     
     var body: some View {

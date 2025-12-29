@@ -50,7 +50,7 @@
 │  │ ┌─────────┐ │  └─────────────┘  └─────────────────────────┘ │
 │  │ │ Merger  │ │                                               │
 │  │ │Splitter │ │  ┌─────────────┐  ┌─────────────────────────┐ │
-│  │ │Compressor│  │KeychainHelper│  │  URL+Security Extension │ │
+│  │ │Reorderer│ │  │KeychainHelper│  │  URL+Security Extension │ │
 │  │ └─────────┘ │  └─────────────┘  └─────────────────────────┘ │
 │  └─────────────┘                                               │
 └─────────────────────────────────────────────────────────────────┘
@@ -163,6 +163,19 @@
 - [ ] App Review notes
 - [ ] TestFlight beta
 
+### Phase 10: Page Reordering Feature
+
+**Duration: 6-11 days**
+
+- [x] `PageItem.swift` – Identifiable page wrapper model
+- [x] `PDFReorderer.swift` – Page reordering service actor
+- [x] `PageReorderViewModel.swift` – Reorder state management with undo/redo
+- [x] `PageThumbnailView.swift` – Individual page thumbnail component
+- [x] `DraggablePageGrid.swift` – Reorderable grid with cross-platform drag-and-drop
+- [x] `PageReorderView.swift` – Main reorder screen with platform-specific layouts
+- [x] Integration with `UserAction` and `DashboardView`
+- [x] Unit tests and UI tests
+
 ---
 
 ## 3. Layer Responsibilities
@@ -181,14 +194,16 @@
 | ------------------ | ------------------------------------------------- |
 | `PDFFile.swift`    | Immutable struct representing a PDF with metadata |
 | `UserAction.swift` | Enumeration of available PDF operations           |
+| `PageItem.swift`   | Identifiable page wrapper for reordering          |
 
 ### 3.3 ViewModels Layer (`ViewModels/`)
 
-| File                        | Responsibility                                                   |
-| --------------------------- | ---------------------------------------------------------------- |
-| `DashboardViewModel.swift`  | Manage selected files, validate selection, trigger actions       |
-| `ProcessingViewModel.swift` | Execute PDF operations, report progress, handle cancellation     |
-| `PaywallViewModel.swift`    | Check subscription status, initiate purchases, restore purchases |
+| File                         | Responsibility                                                   |
+| ---------------------------- | ---------------------------------------------------------------- |
+| `DashboardViewModel.swift`   | Manage selected files, validate selection, trigger actions       |
+| `ProcessingViewModel.swift`  | Execute PDF operations, report progress, handle cancellation     |
+| `PaywallViewModel.swift`     | Check subscription status, initiate purchases, restore purchases |
+| `PageReorderViewModel.swift` | Manage page reorder state with undo/redo support                 |
 
 ### 3.4 Services Layer (`Services/`)
 
@@ -196,6 +211,7 @@
 | ---------------------- | ---------------------------------------- |
 | `PDFMerger.swift`      | Pure business logic for merging PDFs     |
 | `PDFSplitter.swift`    | Pure business logic for splitting PDFs   |
+| `PDFReorderer.swift`   | Pure business logic for reordering pages |
 | `PDFCompressor.swift`  | Apply Quartz filters to reduce file size |
 | `UsageManager.swift`   | Track free tier usage, check limits      |
 | `KeychainHelper.swift` | Secure storage abstraction               |
@@ -258,6 +274,35 @@ enum UserAction: String, CaseIterable, Identifiable {
     var displayName: String { get }
     var iconName: String { get }
     var requiresMultipleFiles: Bool { get }
+}
+```
+
+#### `PageItem.swift`
+
+```swift
+/// Represents a single page in a PDF document for reordering.
+struct PageItem: Identifiable, Hashable, Sendable {
+    /// Unique identifier for this page instance.
+    let id: UUID
+
+    /// Original 0-based page index in the source PDF.
+    let originalIndex: Int
+
+    /// Display page number (1-based) for UI.
+    var displayPageNumber: Int { originalIndex + 1 }
+
+    /// Cached thumbnail (optional, set after async load).
+    var thumbnail: CGImage?
+
+    init(originalIndex: Int)
+}
+
+extension Array where Element == PageItem {
+    /// Get the new page order as an array of original indices.
+    var reorderedIndices: [Int]
+
+    /// Check if the order has changed from the original.
+    var hasChanges: Bool
 }
 ```
 
@@ -348,6 +393,37 @@ actor PDFCompressor {
 }
 ```
 
+#### `PDFReorderer.swift`
+
+```swift
+/// Actor responsible for reordering pages in a PDF document.
+actor PDFReorderer {
+    private var isCancelled: Bool
+
+    /// Reorder pages in a PDF according to the specified order.
+    ///
+    /// - Parameters:
+    ///   - file: Source PDF file
+    ///   - newOrder: Array of 0-based page indices in the desired order
+    ///   - outputFileName: Optional custom output filename
+    ///   - progress: Progress callback (0.0 to 1.0)
+    /// - Returns: URL to the reordered PDF in temporary directory
+    /// - Throws: `PDFEngineError` if reordering fails
+    func reorder(
+        file: PDFFile,
+        newOrder: [Int],
+        outputFileName: String? = nil,
+        progress: @escaping @Sendable (Double) -> Void
+    ) async throws -> URL
+
+    /// Cancel the current reorder operation.
+    func cancel()
+
+    /// Validate that the new order is valid for the given page count.
+    static func validateOrder(_ order: [Int], pageCount: Int) -> Bool
+}
+```
+
 ### 4.4 ViewModels
 
 #### `DashboardViewModel.swift`
@@ -417,6 +493,77 @@ final class PaywallViewModel: ObservableObject {
     func restorePurchases() async
 
     var remainingFreeActions: Int { get }
+}
+```
+
+#### `PageReorderViewModel.swift`
+
+```swift
+/// ViewModel managing page reorder state and operations.
+@MainActor
+final class PageReorderViewModel: ObservableObject {
+
+    // MARK: - Published State
+
+    /// Pages in their current order (may differ from original).
+    @Published private(set) var pages: [PageItem] = []
+
+    /// Currently selected page index (for preview).
+    @Published var selectedPageIndex: Int?
+
+    /// Loading state for initial page load.
+    @Published private(set) var isLoadingPages: Bool = false
+
+    /// Saving state for export operation.
+    @Published private(set) var isSaving: Bool = false
+
+    /// Save progress (0.0 to 1.0).
+    @Published private(set) var saveProgress: Double = 0.0
+
+    /// Error message if any.
+    @Published var errorMessage: String?
+
+    /// Whether changes have been made.
+    var hasChanges: Bool { pages.hasChanges }
+
+    // MARK: - Source Data
+
+    /// The source PDF file being reordered.
+    let sourceFile: PDFFile
+
+    // MARK: - Initialization
+
+    init(file: PDFFile)
+
+    // MARK: - Public Methods
+
+    /// Load pages from the source PDF.
+    func loadPages() async
+
+    /// Move pages from source indices to destination index.
+    func movePages(from source: IndexSet, to destination: Int)
+
+    /// Reset pages to original order.
+    func resetOrder()
+
+    /// Undo last reorder action (if available).
+    func undo()
+
+    /// Redo last undone action (if available).
+    func redo()
+
+    /// Save the reordered PDF.
+    /// - Parameter destinationURL: Where to save (provided by save panel)
+    func save(to destinationURL: URL) async throws
+
+    /// Cancel any ongoing operation.
+    func cancel()
+
+    // MARK: - Computed Properties
+
+    var canUndo: Bool { get }
+    var canRedo: Bool { get }
+    var pageCount: Int { pages.count }
 }
 ```
 
@@ -565,6 +712,75 @@ final class RevenueCatManager: ObservableObject {
 4. Completion
    └─> Show before/after size comparison
    └─> User saves file
+```
+
+### 5.4 Page Reorder Flow
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│ 1. User selects single PDF and taps "Reorder"                         │
+│    └─> DashboardView checks canPerform(.reorder) == true              │
+│        └─> UsageManager.canPerformAction() checked                    │
+│            └─> Navigate to PageReorderView                            │
+└──────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│ 2. PageReorderView appears                                            │
+│    └─> PageReorderViewModel.init(file:) created                       │
+│        └─> PageReorderViewModel.loadPages() called                    │
+│            └─> URL.withSecurityScopeAsync { open PDFDocument }        │
+│                └─> Create PageItem for each page (0 to pageCount-1)   │
+│                    └─> Thumbnails loaded asynchronously (lazy)        │
+└──────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│ 3. User drags page to new position                                    │
+│    └─> DraggablePageGrid.onMove triggered                             │
+│        ├─> macOS: onDrag/onDrop with NSItemProvider                   │
+│        └─> iOS: List.onMove with haptic feedback                      │
+│            └─> viewModel.movePages(from:to:) called                   │
+│                └─> Undo stack pushed with previous state              │
+│                    └─> pages array reordered                          │
+│                        └─> UI updates via @Published                  │
+└──────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│ 4. User taps "Save Reordered" (macOS) or "Done" (iOS)                 │
+│    ├─> macOS: NSSavePanel presented for destination                   │
+│    └─> iOS: Temporary file created, share sheet presented             │
+│        └─> viewModel.save(to:) called                                 │
+│            └─> PDFReorderer.reorder(file:newOrder:progress:)          │
+│                ├─> For each page in newOrder: copy to new document    │
+│                ├─> Report progress via callback                       │
+│                └─> Write to destination URL                           │
+│                    └─> UsageManager.recordAction() on success         │
+│                        └─> Dismiss view                               │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+**Undo/Redo State Flow:**
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│ User reorders pages multiple times                                    │
+│                                                                       │
+│   Initial: [1, 2, 3, 4]                                              │
+│       └─> Move page 3 before page 1                                   │
+│           └─> undoStack: [[1,2,3,4]], pages: [3,1,2,4]               │
+│               └─> Move page 4 after page 1                            │
+│                   └─> undoStack: [[1,2,3,4], [3,1,2,4]]              │
+│                       pages: [3,1,4,2]                                │
+│                                                                       │
+│   User presses Undo (⌘Z on macOS)                                     │
+│       └─> redoStack: [[3,1,4,2]], pages: [3,1,2,4]                   │
+│                                                                       │
+│   User presses Redo (⌘⇧Z on macOS)                                    │
+│       └─> undoStack: [[1,2,3,4], [3,1,2,4]]                          │
+│           pages: [3,1,4,2]                                            │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -1005,30 +1221,37 @@ typealias PlatformImage = UIImage
 
 ### 11.1 Unit Tests
 
-| Component        | What to Test                                     | Location                                         |
-| ---------------- | ------------------------------------------------ | ------------------------------------------------ |
-| `PDFMerger`      | Merge 2 files, page order, bookmark preservation | `ZapPDFTests/Services/PDFMergerTests.swift`      |
-| `PDFSplitter`    | Split modes, edge cases (1 page, 100+ pages)     | `ZapPDFTests/Services/PDFSplitterTests.swift`    |
-| `PDFCompressor`  | Compression ratios, quality preservation         | `ZapPDFTests/Services/PDFCompressorTests.swift`  |
-| `UsageManager`   | Count decrement, limit enforcement, persistence  | `ZapPDFTests/Services/UsageManagerTests.swift`   |
-| `KeychainHelper` | Save/load/delete operations                      | `ZapPDFTests/Services/KeychainHelperTests.swift` |
-| `URL+Security`   | Security scope wrapper behavior                  | `ZapPDFTests/Extensions/URLSecurityTests.swift`  |
+| Component              | What to Test                                     | Location                                                 |
+| ---------------------- | ------------------------------------------------ | -------------------------------------------------------- |
+| `PDFMerger`            | Merge 2 files, page order, bookmark preservation | `ZapPDFTests/Services/PDFMergerTests.swift`              |
+| `PDFSplitter`          | Split modes, edge cases (1 page, 100+ pages)     | `ZapPDFTests/Services/PDFSplitterTests.swift`            |
+| `PDFReorderer`         | Reorder validation, edge cases, cancellation     | `ZapPDFTests/Services/PDFReordererTests.swift`           |
+| `PDFCompressor`        | Compression ratios, quality preservation         | `ZapPDFTests/Services/PDFCompressorTests.swift`          |
+| `UsageManager`         | Count decrement, limit enforcement, persistence  | `ZapPDFTests/Services/UsageManagerTests.swift`           |
+| `KeychainHelper`       | Save/load/delete operations                      | `ZapPDFTests/Services/KeychainHelperTests.swift`         |
+| `URL+Security`         | Security scope wrapper behavior                  | `ZapPDFTests/Extensions/URLSecurityTests.swift`          |
+| `PageItem`             | Initialization, `hasChanges`, `reorderedIndices` | `ZapPDFTests/Models/PageItemTests.swift`                 |
+| `PageReorderViewModel` | Load pages, move, undo/redo, reset, save         | `ZapPDFTests/ViewModels/PageReorderViewModelTests.swift` |
 
 ### 11.2 Integration Tests
 
-| Flow            | What to Test                                                  |
-| --------------- | ------------------------------------------------------------- |
-| Full merge flow | Files → ViewModel → Service → Result                          |
-| Paywall trigger | Usage exhausted → Paywall shown → Purchase → Action completes |
-| Cancellation    | Start operation → Cancel → State reset correctly              |
+| Flow              | What to Test                                                  |
+| ----------------- | ------------------------------------------------------------- |
+| Full merge flow   | Files → ViewModel → Service → Result                          |
+| Paywall trigger   | Usage exhausted → Paywall shown → Purchase → Action completes |
+| Cancellation      | Start operation → Cancel → State reset correctly              |
+| Page reorder flow | Select PDF → Reorder → Undo/Redo → Save → Verify output       |
 
 ### 11.3 UI Tests
 
-| Test                 | Steps                                                     |
-| -------------------- | --------------------------------------------------------- |
-| Add files via picker | Tap add → Select files → Verify thumbnails appear         |
-| Merge PDFs           | Add 2 files → Tap Merge → Verify progress → Verify output |
-| Paywall display      | Exhaust free actions → Verify paywall appears             |
+| Test                 | Steps                                                       |
+| -------------------- | ----------------------------------------------------------- |
+| Add files via picker | Tap add → Select files → Verify thumbnails appear           |
+| Merge PDFs           | Add 2 files → Tap Merge → Verify progress → Verify output   |
+| Paywall display      | Exhaust free actions → Verify paywall appears               |
+| Reorder pages        | Select PDF → Tap Reorder → Drag pages → Verify order change |
+| Reorder undo/redo    | Reorder → Undo → Verify reset → Redo → Verify reordered     |
+| Reorder save         | Reorder → Save → Verify output file has correct page order  |
 
 ### 11.4 Test Data
 
@@ -1183,15 +1406,18 @@ Before merging any PR, verify:
 ### File to Responsibility Map
 
 ```
-PDFFile.swift           → Data model
-URL+Security.swift      → Sandbox access
-PDFMerger.swift         → Merge logic
-PDFSplitter.swift       → Split logic
-PDFCompressor.swift     → Compression logic
-DashboardViewModel.swift → File selection state
+PDFFile.swift             → Data model
+PageItem.swift            → Page reorder model
+URL+Security.swift        → Sandbox access
+PDFMerger.swift           → Merge logic
+PDFSplitter.swift         → Split logic
+PDFReorderer.swift        → Page reorder logic
+PDFCompressor.swift       → Compression logic
+DashboardViewModel.swift  → File selection state
 ProcessingViewModel.swift → Operation execution
-UsageManager.swift      → Free tier tracking
-RevenueCatManager.swift → Subscription status
+PageReorderViewModel.swift→ Page reorder state with undo/redo
+UsageManager.swift        → Free tier tracking
+RevenueCatManager.swift   → Subscription status
 ```
 
 ### Key Method Signatures
@@ -1200,7 +1426,14 @@ RevenueCatManager.swift → Subscription status
 // Core operations
 PDFMerger.merge(files:options:progress:) async throws -> URL
 PDFSplitter.split(file:mode:progress:) async throws -> [URL]
+PDFReorderer.reorder(file:newOrder:progress:) async throws -> URL
 PDFCompressor.compress(file:level:progress:) async throws -> URL
+
+// Page reorder state
+PageReorderViewModel.movePages(from:to:)
+PageReorderViewModel.undo()
+PageReorderViewModel.redo()
+PageReorderViewModel.save(to:) async throws
 
 // State management
 UsageManager.canPerformAction() async -> Bool
