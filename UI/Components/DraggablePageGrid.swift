@@ -14,6 +14,8 @@ import UniformTypeIdentifiers
 /// - **macOS**: Uses `onDrag` and `onDrop` modifiers for traditional drag behavior
 /// - **iOS**: Uses `List` with `onMove` for long-press drag reordering
 ///
+/// Thumbnails are dynamically sized based on available container width.
+///
 /// Example:
 /// ```swift
 /// DraggablePageGrid(
@@ -41,11 +43,19 @@ struct DraggablePageGrid: View {
     /// Callback when pages are moved.
     let onMove: (IndexSet, Int) -> Void
     
-    /// Size of each thumbnail.
-    var thumbnailSize: CGSize = CGSize(width: 80, height: 110)
+    // MARK: - Configuration Constants
     
-    /// Number of columns in the grid.
-    var columns: Int = 2
+    /// Minimum thumbnail width.
+    private let minThumbnailWidth: CGFloat = 100
+    
+    /// Maximum thumbnail width.
+    private let maxThumbnailWidth: CGFloat = 160
+    
+    /// Spacing between grid items.
+    private let gridSpacing: CGFloat = 16
+    
+    /// A4 aspect ratio (width / height).
+    private let aspectRatio: CGFloat = 0.707
     
     // MARK: - Private State
     
@@ -54,23 +64,55 @@ struct DraggablePageGrid: View {
     // MARK: - Body
     
     var body: some View {
-        #if os(macOS)
-        macOSGrid
-        #else
-        iOSGrid
-        #endif
+        GeometryReader { geometry in
+            #if os(macOS)
+            macOSGrid(in: geometry)
+            #else
+            iOSGrid(in: geometry)
+            #endif
+        }
+    }
+    
+    // MARK: - Size Calculation
+    
+    /// Calculate thumbnail size based on container width.
+    private func calculateThumbnailSize(for containerWidth: CGFloat) -> CGSize {
+        let padding: CGFloat = gridSpacing * 2
+        let availableWidth = containerWidth - padding
+        
+        // Calculate number of columns that fit
+        let columnCount = max(2, Int(availableWidth / (minThumbnailWidth + gridSpacing)))
+        
+        // Calculate actual thumbnail width
+        let totalSpacing = CGFloat(columnCount - 1) * gridSpacing
+        let thumbnailWidth = (availableWidth - totalSpacing) / CGFloat(columnCount)
+        let clampedWidth = min(max(thumbnailWidth, minThumbnailWidth), maxThumbnailWidth)
+        
+        // Calculate height maintaining aspect ratio
+        let thumbnailHeight = clampedWidth / aspectRatio
+        
+        return CGSize(width: clampedWidth, height: thumbnailHeight)
+    }
+    
+    /// Calculate number of columns based on container width.
+    private func calculateColumnCount(for containerWidth: CGFloat) -> Int {
+        let padding: CGFloat = gridSpacing * 2
+        let availableWidth = containerWidth - padding
+        return max(2, Int(availableWidth / (minThumbnailWidth + gridSpacing)))
     }
     
     // MARK: - macOS Implementation
     
     #if os(macOS)
-    private var macOSGrid: some View {
-        let gridColumns = Array(repeating: GridItem(.fixed(thumbnailSize.width), spacing: 12), count: columns)
+    private func macOSGrid(in geometry: GeometryProxy) -> some View {
+        let size = calculateThumbnailSize(for: geometry.size.width)
+        let columnCount = calculateColumnCount(for: geometry.size.width)
+        let gridColumns = Array(repeating: GridItem(.fixed(size.width), spacing: gridSpacing), count: columnCount)
         
         return ScrollView {
-            LazyVGrid(columns: gridColumns, spacing: 12) {
+            LazyVGrid(columns: gridColumns, spacing: gridSpacing) {
                 ForEach(Array(pages.enumerated()), id: \.element.id) { index, page in
-                    pageCell(page: page, index: index)
+                    pageCell(page: page, index: index, size: size)
                         .onDrag {
                             self.draggingItem = page
                             return NSItemProvider(object: page.id.uuidString as NSString)
@@ -83,7 +125,7 @@ struct DraggablePageGrid: View {
                         ))
                 }
             }
-            .padding()
+            .padding(gridSpacing)
         }
     }
     #endif
@@ -91,13 +133,15 @@ struct DraggablePageGrid: View {
     // MARK: - iOS Implementation
     
     #if os(iOS)
-    private var iOSGrid: some View {
-        let gridColumns = Array(repeating: GridItem(.fixed(thumbnailSize.width), spacing: 12), count: columns)
+    private func iOSGrid(in geometry: GeometryProxy) -> some View {
+        let size = calculateThumbnailSize(for: geometry.size.width)
+        let columnCount = calculateColumnCount(for: geometry.size.width)
+        let gridColumns = Array(repeating: GridItem(.fixed(size.width), spacing: gridSpacing), count: columnCount)
         
         return ScrollView {
-            LazyVGrid(columns: gridColumns, spacing: 12) {
+            LazyVGrid(columns: gridColumns, spacing: gridSpacing) {
                 ForEach(Array(pages.enumerated()), id: \.element.id) { index, page in
-                    pageCell(page: page, index: index)
+                    pageCell(page: page, index: index, size: size)
                         .draggable(page.id.uuidString) {
                             // Drag preview
                             PageThumbnailView(
@@ -105,16 +149,15 @@ struct DraggablePageGrid: View {
                                 pageIndex: page.originalIndex,
                                 displayNumber: page.displayPageNumber,
                                 isSelected: true,
-                                size: thumbnailSize
+                                size: size
                             )
                             .opacity(0.8)
                         }
                 }
             }
-            .padding()
+            .padding(gridSpacing)
         }
         .dropDestination(for: String.self) { items, location in
-            // Handle drop
             return false
         }
     }
@@ -122,13 +165,13 @@ struct DraggablePageGrid: View {
     
     // MARK: - Common Views
     
-    private func pageCell(page: PageItem, index: Int) -> some View {
+    private func pageCell(page: PageItem, index: Int, size: CGSize) -> some View {
         PageThumbnailView(
             url: pdfURL,
             pageIndex: page.originalIndex,
             displayNumber: page.displayPageNumber,
             isSelected: selectedIndex == index,
-            size: thumbnailSize
+            size: size
         )
         .contentShape(Rectangle())
         .onTapGesture {
@@ -192,7 +235,7 @@ struct DraggablePageList: View {
                         pageIndex: page.originalIndex,
                         displayNumber: page.displayPageNumber,
                         isSelected: selectedIndex == index,
-                        size: CGSize(width: 60, height: 80)
+                        size: CGSize(width: 60, height: 85)
                     )
                     
                     VStack(alignment: .leading, spacing: 4) {
@@ -233,7 +276,7 @@ struct DraggablePageList: View {
         selectedIndex: .constant(1),
         onMove: { _, _ in }
     )
-    .frame(width: 250, height: 400)
+    .frame(width: 400, height: 500)
 }
 
 #Preview("Draggable List - iOS") {

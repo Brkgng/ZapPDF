@@ -101,12 +101,11 @@ struct PageReorderView: View {
                         pages: viewModel.pages,
                         pdfURL: viewModel.sourceFile.url,
                         selectedIndex: $viewModel.selectedPageIndex,
-                        onMove: viewModel.movePages,
-                        columns: 2
+                        onMove: viewModel.movePages
                     )
                 }
             }
-            .frame(minWidth: 220, idealWidth: 280)
+            .frame(minWidth: 280, idealWidth: 400)
         }
         .frame(minWidth: 600, minHeight: 400)
         .navigationTitle("Reorder Pages")
@@ -137,6 +136,16 @@ struct PageReorderView: View {
             }
             .disabled(!viewModel.hasChanges)
             .help("Reset to Original Order")
+            
+            Divider()
+                .frame(height: 16)
+            
+            Button(action: viewModel.deleteSelectedPage) {
+                Image(systemName: "trash")
+            }
+            .disabled(!viewModel.canDeleteSelectedPage)
+            .help("Delete Selected Page (⌫)")
+            .keyboardShortcut(.delete, modifiers: [])
             
             Spacer()
             
@@ -283,41 +292,53 @@ struct PageReorderView: View {
     // MARK: - Common Views
     
     private var previewPanel: some View {
-        VStack {
-            if let selectedIndex = viewModel.selectedPageIndex,
-               selectedIndex < viewModel.pages.count {
-                let page = viewModel.pages[selectedIndex]
-                
-                VStack(spacing: 16) {
-                    Text("Page \(page.displayPageNumber)")
-                        .font(.headline)
+        GeometryReader { geometry in
+            VStack {
+                if let selectedIndex = viewModel.selectedPageIndex,
+                   selectedIndex < viewModel.pages.count {
+                    let page = viewModel.pages[selectedIndex]
                     
-                    PageThumbnailView(
-                        url: viewModel.sourceFile.url,
-                        pageIndex: page.originalIndex,
-                        displayNumber: page.displayPageNumber,
-                        isSelected: false,
-                        size: CGSize(width: 300, height: 400)
-                    )
+                    // Calculate responsive preview size
+                    let maxWidth = geometry.size.width - 48
+                    let maxHeight = geometry.size.height - 120
+                    let aspectRatio: CGFloat = 0.707 // A4
                     
-                    if page.originalIndex != selectedIndex {
-                        Label("Moved from position \(page.originalIndex + 1)", systemImage: "arrow.triangle.swap")
-                            .font(.caption)
-                            .foregroundColor(.orange)
+                    // Fit within bounds maintaining aspect ratio
+                    let widthFromHeight = maxHeight * aspectRatio
+                    let previewWidth = min(maxWidth, widthFromHeight)
+                    let previewHeight = previewWidth / aspectRatio
+                    
+                    VStack(spacing: 16) {
+                        Text("Page \(page.displayPageNumber)")
+                            .font(.headline)
+                        
+                        PageThumbnailView(
+                            url: viewModel.sourceFile.url,
+                            pageIndex: page.originalIndex,
+                            displayNumber: page.displayPageNumber,
+                            isSelected: false,
+                            size: CGSize(width: previewWidth, height: previewHeight)
+                        )
+                        
+                        if page.originalIndex != selectedIndex {
+                            Label("Moved from position \(page.originalIndex + 1)", systemImage: "arrow.triangle.swap")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                        }
+                    }
+                    .padding()
+                } else {
+                    VStack(spacing: 12) {
+                        Image(systemName: "doc.text.magnifyingglass")
+                            .font(.system(size: 48))
+                            .foregroundColor(.secondary)
+                        Text("Select a page to preview")
+                            .foregroundColor(.secondary)
                     }
                 }
-                .padding()
-            } else {
-                VStack(spacing: 12) {
-                    Image(systemName: "doc.text.magnifyingglass")
-                        .font(.system(size: 48))
-                        .foregroundColor(.secondary)
-                    Text("Select a page to preview")
-                        .foregroundColor(.secondary)
-                }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.gray.opacity(0.05))
     }
     

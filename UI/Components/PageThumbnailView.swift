@@ -61,7 +61,7 @@ struct PageThumbnailView: View {
                 thumbnailImage(thumbnail)
             } else if isLoading {
                 ProgressView()
-                    .scaleEffect(0.6)
+                    .controlSize(.small)
             } else {
                 Image(systemName: "doc")
                     .font(.title2)
@@ -140,11 +140,18 @@ struct PageThumbnailView: View {
     private func loadThumbnail() async {
         isLoading = true
         
+        // Render at 2x for Retina displays
+        let scale: CGFloat = 2.0
+        let renderSize = CGSize(
+            width: size.width * scale,
+            height: size.height * scale
+        )
+        
         let task = Task {
             let result = await Self.renderer.thumbnail(
                 for: url,
                 pageIndex: pageIndex,
-                size: size
+                size: renderSize
             )
             
             if !Task.isCancelled {

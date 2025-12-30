@@ -140,27 +140,28 @@ actor PDFReorderer {
     /// Validate that a new order array is valid for the given page count.
     ///
     /// A valid order must:
-    /// - Have the same number of elements as `pageCount`
-    /// - Contain each index from 0 to (pageCount - 1) exactly once
+    /// - Have at least one element
+    /// - Have at most `pageCount` elements
+    /// - Contain only valid indices (0 to pageCount-1)
+    /// - Contain each index at most once (no duplicates)
+    ///
+    /// Note: Order can have fewer elements than pageCount to support page deletion.
     ///
     /// - Parameters:
     ///   - order: Array of 0-based page indices
     ///   - pageCount: Total number of pages in the source document
     /// - Returns: `true` if the order is valid
     static func validateOrder(_ order: [Int], pageCount: Int) -> Bool {
-        // Must have same number of elements as pages
-        guard order.count == pageCount else { return false }
+        // Must have at least one element and at most pageCount elements
+        guard !order.isEmpty && order.count <= pageCount else { return false }
         
-        // Empty is valid only for empty document
-        guard !order.isEmpty else { return pageCount == 0 }
-        
-        // All indices must be in range
+        // All indices must be in valid range
         let validRange = 0..<pageCount
         guard order.allSatisfy({ validRange.contains($0) }) else { return false }
         
-        // Each index must appear exactly once
+        // Each index must appear at most once (no duplicates)
         let uniqueIndices = Set(order)
-        guard uniqueIndices.count == pageCount else { return false }
+        guard uniqueIndices.count == order.count else { return false }
         
         return true
     }

@@ -127,6 +127,12 @@ final class PageReorderViewModel: ObservableObject {
         return pages[index]
     }
     
+    /// Whether the selected page can be deleted.
+    /// Requires a selection and more than 1 page.
+    var canDeleteSelectedPage: Bool {
+        selectedPageIndex != nil && pages.count > 1
+    }
+    
     // MARK: - Public Methods
     
     /// Load pages from the source PDF.
@@ -225,6 +231,44 @@ final class PageReorderViewModel: ObservableObject {
         
         // Sort back to original order
         pages.sort { $0.originalIndex < $1.originalIndex }
+    }
+    
+    /// Delete page at the specified index.
+    ///
+    /// - Parameter index: Index of the page to delete
+    /// - Note: Cannot delete the last remaining page
+    func deletePage(at index: Int) {
+        guard pages.count > 1 else {
+            errorMessage = "Cannot delete the last page"
+            return
+        }
+        guard index >= 0 && index < pages.count else { return }
+        
+        // Save current state for undo
+        pushUndoState()
+        
+        // Clear redo stack on new action
+        redoStack.removeAll()
+        
+        // Remove the page
+        pages.remove(at: index)
+        
+        // Adjust selection
+        if let selected = selectedPageIndex {
+            if selected == index {
+                // Select previous page, or first if deleted was first
+                selectedPageIndex = max(0, selected - 1)
+            } else if selected > index {
+                // Selection was after deleted page, shift down
+                selectedPageIndex = selected - 1
+            }
+        }
+    }
+    
+    /// Delete the currently selected page.
+    func deleteSelectedPage() {
+        guard let index = selectedPageIndex else { return }
+        deletePage(at: index)
     }
     
     /// Undo the last reorder action.

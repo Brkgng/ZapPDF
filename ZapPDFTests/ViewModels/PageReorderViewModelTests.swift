@@ -325,6 +325,109 @@ struct PageReorderViewModelTests {
         let wasRecorded = await mockUsageManager.wasRecordActionCalled()
         #expect(wasRecorded == true)
     }
+    
+    // MARK: - Delete Page Tests
+    
+    @Test("deletePage removes page at index")
+    @MainActor
+    func deletePageRemovesPageAtIndex() async throws {
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 4, identifier: "delete_page_test")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 4, fileSize: 1000)
+        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
+        
+        await viewModel.loadPages()
+        #expect(viewModel.pages.count == 4)
+        
+        // Delete page at index 1
+        viewModel.deletePage(at: 1)
+        
+        #expect(viewModel.pages.count == 3)
+        #expect(viewModel.hasChanges == true)
+    }
+    
+    @Test("deletePage enables undo")
+    @MainActor
+    func deletePageEnablesUndo() async throws {
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "delete_undo_test")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 3, fileSize: 1000)
+        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
+        
+        await viewModel.loadPages()
+        viewModel.deletePage(at: 0)
+        
+        #expect(viewModel.canUndo == true)
+        
+        // Undo should restore the page
+        viewModel.undo()
+        #expect(viewModel.pages.count == 3)
+    }
+    
+    @Test("deletePage adjusts selection when deleted page was selected")
+    @MainActor
+    func deletePageAdjustsSelection() async throws {
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 4, identifier: "delete_selection_test")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 4, fileSize: 1000)
+        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
+        
+        await viewModel.loadPages()
+        viewModel.selectedPageIndex = 2
+        
+        // Delete the selected page
+        viewModel.deletePage(at: 2)
+        
+        // Selection should move to previous page
+        #expect(viewModel.selectedPageIndex == 1)
+    }
+    
+    @Test("deletePage prevents deleting last page")
+    @MainActor
+    func deletePagePreventsLastPage() async throws {
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 1, identifier: "delete_last_test")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 1, fileSize: 1000)
+        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
+        
+        await viewModel.loadPages()
+        #expect(viewModel.pages.count == 1)
+        
+        // Try to delete the only page
+        viewModel.deletePage(at: 0)
+        
+        // Should still have 1 page and error message
+        #expect(viewModel.pages.count == 1)
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test("canDeleteSelectedPage returns correct value")
+    @MainActor
+    func canDeleteSelectedPageReturnsCorrectValue() async throws {
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 2, identifier: "can_delete_test")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 2, fileSize: 1000)
+        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
+        
+        await viewModel.loadPages()
+        
+        // No selection - cannot delete
+        viewModel.selectedPageIndex = nil
+        #expect(viewModel.canDeleteSelectedPage == false)
+        
+        // With selection - can delete
+        viewModel.selectedPageIndex = 0
+        #expect(viewModel.canDeleteSelectedPage == true)
+        
+        // Delete one page - only 1 left, cannot delete
+        viewModel.deletePage(at: 1)
+        #expect(viewModel.canDeleteSelectedPage == false)
+    }
 }
 
 
