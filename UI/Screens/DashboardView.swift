@@ -41,6 +41,8 @@ struct DashboardView: View {
     @State private var showSplitOptions = false
     @State private var showReorderView = false
     @State private var splitMode: PDFSplitter.SplitMode = .splitEvery(n: 1)
+    @State private var isMergeHelpHovered = false
+    @State private var draggingFileID: UUID?  // For macOS drag-and-drop
     
     // MARK: - Body
     
@@ -153,6 +155,69 @@ struct DashboardView: View {
     
     // MARK: - File List
     
+    #if os(macOS)
+    // macOS: ScrollView with onDrag/onDrop for reliable drag-and-drop
+    private var fileList: some View {
+        ScrollView {
+            LazyVStack(spacing: 8) {
+                ForEach(viewModel.files) { file in
+                    PDFFileRow(
+                        pdfFile: file,
+                        isSelected: viewModel.isSelected(file),
+                        showSelectionCheckbox: true,
+                        onSelectionChanged: { isSelected in
+                            if isSelected {
+                                viewModel.selectFile(file)
+                            } else {
+                                viewModel.deselectFile(file)
+                            }
+                        },
+                        onDelete: {
+                            viewModel.removeFile(file)
+                        }
+                    )
+                    .onDrag {
+                        draggingFileID = file.id
+                        return NSItemProvider(object: file.id.uuidString as NSString)
+                    } preview: {
+                        // Invisible drag preview
+                        Color.clear.frame(width: 1, height: 1)
+                    }
+                    .onDrop(of: [.text], delegate: FileDropDelegate(
+                        item: file,
+                        files: viewModel.files,
+                        draggingFileID: $draggingFileID,
+                        onMove: { source, dest in
+                            viewModel.reorderFiles(from: source, to: dest)
+                        }
+                    ))
+                    .opacity(draggingFileID == file.id ? 0.5 : 1.0)
+                    .contextMenu {
+                        Button {
+                            viewModel.toggleSelection(for: file)
+                        } label: {
+                            Label(
+                                viewModel.isSelected(file) ? "Deselect" : "Select",
+                                systemImage: viewModel.isSelected(file) ? "circle" : "checkmark.circle"
+                            )
+                        }
+                        
+                        Divider()
+                        
+                        Button(role: .destructive) {
+                            viewModel.removeFile(file)
+                        } label: {
+                            Label("Remove", systemImage: "trash")
+                        }
+                    }
+                }
+            }
+            .padding()
+        }
+        .background(Color(nsColor: .controlBackgroundColor))
+    }
+    #else
+    // iOS: List with onMove for native reordering
     private var fileList: some View {
         List {
             ForEach(viewModel.files) { file in
@@ -198,10 +263,8 @@ struct DashboardView: View {
             }
         }
         .listStyle(.inset)
-        #if os(macOS)
-        .listStyle(.bordered(alternatesRowBackgrounds: true))
-        #endif
     }
+    #endif
     
     // MARK: - Bottom Bar
     
@@ -252,12 +315,34 @@ struct DashboardView: View {
     
     private var actionButtonsRow: some View {
         HStack(spacing: 12) {
-            // Merge button
+            // Merge button with instant hover help
             StyledActionButton(
                 action: .merge,
                 isEnabled: viewModel.canPerform(action: .merge)
             ) {
                 handleActionTap(.merge)
+            }
+            .onHover { hovering in
+                isMergeHelpHovered = hovering && viewModel.filesForAction(.merge).count >= 2
+            }
+            .overlay(alignment: .top) {
+                if isMergeHelpHovered {
+                    HStack(spacing: 6) {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundColor(.accentColor)
+                        Text("Files merge in displayed order. Drag to reorder.")
+                            .multilineTextAlignment(.leading)
+                    }
+                    .font(.caption)
+                    .padding(10)
+                    .background(.regularMaterial)
+                    .cornerRadius(8)
+                    .shadow(radius: 4)
+                    .fixedSize(horizontal: true, vertical: false)
+                    .offset(y: -50) // Position above the button
+                    .allowsHitTesting(false) // Critical: prevents tooltip from intercepting clicks
+                    .transition(.opacity.animation(.easeInOut(duration: 0.2)))
+                }
             }
             
             // Split button
@@ -502,6 +587,39 @@ struct SplitOptionsSheet: View {
         return (pageCount + splitEveryN - 1) / splitEveryN
     }
 }
+
+// MARK: - macOS File Drop Delegate
+
+#if os(macOS)
+/// Drop delegate for file reordering on macOS.
+struct FileDropDelegate: DropDelegate {
+    let item: PDFFile
+    let files: [PDFFile]
+    @Binding var draggingFileID: UUID?
+    let onMove: (IndexSet, Int) -> Void
+    
+    func dropEntered(info: DropInfo) {
+        guard let draggingID = draggingFileID,
+              draggingID != item.id,
+              let fromIndex = files.firstIndex(where: { $0.id == draggingID }),
+              let toIndex = files.firstIndex(where: { $0.id == item.id })
+        else { return }
+        
+        withAnimation(.easeInOut(duration: 0.2)) {
+            onMove(IndexSet(integer: fromIndex), toIndex > fromIndex ? toIndex + 1 : toIndex)
+        }
+    }
+    
+    func performDrop(info: DropInfo) -> Bool {
+        draggingFileID = nil
+        return true
+    }
+    
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        return DropProposal(operation: .move)
+    }
+}
+#endif
 
 // MARK: - Preview
 

@@ -130,13 +130,16 @@ struct PDFFileRow: View {
                 .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
         )
         .contentShape(Rectangle())
-        .onTapGesture {
-            if showSelectionCheckbox {
-                onSelectionChanged?(!isSelected)
-            } else {
-                onTap?()
-            }
-        }
+        .simultaneousGesture(
+            TapGesture()
+                .onEnded { _ in
+                    if showSelectionCheckbox {
+                        onSelectionChanged?(!isSelected)
+                    } else {
+                        onTap?()
+                    }
+                }
+        )
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.15)) {
                 isHovered = hovering
