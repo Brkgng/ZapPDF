@@ -46,6 +46,8 @@ struct ProcessingView: View {
     @State private var showCancelConfirmation = false
     @State private var showShareSheet = false
     @State private var showFileSaveSuccess = false
+    @State private var savedFileURL: URL?
+    @State private var saveErrorMessage: String?
     
     // MARK: - Body
     
@@ -99,8 +101,34 @@ struct ProcessingView: View {
                 Button("OK") {
                     dismiss()
                 }
+                #if os(macOS)
+                if let savedURL = savedFileURL {
+                    Button("Reveal in Finder") {
+                        NSWorkspace.shared.activateFileViewerSelecting([savedURL])
+                        dismiss()
+                    }
+                }
+                #endif
             } message: {
                 Text("Your PDF has been saved successfully.")
+            }
+            .alert(
+                "Save Failed",
+                isPresented: .init(
+                    get: { saveErrorMessage != nil },
+                    set: { if !$0 { saveErrorMessage = nil } }
+                )
+            ) {
+                Button("Try Again") {
+                    if case .completed(let urls) = viewModel.state {
+                        saveFileOnMacOS(urls: urls)
+                    }
+                }
+                Button("Cancel", role: .cancel) {
+                    saveErrorMessage = nil
+                }
+            } message: {
+                Text(saveErrorMessage ?? "Unable to save the file.")
             }
             .onChange(of: viewModel.state) { oldState, newState in
                 if case .cancelled = newState {
@@ -315,17 +343,6 @@ struct ProcessingView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             .buttonStyle(.plain)
-            
-            // Reveal in Finder
-            Button {
-                if let url = resultURLs.first {
-                    NSWorkspace.shared.activateFileViewerSelecting([url])
-                }
-            } label: {
-                Text("Reveal in Finder")
-                    .font(.subheadline)
-                    .foregroundColor(.accentColor)
-            }
             #else
             // iOS: Share button
             Button {
@@ -344,15 +361,6 @@ struct ProcessingView: View {
                 ShareSheet(items: resultURLs)
             }
             #endif
-            
-            // Done button
-            Button {
-                dismiss()
-            } label: {
-                Text("Done")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
         }
     }
     
@@ -386,11 +394,11 @@ struct ProcessingView: View {
                         try FileManager.default.removeItem(at: destinationURL)
                     }
                     
-                    try FileManager.default.copyItem(at: firstURL, to: destinationURL)
+                    try FileManager.default.moveItem(at: firstURL, to: destinationURL)
+                    savedFileURL = destinationURL
                     showFileSaveSuccess = true
                 } catch {
-                    // Could show error alert here
-                    print("Save failed: \(error)")
+                    saveErrorMessage = "Could not save file: \(error.localizedDescription)"
                 }
             }
         }
