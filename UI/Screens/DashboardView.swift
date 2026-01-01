@@ -68,21 +68,21 @@ struct DashboardView: View {
                     if let action = selectedAction, let options = processingOptions {
                         ProcessingView(
                             action: action,
-                            files: viewModel.selectedFiles,
+                            files: viewModel.filesForAction(action),
                             options: options
                         )
                     }
                 }
                 .sheet(isPresented: $showSplitOptions) {
                     SplitOptionsSheet(
-                        pageCount: viewModel.selectedFiles.first?.pageCount ?? 0,
+                        pageCount: viewModel.filesForAction(.split).first?.pageCount ?? 0,
                         splitMode: $splitMode
                     ) {
                         startAction(.split, options: .split(mode: splitMode))
                     }
                 }
                 .navigationDestination(isPresented: $showReorderView) {
-                    if let file = viewModel.selectedFiles.first {
+                    if let file = viewModel.filesForAction(.reorder).first {
                         PageReorderView(file: file)
                     }
                 }
@@ -155,15 +155,40 @@ struct DashboardView: View {
     
     private var fileList: some View {
         List {
-            ForEach(viewModel.selectedFiles) { file in
-                PDFFileRow(pdfFile: file)
-                    .contextMenu {
-                        Button(role: .destructive) {
-                            viewModel.removeFile(file)
-                        } label: {
-                            Label("Remove", systemImage: "trash")
+            ForEach(viewModel.files) { file in
+                PDFFileRow(
+                    pdfFile: file,
+                    isSelected: viewModel.isSelected(file),
+                    showSelectionCheckbox: true,
+                    onSelectionChanged: { isSelected in
+                        if isSelected {
+                            viewModel.selectFile(file)
+                        } else {
+                            viewModel.deselectFile(file)
                         }
+                    },
+                    onDelete: {
+                        viewModel.removeFile(file)
                     }
+                )
+                .contextMenu {
+                    Button {
+                        viewModel.toggleSelection(for: file)
+                    } label: {
+                        Label(
+                            viewModel.isSelected(file) ? "Deselect" : "Select",
+                            systemImage: viewModel.isSelected(file) ? "circle" : "checkmark.circle"
+                        )
+                    }
+                    
+                    Divider()
+                    
+                    Button(role: .destructive) {
+                        viewModel.removeFile(file)
+                    } label: {
+                        Label("Remove", systemImage: "trash")
+                    }
+                }
             }
             .onDelete { indexSet in
                 viewModel.removeFiles(at: indexSet)
@@ -184,7 +209,8 @@ struct DashboardView: View {
         VStack(spacing: 16) {
             // Summary
             HStack {
-                Text("\(viewModel.selectedFiles.count) files")
+                // Selection count
+                Text("\(viewModel.selectedCount) of \(viewModel.files.count) selected")
                     .font(.subheadline)
                 
                 Text("•")
@@ -272,10 +298,48 @@ struct DashboardView: View {
             }
         }
         
+        #if os(macOS)
+        if viewModel.hasFiles {
+            ToolbarItem(placement: .secondaryAction) {
+                Menu {
+                    Button {
+                        viewModel.selectAll()
+                    } label: {
+                        Label("Select All", systemImage: "checkmark.circle")
+                    }
+                    .keyboardShortcut("a", modifiers: .command)
+                    
+                    Button {
+                        viewModel.deselectAll()
+                    } label: {
+                        Label("Deselect All", systemImage: "circle")
+                    }
+                    .keyboardShortcut("a", modifiers: [.command, .shift])
+                } label: {
+                    Label("Selection", systemImage: "checklist")
+                }
+            }
+        }
+        #endif
+        
         #if os(iOS)
         if viewModel.hasFiles {
             ToolbarItem(placement: .topBarLeading) {
-                EditButton()
+                Menu {
+                    Button {
+                        viewModel.selectAll()
+                    } label: {
+                        Label("Select All", systemImage: "checkmark.circle")
+                    }
+                    
+                    Button {
+                        viewModel.deselectAll()
+                    } label: {
+                        Label("Deselect All", systemImage: "circle")
+                    }
+                } label: {
+                    Label("Selection", systemImage: "checklist")
+                }
             }
         }
         #endif

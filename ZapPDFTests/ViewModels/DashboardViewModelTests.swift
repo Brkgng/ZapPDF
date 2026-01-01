@@ -9,8 +9,6 @@ import Testing
 import Foundation
 @testable import ZapPDF
 
-
-
 @Suite("DashboardViewModel Tests")
 struct DashboardViewModelTests {
     
@@ -29,6 +27,7 @@ struct DashboardViewModelTests {
         let viewModel = createViewModel()
         
         #expect(viewModel.selectedFiles.isEmpty)
+        #expect(viewModel.files.isEmpty)
         #expect(viewModel.isLoading == false)
         #expect(viewModel.errorMessage == nil)
         #expect(viewModel.hasFiles == false)
@@ -45,10 +44,12 @@ struct DashboardViewModelTests {
         
         await viewModel.addFiles(urls: [testURL])
         
-        #expect(viewModel.selectedFiles.count == 1)
-        #expect(viewModel.selectedFiles.first?.fileName == testURL.lastPathComponent)
+        #expect(viewModel.files.count == 1)
+        #expect(viewModel.files.first?.fileName == testURL.lastPathComponent)
         #expect(viewModel.hasFiles == true)
         #expect(viewModel.isLoading == false)
+        // Verify default is NOT selected
+        #expect(viewModel.selectedFiles.isEmpty)
     }
     
     @Test("Adding multiple files works correctly")
@@ -60,7 +61,7 @@ struct DashboardViewModelTests {
         
         await viewModel.addFiles(urls: urls)
         
-        #expect(viewModel.selectedFiles.count == 3)
+        #expect(viewModel.files.count == 3)
         #expect(viewModel.totalPageCount == 9) // 2 + 3 + 4
     }
     
@@ -73,11 +74,16 @@ struct DashboardViewModelTests {
         
         await viewModel.addFiles(urls: urls)
         
-        let firstFile = viewModel.selectedFiles[0]
-        viewModel.removeFile(firstFile)
+        // Select first file
+        let firstFile = viewModel.files[0]
+        viewModel.selectFile(firstFile)
         
         #expect(viewModel.selectedFiles.count == 1)
-        #expect(viewModel.selectedFiles.first?.fileName != firstFile.fileName)
+        
+        viewModel.removeFile(firstFile)
+        
+        #expect(viewModel.selectedFiles.isEmpty)
+        #expect(viewModel.files.count == 1)
     }
     
     @Test("Reorder files preserves all files")
@@ -89,13 +95,13 @@ struct DashboardViewModelTests {
         
         await viewModel.addFiles(urls: urls)
         
-        let originalFirst = viewModel.selectedFiles[0]
+        let originalFirst = viewModel.files[0]
         
         // Move first to last position
         viewModel.reorderFiles(from: IndexSet(integer: 0), to: 3)
         
-        #expect(viewModel.selectedFiles.count == 3)
-        #expect(viewModel.selectedFiles.last?.id == originalFirst.id)
+        #expect(viewModel.files.count == 3)
+        #expect(viewModel.files.last?.id == originalFirst.id)
     }
     
     @Test("Clear all resets state")
@@ -106,10 +112,51 @@ struct DashboardViewModelTests {
         defer { PDFTestHelpers.cleanup(url: testURL) }
         
         await viewModel.addFiles(urls: [testURL])
+        viewModel.selectFile(viewModel.files[0])
+        
         viewModel.clearAll()
         
         #expect(viewModel.selectedFiles.isEmpty)
+        #expect(viewModel.files.isEmpty)
         #expect(viewModel.hasFiles == false)
+    }
+    
+    // MARK: - Selection Tests
+    
+    @Test("Selection methods work correctly")
+    @MainActor
+    func selectionMethodsWork() async throws {
+        let viewModel = createViewModel()
+        let urls = try PDFTestHelpers.createTestPDFs(counts: [1, 1])
+        defer { PDFTestHelpers.cleanup(urls: urls) }
+        
+        await viewModel.addFiles(urls: urls)
+        let file1 = viewModel.files[0]
+        let file2 = viewModel.files[1]
+        
+        // Test select
+        viewModel.selectFile(file1)
+        #expect(viewModel.selectedFiles.count == 1)
+        #expect(viewModel.isSelected(file1))
+        #expect(!viewModel.isSelected(file2))
+        
+        // Test toggle
+        viewModel.toggleSelection(for: file1)
+        #expect(viewModel.selectedFiles.isEmpty)
+        
+        viewModel.toggleSelection(for: file2)
+        #expect(viewModel.selectedFiles.count == 1)
+        #expect(viewModel.isSelected(file2))
+        
+        // Test select all
+        viewModel.selectAll()
+        #expect(viewModel.selectedFiles.count == 2)
+        #expect(viewModel.allSelected)
+        
+        // Test deselect all
+        viewModel.deselectAll()
+        #expect(viewModel.selectedFiles.isEmpty)
+        #expect(viewModel.noneSelected)
     }
     
     // MARK: - Action Validation Tests
@@ -133,6 +180,16 @@ struct DashboardViewModelTests {
         defer { PDFTestHelpers.cleanup(url: secondURL) }
         
         await viewModel.addFiles(urls: [secondURL])
+        
+        // Should default to true if NO files are selected (fallback behavior)
+        #expect(viewModel.canPerform(action: .merge) == true)
+        
+        // If we select just 1, it should fail
+        viewModel.selectFile(viewModel.files[0])
+        #expect(viewModel.canPerform(action: .merge) == false)
+        
+        // If we select both, it should pass
+        viewModel.selectAll()
         #expect(viewModel.canPerform(action: .merge) == true)
     }
     
@@ -146,12 +203,17 @@ struct DashboardViewModelTests {
         // No files
         #expect(viewModel.canPerform(action: .split) == false)
         
-        // One file - valid
+        // One file added (none selected) -> Split requires selection
         await viewModel.addFiles(urls: [urls[0]])
+        #expect(viewModel.canPerform(action: .split) == false)
+        
+        // Select one file -> Valid
+        viewModel.selectFile(viewModel.files[0])
         #expect(viewModel.canPerform(action: .split) == true)
         
-        // Two files - invalid for split
+        // Two files selected -> Invalid
         await viewModel.addFiles(urls: [urls[1]])
+        viewModel.selectAll()
         #expect(viewModel.canPerform(action: .split) == false)
     }
     
@@ -195,7 +257,7 @@ struct DashboardViewModelTests {
         await viewModel.addFiles(urls: [invalidURL])
         
         #expect(viewModel.errorMessage != nil)
-        #expect(viewModel.selectedFiles.isEmpty)
+        #expect(viewModel.files.isEmpty)
     }
     
     // MARK: - Computed Properties Tests

@@ -44,8 +44,12 @@ final class DashboardViewModel: ObservableObject {
     
     // MARK: - Published State
     
-    /// Currently selected PDF files.
-    @Published private(set) var selectedFiles: [PDFFile] = []
+    /// All PDF files added to the dashboard.
+    @Published private(set) var files: [PDFFile] = []
+    
+    /// IDs of currently selected files for operations.
+    /// Files are not selected by default when added.
+    @Published private(set) var selectedFileIDs: Set<UUID> = []
     
     /// Whether files are currently being loaded.
     @Published private(set) var isLoading: Bool = false
@@ -78,6 +82,7 @@ final class DashboardViewModel: ObservableObject {
     ///
     /// This method loads metadata from each URL and creates PDFFile instances.
     /// Invalid URLs or non-PDF files will set an error message.
+    /// Note: Newly added files are NOT selected by default (Option B).
     ///
     /// - Parameter urls: Array of file URLs to add
     func addFiles(urls: [URL]) async {
@@ -99,8 +104,8 @@ final class DashboardViewModel: ObservableObject {
             }
         }
         
-        // Add successfully loaded files
-        selectedFiles.append(contentsOf: addedFiles)
+        // Add successfully loaded files (not selected by default)
+        files.append(contentsOf: addedFiles)
         
         // Set error message if any files failed
         if !errorURLs.isEmpty {
@@ -115,18 +120,24 @@ final class DashboardViewModel: ObservableObject {
         isLoading = false
     }
     
-    /// Remove a file from the selection.
+    /// Remove a file from the list.
     ///
     /// - Parameter file: The PDFFile to remove
     func removeFile(_ file: PDFFile) {
-        selectedFiles.removeAll { $0.id == file.id }
+        files.removeAll { $0.id == file.id }
+        // Also remove from selection if selected
+        selectedFileIDs.remove(file.id)
     }
     
     /// Remove files at specified indices.
     ///
     /// - Parameter indexSet: Indices of files to remove
     func removeFiles(at indexSet: IndexSet) {
-        selectedFiles.remove(atOffsets: indexSet)
+        // Remove from selection first
+        let removedIDs = indexSet.map { files[$0].id }
+        removedIDs.forEach { selectedFileIDs.remove($0) }
+        // Then remove from files
+        files.remove(atOffsets: indexSet)
     }
     
     /// Reorder files (for drag and drop in merge operations).
@@ -135,23 +146,84 @@ final class DashboardViewModel: ObservableObject {
     ///   - source: Source indices
     ///   - destination: Destination index
     func reorderFiles(from source: IndexSet, to destination: Int) {
-        selectedFiles.move(fromOffsets: source, toOffset: destination)
+        files.move(fromOffsets: source, toOffset: destination)
     }
     
-    /// Clear all selected files.
+    /// Clear all files.
     func clearAll() {
-        selectedFiles.removeAll()
+        files.removeAll()
+        selectedFileIDs.removeAll()
         errorMessage = nil
     }
     
+    // MARK: - Selection Management
+    
+    /// Toggle selection state of a file.
+    ///
+    /// - Parameter file: The file to toggle selection for
+    func toggleSelection(for file: PDFFile) {
+        if selectedFileIDs.contains(file.id) {
+            selectedFileIDs.remove(file.id)
+        } else {
+            selectedFileIDs.insert(file.id)
+        }
+    }
+    
+    /// Select a file.
+    ///
+    /// - Parameter file: The file to select
+    func selectFile(_ file: PDFFile) {
+        selectedFileIDs.insert(file.id)
+    }
+    
+    /// Deselect a file.
+    ///
+    /// - Parameter file: The file to deselect
+    func deselectFile(_ file: PDFFile) {
+        selectedFileIDs.remove(file.id)
+    }
+    
+    /// Select all files.
+    func selectAll() {
+        selectedFileIDs = Set(files.map(\.id))
+    }
+    
+    /// Deselect all files.
+    func deselectAll() {
+        selectedFileIDs.removeAll()
+    }
+    
+    /// Check if a file is selected.
+    ///
+    /// - Parameter file: The file to check
+    /// - Returns: true if the file is selected
+    func isSelected(_ file: PDFFile) -> Bool {
+        selectedFileIDs.contains(file.id)
+    }
+    
     // MARK: - Action Validation
+    
+    /// Get files to use for the given action.
+    ///
+    /// For merge: uses selected files, or all files if none selected (backward compatibility).
+    /// For other actions: uses selected files only.
+    ///
+    /// - Parameter action: The action to get files for
+    /// - Returns: Array of files to use for the action
+    func filesForAction(_ action: UserAction) -> [PDFFile] {
+        if action == .merge && selectedFileIDs.isEmpty {
+            return files  // Fall back to all files for merge
+        }
+        return selectedFiles
+    }
     
     /// Check if an action can be performed with current file selection.
     ///
     /// - Parameter action: The action to validate
     /// - Returns: true if the action can be performed
     func canPerform(action: UserAction) -> Bool {
-        action.isValidFileCount(selectedFiles.count)
+        let actionFiles = filesForAction(action)
+        return action.isValidFileCount(actionFiles.count)
     }
     
     /// Get the validation error message for an action.
@@ -159,7 +231,8 @@ final class DashboardViewModel: ObservableObject {
     /// - Parameter action: The action to check
     /// - Returns: Error message if validation fails, nil otherwise
     func validationError(for action: UserAction) -> String? {
-        action.fileCountError(for: selectedFiles.count)
+        let actionFiles = filesForAction(action)
+        return action.fileCountError(for: actionFiles.count)
     }
     
     /// Check if the user should see the paywall before performing an action.
@@ -190,23 +263,43 @@ final class DashboardViewModel: ObservableObject {
     
     // MARK: - Computed Properties
     
-    /// Whether any files are selected.
+    /// Files that are currently selected.
+    var selectedFiles: [PDFFile] {
+        files.filter { selectedFileIDs.contains($0.id) }
+    }
+    
+    /// Number of selected files.
+    var selectedCount: Int {
+        selectedFileIDs.count
+    }
+    
+    /// Whether all files are selected.
+    var allSelected: Bool {
+        selectedFileIDs.count == files.count && !files.isEmpty
+    }
+    
+    /// Whether no files are selected.
+    var noneSelected: Bool {
+        selectedFileIDs.isEmpty
+    }
+    
+    /// Whether any files are added.
     var hasFiles: Bool {
-        !selectedFiles.isEmpty
+        !files.isEmpty
     }
     
-    /// Total page count across all selected files.
+    /// Total page count across all files.
     var totalPageCount: Int {
-        selectedFiles.totalPageCount
+        files.totalPageCount
     }
     
-    /// Total file size across all selected files.
+    /// Total file size across all files.
     var totalFileSize: Int64 {
-        selectedFiles.totalFileSize
+        files.totalFileSize
     }
     
     /// Formatted total file size.
     var formattedTotalSize: String {
-        selectedFiles.formattedTotalSize
+        files.formattedTotalSize
     }
 }

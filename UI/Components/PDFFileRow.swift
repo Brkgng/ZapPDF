@@ -33,11 +33,20 @@ struct PDFFileRow: View {
     /// The PDF file to display.
     let pdfFile: PDFFile
     
+    /// Whether this file is currently selected.
+    var isSelected: Bool = false
+    
     /// Whether to show a drag handle for reordering.
     var showDragHandle: Bool = false
     
     /// Whether to show the delete button.
     var showDeleteButton: Bool = true
+    
+    /// Whether to show the selection checkbox.
+    var showSelectionCheckbox: Bool = false
+    
+    /// Callback when selection changes.
+    var onSelectionChanged: ((Bool) -> Void)?
     
     /// Callback when the delete button is tapped.
     var onDelete: (() -> Void)?
@@ -53,6 +62,11 @@ struct PDFFileRow: View {
     
     var body: some View {
         HStack(spacing: 12) {
+            // Selection checkbox (if enabled)
+            if showSelectionCheckbox {
+                selectionCheckbox
+            }
+            
             // Drag handle (if enabled)
             if showDragHandle {
                 Image(systemName: "line.3.horizontal")
@@ -109,11 +123,19 @@ struct PDFFileRow: View {
         .padding(.horizontal, 12)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(isHovered ? Color.gray.opacity(0.1) : Color.clear)
+                .fill(backgroundColor)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
         )
         .contentShape(Rectangle())
         .onTapGesture {
-            onTap?()
+            if showSelectionCheckbox {
+                onSelectionChanged?(!isSelected)
+            } else {
+                onTap?()
+            }
         }
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.15)) {
@@ -122,6 +144,32 @@ struct PDFFileRow: View {
         }
         .contextMenu {
             contextMenuItems
+        }
+    }
+    
+    // MARK: - Selection Checkbox
+    
+    private var selectionCheckbox: some View {
+        Button {
+            onSelectionChanged?(!isSelected)
+        } label: {
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                .font(.title2)
+                .foregroundColor(isSelected ? .accentColor : .secondary)
+        }
+        .buttonStyle(.plain)
+        .help(isSelected ? "Deselect file" : "Select file")
+    }
+    
+    // MARK: - Background Color
+    
+    private var backgroundColor: Color {
+        if isSelected {
+            return Color.accentColor.opacity(0.12)
+        } else if isHovered {
+            return Color.gray.opacity(0.1)
+        } else {
+            return Color.clear
         }
     }
     
