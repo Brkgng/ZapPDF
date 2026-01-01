@@ -117,6 +117,12 @@ final class ProcessingViewModel: ObservableObject {
     private let splitter: PDFSplitter
     private let usageManager: any UsageManaging
     
+    /// Last time progress was updated (for throttling)
+    private var lastProgressUpdate: Date = .distantPast
+    
+    /// Minimum interval between progress updates (50ms = ~20 updates/second)
+    private let progressThrottleInterval: TimeInterval = 0.05
+    
     // MARK: - Initialization
     
     /// Creates a ProcessingViewModel with default services.
@@ -155,6 +161,9 @@ final class ProcessingViewModel: ObservableObject {
     ) async {
         // Cancel any existing operation
         processingTask?.cancel()
+        
+        // Reset throttle timer for new operation
+        lastProgressUpdate = .distantPast
         
         // Reset state
         state = .processing(progress: 0.0, message: progressMessage(for: action))
@@ -259,6 +268,16 @@ final class ProcessingViewModel: ObservableObject {
     
     private func updateProgress(_ progress: Double, action: UserAction) {
         guard case .processing = state else { return }
+        
+        // Throttle progress updates to avoid rapid state changes that trigger
+        // SwiftUI's "onChange tried to update multiple times per frame" warning.
+        // Always allow 100% progress through to ensure completion is displayed.
+        let now = Date()
+        guard progress >= 1.0 || now.timeIntervalSince(lastProgressUpdate) >= progressThrottleInterval else {
+            return
+        }
+        lastProgressUpdate = now
+        
         state = .processing(progress: progress, message: progressMessage(for: action, progress: progress))
     }
     
