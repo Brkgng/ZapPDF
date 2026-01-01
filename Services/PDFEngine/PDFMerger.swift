@@ -34,10 +34,14 @@ actor PDFMerger {
         /// Whether to preserve bookmarks from source documents
         var preserveBookmarks: Bool = true
         
+        /// Whether to append a timestamp suffix for uniqueness
+        var includeTimestamp: Bool = true
+        
         /// Creates default merge options
-        init(outputFileName: String = "merged", preserveBookmarks: Bool = true) {
+        init(outputFileName: String = "merged", preserveBookmarks: Bool = true, includeTimestamp: Bool = true) {
             self.outputFileName = outputFileName
             self.preserveBookmarks = preserveBookmarks
+            self.includeTimestamp = includeTimestamp
         }
     }
     
@@ -115,9 +119,13 @@ actor PDFMerger {
         
         try checkCancellation()
         
-        // Generate output URL
+        // Generate output URL with optional timestamp
+        var finalOutputName = options.outputFileName
+        if options.includeTimestamp {
+            finalOutputName += "_\(Date.filenameTimestamp())"
+        }
         let outputURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent(options.outputFileName)
+            .appendingPathComponent(finalOutputName)
             .appendingPathExtension("pdf")
         
         // Write output file

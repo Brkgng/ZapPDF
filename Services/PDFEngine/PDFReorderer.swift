@@ -41,6 +41,7 @@ actor PDFReorderer {
     ///   - file: The source PDF file to reorder
     ///   - newOrder: Array of 0-based page indices in the desired output order
     ///   - outputFileName: Optional custom output filename (without extension)
+    ///   - includeTimestamp: Whether to append a timestamp suffix for uniqueness (default: true, only applies when outputFileName is nil)
     ///   - progress: Callback reporting progress from 0.0 to 1.0
     /// - Returns: URL to the reordered PDF in the temporary directory
     /// - Throws: `PDFEngineError` if reordering fails
@@ -55,6 +56,7 @@ actor PDFReorderer {
         file: PDFFile,
         newOrder: [Int],
         outputFileName: String? = nil,
+        includeTimestamp: Bool = true,
         progress: @escaping @Sendable (Double) -> Void
     ) async throws -> URL {
         // Reset cancellation state
@@ -110,9 +112,19 @@ actor PDFReorderer {
             
             try await self.checkCancellation()
             
-            // Generate output filename
+            // Generate output filename with optional timestamp
             let baseName = file.url.deletingPathExtension().lastPathComponent
-            let finalOutputName = outputFileName ?? "\(baseName)_reordered"
+            var finalOutputName: String
+            if let customName = outputFileName {
+                // User provided custom name, use it as-is
+                finalOutputName = customName
+            } else {
+                // Default name with optional timestamp
+                finalOutputName = "\(baseName)_reordered"
+                if includeTimestamp {
+                    finalOutputName += "_\(Date.filenameTimestamp())"
+                }
+            }
             
             // Generate output URL
             let outputURL = FileManager.default.temporaryDirectory

@@ -51,12 +51,14 @@ actor PDFSplitter {
     /// - Parameters:
     ///   - file: The source `PDFFile` to split
     ///   - mode: How to split the PDF
+    ///   - includeTimestamp: Whether to append a timestamp suffix for uniqueness (default: true)
     ///   - progress: Callback reporting progress from 0.0 to 1.0
     /// - Returns: Array of URLs to the output PDF files
     /// - Throws: `PDFEngineError` if split fails
     func split(
         file: PDFFile,
         mode: SplitMode,
+        includeTimestamp: Bool = true,
         progress: @escaping @Sendable (Double) -> Void
     ) async throws -> [URL] {
         // Reset cancellation state
@@ -103,12 +105,13 @@ actor PDFSplitter {
                     }
                 }
                 
-                // Generate output filename
+                // Generate output filename with optional timestamp
+                let timestamp = includeTimestamp ? "_\(Date.filenameTimestamp())" : ""
                 let outputName: String
                 if segments.count == 1 {
-                    outputName = "\(baseName)_extracted"
+                    outputName = "\(baseName)_extracted\(timestamp)"
                 } else {
-                    outputName = "\(baseName)_part\(index + 1)"
+                    outputName = "\(baseName)_part\(index + 1)\(timestamp)"
                 }
                 
                 let outputURL = FileManager.default.temporaryDirectory
