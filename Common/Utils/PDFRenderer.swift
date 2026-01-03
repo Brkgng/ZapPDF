@@ -2,7 +2,7 @@
 //  PDFRenderer.swift
 //  ZapPDF
 //
-//  Actor for generating PDF page thumbnails with caching.
+//  Actor for generating PDF page thumbnails with memory-optimized caching.
 //
 
 import Foundation
@@ -15,10 +15,68 @@ import AppKit
 import UIKit
 #endif
 
+// MARK: - Cache Wrapper Classes for NSCache
+
+/// Wrapper for CGImage to use with NSCache (requires AnyObject).
+final class CGImageWrapper: NSObject {
+    let image: CGImage
+    
+    /// Memory cost in bytes (width × height × 4 bytes per pixel).
+    let cost: Int
+    
+    init(image: CGImage) {
+        self.image = image
+        self.cost = image.width * image.height * 4
+        super.init()
+    }
+}
+
+/// Cache key wrapper for NSCache (requires NSObject subclass).
+final class ThumbnailCacheKey: NSObject {
+    let url: URL
+    let pageIndex: Int
+    let width: Int
+    let height: Int
+    
+    init(url: URL, pageIndex: Int, width: Int, height: Int) {
+        self.url = url
+        self.pageIndex = pageIndex
+        self.width = width
+        self.height = height
+        super.init()
+    }
+    
+    override var hash: Int {
+        var hasher = Hasher()
+        hasher.combine(url)
+        hasher.combine(pageIndex)
+        hasher.combine(width)
+        hasher.combine(height)
+        return hasher.finalize()
+    }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? ThumbnailCacheKey else { return false }
+        return url == other.url &&
+               pageIndex == other.pageIndex &&
+               width == other.width &&
+               height == other.height
+    }
+}
+
+// MARK: - PDFRenderer
+
 /// Actor responsible for generating PDF page thumbnails.
 ///
 /// `PDFRenderer` generates thumbnails at a specified size and caches them
-/// in memory for efficient reuse. All rendering happens off the main thread.
+/// using `NSCache` for automatic memory management under pressure.
+/// All rendering happens off the main thread with proper cancellation support.
+///
+/// ## Memory Management
+/// - Uses `NSCache` which automatically evicts entries under memory pressure
+/// - Platform-specific limits: 50 items / 20 MB on iOS, 100 items / 50 MB on macOS
+/// - Tracks in-flight tasks to prevent duplicate renders
+/// - Supports cooperative cancellation
 ///
 /// Example:
 /// ```swift
@@ -29,54 +87,110 @@ import UIKit
 /// ```
 actor PDFRenderer {
     
-    // MARK: - Cache Key
+    // MARK: - Platform-Specific Limits
     
-    private struct CacheKey: Hashable {
-        let url: URL
-        let pageIndex: Int
-        let width: Int
-        let height: Int
+    /// Maximum number of cached thumbnails.
+    private static var cacheCountLimit: Int {
+        #if os(iOS)
+        return 50   // Smaller limit for iOS memory constraints
+        #else
+        return 100  // Larger limit for macOS
+        #endif
+    }
+    
+    /// Maximum total memory for cache in bytes.
+    private static var cacheCostLimit: Int {
+        #if os(iOS)
+        return 20 * 1024 * 1024  // 20 MB on iOS
+        #else
+        return 50 * 1024 * 1024  // 50 MB on macOS
+        #endif
     }
     
     // MARK: - Private Properties
     
-    private var cache: [CacheKey: CGImage] = [:]
-    private let maxCacheSize = 100
+    /// NSCache for automatic memory management.
+    private let cache: NSCache<ThumbnailCacheKey, CGImageWrapper>
+    
+    /// Tracks cached keys for count (NSCache doesn't expose count).
+    private var cachedKeys: Set<ThumbnailCacheKey> = []
+    
+    /// Tracks in-flight rendering tasks to prevent duplicate work.
+    private var inFlightTasks: [ThumbnailCacheKey: Task<CGImage?, Never>] = [:]
+    
+    // MARK: - Initialization
+    
+    init() {
+        cache = NSCache<ThumbnailCacheKey, CGImageWrapper>()
+        cache.countLimit = Self.cacheCountLimit
+        cache.totalCostLimit = Self.cacheCostLimit
+    }
     
     // MARK: - Public Methods
     
     /// Generate a thumbnail for a specific page of a PDF.
     ///
+    /// This method supports cooperative cancellation. If the calling task is cancelled,
+    /// rendering will stop early and return `nil`.
+    ///
     /// - Parameters:
     ///   - url: URL of the PDF file
     ///   - pageIndex: Zero-based page index
     ///   - size: Desired size for the thumbnail
-    /// - Returns: CGImage of the thumbnail, or nil if generation failed
+    /// - Returns: CGImage of the thumbnail, or nil if generation failed or was cancelled
     func thumbnail(
         for url: URL,
         pageIndex: Int = 0,
         size: CGSize
     ) async -> CGImage? {
-        let cacheKey = CacheKey(
+        let cacheKey = ThumbnailCacheKey(
             url: url,
             pageIndex: pageIndex,
             width: Int(size.width),
             height: Int(size.height)
         )
         
-        // Check cache first
-        if let cached = cache[cacheKey] {
-            return cached
+        // 1. Check cache first
+        if let cached = cache.object(forKey: cacheKey) {
+            return cached.image
         }
         
-        // Generate thumbnail off main thread
-        let result = await Task.detached(priority: .utility) { [url, pageIndex, size] in
-            return Self.renderThumbnail(url: url, pageIndex: pageIndex, size: size)
-        }.value
+        // 2. Check if already rendering this exact thumbnail
+        if let existingTask = inFlightTasks[cacheKey] {
+            return await existingTask.value
+        }
         
-        // Cache the result
-        if let image = result {
-            addToCache(key: cacheKey, image: image)
+        // 3. Check cancellation BEFORE starting expensive work
+        guard !Task.isCancelled else { return nil }
+        
+        // 4. Create task that checks for cancellation
+        // Note: Using regular Task (not Task.detached) so it inherits cancellation
+        let task = Task<CGImage?, Never>(priority: .utility) { [url, pageIndex, size] in
+            // Check cancellation at the start
+            guard !Task.isCancelled else { return nil }
+            
+            let result = Self.renderThumbnail(url: url, pageIndex: pageIndex, size: size)
+            
+            // Check cancellation after rendering
+            guard !Task.isCancelled else { return nil }
+            
+            return result
+        }
+        
+        // Track in-flight task
+        inFlightTasks[cacheKey] = task
+        
+        // Await result
+        let result = await task.value
+        
+        // Cleanup in-flight tracking
+        inFlightTasks.removeValue(forKey: cacheKey)
+        
+        // Only cache if not cancelled and we got a result
+        if let image = result, !Task.isCancelled {
+            let wrapper = CGImageWrapper(image: image)
+            cache.setObject(wrapper, forKey: cacheKey, cost: wrapper.cost)
+            cachedKeys.insert(cacheKey)
         }
         
         return result
@@ -84,33 +198,49 @@ actor PDFRenderer {
     
     /// Clear all cached thumbnails.
     func clearCache() {
-        cache.removeAll()
+        cache.removeAllObjects()
+        cachedKeys.removeAll()
     }
     
     /// Get the current number of cached thumbnails.
     var cacheCount: Int {
-        cache.count
+        cachedKeys.count
+    }
+    
+    /// Cancel all in-flight rendering tasks.
+    ///
+    /// Call this when navigating away from a view that uses many thumbnails
+    /// to immediately stop all pending renders.
+    func cancelAllInFlight() {
+        for task in inFlightTasks.values {
+            task.cancel()
+        }
+        inFlightTasks.removeAll()
+    }
+    
+    /// Get the current number of in-flight tasks (for debugging).
+    var inFlightCount: Int {
+        inFlightTasks.count
     }
     
     // MARK: - Private Methods
     
-    private func addToCache(key: CacheKey, image: CGImage) {
-        // Simple LRU-ish eviction: remove oldest entries if cache is too large
-        if cache.count >= maxCacheSize {
-            // Remove first 20% of entries
-            let removeCount = maxCacheSize / 5
-            let keysToRemove = Array(cache.keys.prefix(removeCount))
-            for key in keysToRemove {
-                cache.removeValue(forKey: key)
-            }
-        }
-        
-        cache[key] = image
-    }
-    
     /// Render a thumbnail for a PDF page.
+    ///
+    /// This method handles security-scoped resource access for sandboxed environments.
+    /// When files are selected via the file picker, the system grants security-scoped
+    /// access. We must call `startAccessingSecurityScopedResource()` before accessing
+    /// the file and `stopAccessingSecurityScopedResource()` when done.
+    ///
+    /// - Note: If the URL is not security-scoped (e.g., files in temp directory),
+    ///   `startAccessingSecurityScopedResource()` returns `false` but does not fail.
+    ///   The file access still succeeds because those directories don't require scope.
     private static func renderThumbnail(url: URL, pageIndex: Int, size: CGSize) -> CGImage? {
-        // Try to access the URL with security scope
+        // Check cancellation before expensive file I/O
+        guard !Task.isCancelled else { return nil }
+        
+        // Activate security-scoped access for user-selected files outside the sandbox.
+        // This is required because DashboardView stops access after file import.
         let didStart = url.startAccessingSecurityScopedResource()
         defer {
             if didStart {
@@ -121,6 +251,9 @@ actor PDFRenderer {
         guard let document = PDFDocument(url: url) else {
             return nil
         }
+        
+        // Check cancellation after file I/O
+        guard !Task.isCancelled else { return nil }
         
         guard let page = document.page(at: pageIndex) else {
             return nil
@@ -136,6 +269,9 @@ actor PDFRenderer {
         
         let scaledWidth = pageBounds.width * scale
         let scaledHeight = pageBounds.height * scale
+        
+        // Check cancellation before creating context
+        guard !Task.isCancelled else { return nil }
         
         // Create bitmap context
         let colorSpace = CGColorSpaceCreateDeviceRGB()

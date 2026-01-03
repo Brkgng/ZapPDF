@@ -81,8 +81,10 @@ struct PageThumbnailView: View {
             await loadThumbnail()
         }
         .onDisappear {
+            // Cancel any pending load and release memory
             loadingTask?.cancel()
             loadingTask = nil
+            thumbnail = nil  // Release memory when scrolled out
         }
     }
     
