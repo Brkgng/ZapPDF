@@ -80,6 +80,7 @@ struct DashboardView: View {
                         SplitOptionsSheet(
                             pageCount: file.pageCount,
                             fileURL: file.url,
+                            fileName: file.fileName,
                             splitMode: $splitMode
                         ) {
                             startAction(.split, options: .split(mode: splitMode))
@@ -515,6 +516,7 @@ struct DashboardView: View {
 struct SplitOptionsSheet: View {
     let pageCount: Int
     let fileURL: URL?
+    let fileName: String
     @Binding var splitMode: PDFSplitter.SplitMode
     let onConfirm: () -> Void
     
@@ -536,11 +538,13 @@ struct SplitOptionsSheet: View {
     // Convenience initializer for backwards compatibility
     init(
         pageCount: Int,
+        fileName: String = "Source PDF",
         splitMode: Binding<PDFSplitter.SplitMode>,
         onConfirm: @escaping () -> Void
     ) {
         self.pageCount = pageCount
         self.fileURL = nil
+        self.fileName = fileName
         self._splitMode = splitMode
         self.onConfirm = onConfirm
     }
@@ -549,11 +553,13 @@ struct SplitOptionsSheet: View {
     init(
         pageCount: Int,
         fileURL: URL,
+        fileName: String,
         splitMode: Binding<PDFSplitter.SplitMode>,
         onConfirm: @escaping () -> Void
     ) {
         self.pageCount = pageCount
         self.fileURL = fileURL
+        self.fileName = fileName
         self._splitMode = splitMode
         self.onConfirm = onConfirm
     }
@@ -618,8 +624,10 @@ struct SplitOptionsSheet: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             
             VStack(alignment: .leading, spacing: 2) {
-                Text("Source PDF")
+                Text(fileName)
                     .font(.headline)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
                 Text("\(pageCount) pages")
                     .font(.subheadline)
                     .foregroundColor(.secondary)

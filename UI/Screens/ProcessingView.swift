@@ -112,6 +112,7 @@ struct ProcessingView: View {
             } message: {
                 Text("Your PDF has been saved successfully.")
             }
+            #if os(macOS)
             .alert(
                 "Save Failed",
                 isPresented: .init(
@@ -130,6 +131,7 @@ struct ProcessingView: View {
             } message: {
                 Text(saveErrorMessage ?? "Unable to save the file.")
             }
+            #endif
             .onChange(of: viewModel.state) { oldState, newState in
                 if case .cancelled = newState {
                     dismiss()
