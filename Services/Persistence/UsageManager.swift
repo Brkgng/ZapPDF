@@ -36,14 +36,6 @@ enum UsageError: Error, LocalizedError, Sendable {
     }
 }
 
-// MARK: - Notifications
-
-extension Notification.Name {
-    /// Posted when the user's subscription or usage state changes.
-    /// ViewModels should subscribe to this to refresh their UI.
-    static let usageStateDidChange = Notification.Name("usageStateDidChange")
-}
-
 // MARK: - UsageManager
 
 /// Actor managing free tier usage with thread-safe operations.

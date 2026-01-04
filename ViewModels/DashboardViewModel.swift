@@ -181,11 +181,39 @@ final class DashboardViewModel: ObservableObject {
         files.move(fromOffsets: source, toOffset: destination)
     }
     
-    /// Clear all files.
+    /// Clear all files with undo support.
+    ///
+    /// This clears all files and selection, while posting a notification
+    /// that can be used by the UI to offer an undo option.
     func clearAll() {
+        // Store previous state for undo
+        let previousFiles = files
+        let previousSelection = selectedFileIDs
+        
+        // Clear everything
         files.removeAll()
         selectedFileIDs.removeAll()
         errorMessage = nil
+        
+        // Post notification with undo data
+        NotificationCenter.default.post(
+            name: .filesCleared,
+            object: nil,
+            userInfo: [
+                "previousFiles": previousFiles,
+                "previousSelection": previousSelection
+            ]
+        )
+    }
+    
+    /// Restore files after a clearAll (for undo functionality).
+    ///
+    /// - Parameters:
+    ///   - restoredFiles: The files to restore
+    ///   - restoredSelection: The selection state to restore
+    func restoreFiles(_ restoredFiles: [PDFFile], selection restoredSelection: Set<UUID>) {
+        files = restoredFiles
+        selectedFileIDs = restoredSelection
     }
     
     // MARK: - Selection Management

@@ -43,6 +43,10 @@ struct DashboardView: View {
     @State private var splitMode: PDFSplitter.SplitMode = .splitEvery(n: 1)
     @State private var isMergeHelpHovered = false
     @State private var draggingFileID: UUID?  // For macOS drag-and-drop
+    @State private var showClearConfirmation = false
+    @State private var showUndoToast = false
+    @State private var clearedFiles: [PDFFile] = []
+    @State private var clearedSelection: Set<UUID> = []
     
     // MARK: - Body
     
@@ -99,8 +103,29 @@ struct DashboardView: View {
                 } message: {
                     Text(viewModel.errorMessage ?? "An error occurred")
                 }
+                .confirmationDialog(
+                    "Clear All Files?",
+                    isPresented: $showClearConfirmation,
+                    titleVisibility: .visible
+                ) {
+                    Button("Clear \(viewModel.files.count) Files", role: .destructive) {
+                        viewModel.clearAll()
+                    }
+                    Button("Cancel", role: .cancel) { }
+                } message: {
+                    Text("This will remove all files from the list. You can add them again later.")
+                }
                 .task {
                     await viewModel.loadSubscriptionState()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .filesCleared)) { notification in
+                    handleFilesCleared(notification)
+                }
+                .overlay(alignment: .bottom) {
+                    if showUndoToast {
+                        undoToast
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }
                 }
         }
     }
@@ -297,12 +322,8 @@ struct DashboardView: View {
                 
                 Spacer()
                 
-                Button {
-                    viewModel.clearAll()
-                } label: {
-                    Text("Clear All")
-                        .font(.subheadline)
-                        .foregroundColor(.red)
+                ClearAllButton {
+                    showClearConfirmation = true
                 }
             }
             .foregroundColor(.secondary)
@@ -530,6 +551,78 @@ struct DashboardView: View {
             get: { viewModel.errorMessage != nil },
             set: { if !$0 { viewModel.errorMessage = nil } }
         )
+    }
+    
+    // MARK: - Undo Toast
+    
+    private var undoToast: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "trash.fill")
+                .font(.body)
+                .foregroundColor(.secondary)
+            
+            Text("\(clearedFiles.count) files cleared")
+                .font(.subheadline)
+            
+            Spacer()
+            
+            Button {
+                undoClear()
+            } label: {
+                Text("Undo")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundColor(.accentColor)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(.regularMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 16)
+    }
+    
+    private func handleFilesCleared(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let previousFiles = userInfo["previousFiles"] as? [PDFFile],
+              let previousSelection = userInfo["previousSelection"] as? Set<UUID>,
+              !previousFiles.isEmpty
+        else { return }
+        
+        // Store data for undo
+        clearedFiles = previousFiles
+        clearedSelection = previousSelection
+        
+        // Show toast with animation
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+            showUndoToast = true
+        }
+        
+        // Auto-dismiss after 5 seconds
+        Task {
+            try? await Task.sleep(for: .seconds(5))
+            await MainActor.run {
+                withAnimation(.easeOut(duration: 0.2)) {
+                    showUndoToast = false
+                }
+            }
+        }
+    }
+    
+    private func undoClear() {
+        viewModel.restoreFiles(clearedFiles, selection: clearedSelection)
+        
+        withAnimation(.easeOut(duration: 0.2)) {
+            showUndoToast = false
+        }
+        
+        // Trigger haptic
+        #if os(iOS)
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+        #endif
     }
 }
 
