@@ -234,4 +234,69 @@ struct UsageManagerTests {
         #expect(remaining == 0)
         #expect(await manager.canPerformAction() == false)
     }
+    
+    // MARK: - Notification Tests
+    
+    @Test("setProStatus posts notification")
+    func setProStatusPostsNotification() async throws {
+        let manager = createTestManager()
+        
+        // Set up expectation for notification
+        var notificationReceived = false
+        let cancellable = NotificationCenter.default.publisher(for: .usageStateDidChange)
+            .sink { _ in
+                notificationReceived = true
+            }
+        
+        // Set Pro status
+        await manager.setProStatus(true)
+        
+        // Wait a bit for the notification to be delivered (it's posted on MainActor)
+        try await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
+        
+        #expect(notificationReceived == true)
+        
+        cancellable.cancel()
+    }
+    
+    @Test("recordAction posts notification")
+    func recordActionPostsNotification() async throws {
+        let manager = createTestManager()
+        
+        // Set up expectation for notification
+        var notificationReceived = false
+        let cancellable = NotificationCenter.default.publisher(for: .usageStateDidChange)
+            .sink { _ in
+                notificationReceived = true
+            }
+        
+        // Record an action
+        try await manager.recordAction()
+        
+        // Wait a bit for the notification to be delivered
+        try await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
+        
+        #expect(notificationReceived == true)
+        
+        cancellable.cancel()
+    }
+    
+    @Test("getProStatus returns correct value")
+    func getProStatusReturnsCorrectValue() async {
+        let manager = createTestManager()
+        
+        // Initially not Pro
+        let initialStatus = await manager.getProStatus()
+        #expect(initialStatus == false)
+        
+        // Set to Pro
+        await manager.setProStatus(true)
+        let afterUpgrade = await manager.getProStatus()
+        #expect(afterUpgrade == true)
+        
+        // Set back to free
+        await manager.setProStatus(false)
+        let afterDowngrade = await manager.getProStatus()
+        #expect(afterDowngrade == false)
+    }
 }

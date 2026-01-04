@@ -99,6 +99,9 @@ struct DashboardView: View {
                 } message: {
                     Text(viewModel.errorMessage ?? "An error occurred")
                 }
+                .task {
+                    await viewModel.loadSubscriptionState()
+                }
         }
     }
     
@@ -379,6 +382,31 @@ struct DashboardView: View {
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        // Subscription status badge
+        #if os(macOS)
+        ToolbarItem(placement: .navigation) {
+            SubscriptionStatusBadge(
+                isPro: viewModel.isPro,
+                remainingActions: viewModel.remainingFreeActions,
+                freeActionLimit: viewModel.freeActionLimit,
+                onUpgradeTapped: {
+                    viewModel.showPaywall = true
+                }
+            )
+        }
+        #else
+        ToolbarItem(placement: .topBarLeading) {
+            SubscriptionStatusBadge(
+                isPro: viewModel.isPro,
+                remainingActions: viewModel.remainingFreeActions,
+                freeActionLimit: viewModel.freeActionLimit,
+                onUpgradeTapped: {
+                    viewModel.showPaywall = true
+                }
+            )
+        }
+        #endif
+        
         ToolbarItem(placement: .primaryAction) {
             Button {
                 showFilePicker = true

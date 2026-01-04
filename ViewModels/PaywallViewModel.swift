@@ -103,8 +103,10 @@ final class PaywallViewModel: ObservableObject {
         do {
             try await Task.sleep(nanoseconds: 500_000_000) // 0.5 second
             
-            // Simulate success for now
-            // In Phase 7, this will call RevenueCat.purchase()
+            // Update UsageManager (this will post notification to all subscribers)
+            await usageManager.setProStatus(true)
+            
+            // Update local state
             isPro = true
             purchaseState = .success
             

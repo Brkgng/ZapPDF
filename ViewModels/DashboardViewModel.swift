@@ -16,6 +16,8 @@ protocol UsageManaging: Actor {
     func canPerformAction() async -> Bool
     func remainingActions() async -> Int
     func recordAction() async throws
+    func getProStatus() async -> Bool
+    func setProStatus(_ isPro: Bool) async
 }
 
 extension UsageManager: UsageManaging {}
@@ -60,20 +62,50 @@ final class DashboardViewModel: ObservableObject {
     /// Whether to show the paywall.
     @Published var showPaywall: Bool = false
     
+    // MARK: - Subscription State
+    
+    /// Whether the user has an active Pro subscription.
+    @Published private(set) var isPro: Bool = false
+    
+    /// Number of free actions remaining.
+    @Published private(set) var remainingFreeActions: Int = 5
+    
+    /// The free action limit (for display purposes).
+    let freeActionLimit: Int = 5
+    
     // MARK: - Dependencies
     
     private let usageManager: any UsageManaging
+    
+    /// Cancellables for Combine subscriptions.
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Initialization
     
     /// Creates a DashboardViewModel with the default UsageManager.
     init() {
         self.usageManager = UsageManager.shared
+        setupNotificationObserver()
     }
     
     /// Creates a DashboardViewModel with a custom UsageManager (for testing).
     init(usageManager: any UsageManaging) {
         self.usageManager = usageManager
+        setupNotificationObserver()
+    }
+    
+    // MARK: - Private Setup
+    
+    /// Subscribe to usage state change notifications.
+    private func setupNotificationObserver() {
+        NotificationCenter.default.publisher(for: .usageStateDidChange)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                Task {
+                    await self?.loadSubscriptionState()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - File Management
@@ -259,6 +291,23 @@ final class DashboardViewModel: ObservableObject {
         }
         
         return true
+    }
+    
+    // MARK: - Subscription Methods
+    
+    /// Load the current subscription and usage state.
+    ///
+    /// This should be called when the Dashboard appears.
+    func loadSubscriptionState() async {
+        isPro = await usageManager.getProStatus()
+        remainingFreeActions = await usageManager.remainingActions()
+    }
+    
+    /// Refresh usage state after an action is recorded.
+    ///
+    /// Call this after a successful PDF operation to update the UI.
+    func refreshUsageState() async {
+        remainingFreeActions = await usageManager.remainingActions()
     }
     
     // MARK: - Computed Properties

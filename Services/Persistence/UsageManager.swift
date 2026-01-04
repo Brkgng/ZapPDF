@@ -36,6 +36,14 @@ enum UsageError: Error, LocalizedError, Sendable {
     }
 }
 
+// MARK: - Notifications
+
+extension Notification.Name {
+    /// Posted when the user's subscription or usage state changes.
+    /// ViewModels should subscribe to this to refresh their UI.
+    static let usageStateDidChange = Notification.Name("usageStateDidChange")
+}
+
 // MARK: - UsageManager
 
 /// Actor managing free tier usage with thread-safe operations.
@@ -202,6 +210,7 @@ actor UsageManager {
         do {
             try KeychainHelper.saveInt(newRemaining, for: .actionsRemaining)
             cachedRemainingActions = newRemaining
+            postStateChangeNotification()
         } catch {
             throw UsageError.persistenceFailed(error)
         }
@@ -236,6 +245,24 @@ actor UsageManager {
     /// - Parameter isPro: Whether the user has an active Pro subscription
     func setProStatus(_ isPro: Bool) {
         self.isPro = isPro
+        postStateChangeNotification()
+    }
+    
+    /// Get the current Pro status.
+    ///
+    /// - Returns: Whether the user has an active Pro subscription
+    func getProStatus() -> Bool {
+        return isPro
+    }
+    
+    // MARK: - Private Helpers
+    
+    /// Post a notification that state has changed.
+    /// This runs on the main thread to ensure UI updates are safe.
+    private func postStateChangeNotification() {
+        Task { @MainActor in
+            NotificationCenter.default.post(name: .usageStateDidChange, object: nil)
+        }
     }
     
     // MARK: - Testing Support

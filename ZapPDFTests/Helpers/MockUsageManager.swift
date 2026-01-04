@@ -16,6 +16,10 @@ actor MockUsageManager: UsageManaging {
         self.isPro = isPro
     }
     
+    func getProStatus() -> Bool {
+        return isPro
+    }
+    
     func setShouldThrowError(_ shouldThrow: Bool) {
         self.shouldThrowError = shouldThrow
     }

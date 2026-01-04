@@ -273,4 +273,117 @@ struct DashboardViewModelTests {
         
         #expect(viewModel.totalPageCount == 30)
     }
+    
+    // MARK: - Subscription State Tests
+    
+    @Test("loadSubscriptionState updates isPro and remainingFreeActions")
+    @MainActor
+    func loadSubscriptionStateUpdatesState() async throws {
+        let mockUsageManager = MockUsageManager()
+        await mockUsageManager.setMockRemaining(3)
+        await mockUsageManager.setProStatus(false)
+        
+        let viewModel = createViewModel(usageManager: mockUsageManager)
+        
+        // Initially uses defaults
+        #expect(viewModel.isPro == false)
+        #expect(viewModel.remainingFreeActions == 5) // Default value
+        
+        // Load state
+        await viewModel.loadSubscriptionState()
+        
+        #expect(viewModel.isPro == false)
+        #expect(viewModel.remainingFreeActions == 3)
+    }
+    
+    @Test("loadSubscriptionState reflects Pro status")
+    @MainActor
+    func loadSubscriptionStateReflectsProStatus() async throws {
+        let mockUsageManager = MockUsageManager()
+        await mockUsageManager.setProStatus(true)
+        
+        let viewModel = createViewModel(usageManager: mockUsageManager)
+        
+        await viewModel.loadSubscriptionState()
+        
+        #expect(viewModel.isPro == true)
+        #expect(viewModel.remainingFreeActions == Int.max)
+    }
+    
+    @Test("refreshUsageState updates remainingFreeActions")
+    @MainActor
+    func refreshUsageStateUpdatesRemaining() async throws {
+        let mockUsageManager = MockUsageManager()
+        await mockUsageManager.setMockRemaining(5)
+        
+        let viewModel = createViewModel(usageManager: mockUsageManager)
+        await viewModel.loadSubscriptionState()
+        
+        #expect(viewModel.remainingFreeActions == 5)
+        
+        // Simulate action consumption
+        try await mockUsageManager.recordAction()
+        await viewModel.refreshUsageState()
+        
+        #expect(viewModel.remainingFreeActions == 4)
+    }
+    
+    @Test("freeActionLimit is constant at 5")
+    @MainActor
+    func freeActionLimitIsConstant() async {
+        let viewModel = createViewModel()
+        
+        #expect(viewModel.freeActionLimit == 5)
+    }
+    
+    // MARK: - Notification Integration Tests
+    
+    @Test("Usage change triggers automatic update via notification")
+    @MainActor
+    func usageChangeTriggersAutomaticUpdate() async throws {
+        // Create real UsageManager test instance (not mock) because it posts notifications
+        let usageManager = UsageManager.createTestInstance()
+        
+        // Create ViewModel with the real UsageManager
+        let viewModel = DashboardViewModel(usageManager: usageManager)
+        
+        // Load initial state
+        await viewModel.loadSubscriptionState()
+        let initialRemaining = viewModel.remainingFreeActions
+        #expect(initialRemaining == 5)
+        
+        // Record an action - this should post a notification
+        // that the DashboardViewModel's subscription will receive
+        try await usageManager.recordAction()
+        
+        // Wait briefly for the notification to be delivered and processed
+        // (the notification is posted on MainActor.run)
+        try await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
+        
+        // Verify that the ViewModel auto-updated without manual refresh call
+        #expect(viewModel.remainingFreeActions == 4)
+    }
+    
+    @Test("Pro status change triggers automatic update via notification")
+    @MainActor
+    func proStatusChangeTriggersAutomaticUpdate() async throws {
+        // Create real UsageManager test instance
+        let usageManager = UsageManager.createTestInstance()
+        
+        // Create ViewModel
+        let viewModel = DashboardViewModel(usageManager: usageManager)
+        
+        // Load initial state
+        await viewModel.loadSubscriptionState()
+        #expect(viewModel.isPro == false)
+        
+        // Change Pro status - this should post a notification
+        await usageManager.setProStatus(true)
+        
+        // Wait briefly for notification delivery
+        try await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
+        
+        // Verify that the ViewModel auto-updated
+        #expect(viewModel.isPro == true)
+    }
 }
