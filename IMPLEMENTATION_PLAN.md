@@ -1,6 +1,6 @@
 # ZapPDF Implementation Plan
 
-> **Living Document** – Update as development progresses. Last updated: 2025-12-26
+> **Living Document** – Update as development progresses. Last updated: 2026-01-06
 
 ---
 
@@ -163,9 +163,9 @@
 - [ ] App Review notes
 - [ ] TestFlight beta
 
-### Phase 10: Page Reordering Feature
+### Phase 10: Page Reordering Feature ✅
 
-**Duration: 6-11 days**
+**Duration: 6-11 days** | Completed: 2025-12-28
 
 - [x] `PageItem.swift` – Identifiable page wrapper model
 - [x] `PDFReorderer.swift` – Page reordering service actor
@@ -175,6 +175,39 @@
 - [x] `PageReorderView.swift` – Main reorder screen with platform-specific layouts
 - [x] Integration with `UserAction` and `DashboardView`
 - [x] Unit tests and UI tests
+
+### Phase 11: Internationalization & Localization ✅
+
+**Duration: 2-3 days** | Completed: 2026-01-06
+
+Full i18n/l10n support using type-safe `L10n` namespace.
+
+- [x] `App/Localizable.xcstrings` – String Catalog for all user-facing strings
+- [x] `Common/Localization/LocalizedStrings.swift` – Type-safe `L10n` namespace with 200+ keys
+- [x] Migrate all UI strings across 26 files (UI/Screens, UI/Components, ViewModels, Models, Services)
+- [x] Pluralization support for pages
+- [x] Accessibility label localization
+- [x] `.formatted(.percent)` for locale-aware percentages
+- [x] Error message localization (PDFFileError, FileAccessError, PageRangeParseError, UsageError)
+
+**Localization Architecture:**
+
+```swift
+// Type-safe access
+Text(L10n.Dashboard.title)
+Text(L10n.Plural.pages(count))
+Text(L10n.Error.fileNotFound(filename: url.lastPathComponent))
+```
+
+**Target Languages (Tier 1):**
+
+- English (base)
+- German (DE)
+- French (FR)
+- Spanish (ES)
+- Japanese (JA)
+- Chinese Simplified (ZH-Hans)
+- Turkish (TR)
 
 ---
 

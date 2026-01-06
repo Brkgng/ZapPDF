@@ -74,8 +74,8 @@ struct PageThumbnailView: View {
         .frame(width: size.width, height: size.height)
         .overlay(selectionOverlay)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Page \(displayNumber)")
-        .accessibilityHint(isSelected ? "Selected. Double tap to deselect." : "Double tap to select.")
+        .accessibilityLabel(L10n.PageReorder.page(displayNumber))
+        .accessibilityHint(isSelected ? L10n.Accessibility.selectedTapHint : L10n.Accessibility.tapToSelectHint)
         .accessibilityAddTraits(isSelected ? [.isSelected, .isButton] : .isButton)
         .task(id: "\(url.absoluteString)_\(pageIndex)") {
             await loadThumbnail()

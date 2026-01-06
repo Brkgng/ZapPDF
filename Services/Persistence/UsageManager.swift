@@ -20,18 +20,18 @@ enum UsageError: Error, LocalizedError, Sendable {
     var errorDescription: String? {
         switch self {
         case .noActionsRemaining:
-            return "You've used all your free actions."
+            return L10n.UsageError.noActionsRemaining
         case .persistenceFailed:
-            return "Failed to save usage data."
+            return L10n.UsageError.persistenceFailed
         }
     }
     
     var recoverySuggestion: String? {
         switch self {
         case .noActionsRemaining:
-            return "Upgrade to Pro for unlimited PDF operations."
+            return L10n.Error.upgradeForUnlimited
         case .persistenceFailed:
-            return "Please try again."
+            return L10n.Error.tryAgain
         }
     }
 }

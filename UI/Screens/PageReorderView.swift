@@ -58,20 +58,20 @@ struct PageReorderView: View {
                 savingOverlay
             }
         }
-        .alert("Discard Changes?", isPresented: $showingDiscardConfirmation) {
-            Button("Discard", role: .destructive) {
+        .alert(L10n.PageReorder.discardChangesTitle, isPresented: $showingDiscardConfirmation) {
+            Button(L10n.PageReorder.discard, role: .destructive) {
                 dismiss()
             }
-            Button("Cancel", role: .cancel) {}
+            Button(L10n.Action.cancel, role: .cancel) {}
         } message: {
-            Text("You have unsaved changes. Are you sure you want to discard them?")
+            Text(L10n.PageReorder.discardChangesMessage)
         }
-        .alert("Error", isPresented: hasError) {
-            Button("OK") {
+        .alert(L10n.Common.errorTitle, isPresented: hasError) {
+            Button(L10n.Action.ok) {
                 viewModel.errorMessage = nil
             }
         } message: {
-            Text(viewModel.errorMessage ?? "An error occurred")
+            Text(viewModel.errorMessage ?? L10n.Common.errorOccurred)
         }
     }
     
@@ -108,7 +108,7 @@ struct PageReorderView: View {
             .frame(minWidth: 280, idealWidth: 400)
         }
         .frame(minWidth: 600, minHeight: 400)
-        .navigationTitle("Reorder Pages")
+        .navigationTitle(L10n.Operation.Reorder.title)
     }
     
     private var macOSToolbar: some View {
@@ -118,14 +118,14 @@ struct PageReorderView: View {
                 Image(systemName: "arrow.uturn.backward")
             }
             .disabled(!viewModel.canUndo)
-            .help("Undo (⌘Z)")
+            .help(L10n.Help.undo)
             .keyboardShortcut("z", modifiers: .command)
             
             Button(action: viewModel.redo) {
                 Image(systemName: "arrow.uturn.forward")
             }
             .disabled(!viewModel.canRedo)
-            .help("Redo (⌘⇧Z)")
+            .help(L10n.Help.redo)
             .keyboardShortcut("z", modifiers: [.command, .shift])
             
             Divider()
@@ -135,7 +135,7 @@ struct PageReorderView: View {
                 Image(systemName: "arrow.counterclockwise")
             }
             .disabled(!viewModel.hasChanges)
-            .help("Reset to Original Order")
+            .help(L10n.Help.resetOrder)
             
             Divider()
                 .frame(height: 16)
@@ -144,18 +144,18 @@ struct PageReorderView: View {
                 Image(systemName: "trash")
             }
             .disabled(!viewModel.canDeleteSelectedPage)
-            .help("Delete Selected Page (⌫)")
+            .help(L10n.Help.deletePage)
             .keyboardShortcut(.delete, modifiers: [])
             
             Spacer()
             
             // Page count
-            Text("\(viewModel.pageCount) pages")
+            Text(L10n.Plural.pages(viewModel.pageCount))
                 .font(.caption)
                 .foregroundColor(.secondary)
             
             // Save button
-            Button("Save Reordered") {
+            Button(L10n.Operation.Reorder.saveReordered) {
                 showSavePanel()
             }
             .buttonStyle(.borderedProminent)
@@ -167,8 +167,8 @@ struct PageReorderView: View {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.pdf]
         panel.nameFieldStringValue = "\(viewModel.sourceFile.url.deletingPathExtension().lastPathComponent)_reordered.pdf"
-        panel.title = "Save Reordered PDF"
-        panel.message = "Choose where to save the reordered PDF"
+        panel.title = L10n.SavePanel.reorderTitle
+        panel.message = L10n.SavePanel.reorderMessage
         
         panel.begin { response in
             if response == .OK, let url = panel.url {
@@ -210,11 +210,11 @@ struct PageReorderView: View {
                     iOSBottomToolbar
                 }
             }
-            .navigationTitle("Reorder Pages")
+            .navigationTitle(L10n.Operation.Reorder.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(L10n.Action.cancel) {
                         if viewModel.hasChanges {
                             showingDiscardConfirmation = true
                         } else {
@@ -246,16 +246,16 @@ struct PageReorderView: View {
             
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("\(viewModel.pageCount) pages")
+                    Text(L10n.Plural.pages(viewModel.pageCount))
                         .font(.headline)
-                    Text("Tap Done to save changes")
+                    Text(L10n.PageReorder.tapDoneToSave)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
-                Button("Done") {
+                Button(L10n.Action.done) {
                     Task {
                         await saveForSharing()
                     }
@@ -309,7 +309,7 @@ struct PageReorderView: View {
                     let previewHeight = previewWidth / aspectRatio
                     
                     VStack(spacing: 16) {
-                        Text("Page \(page.displayPageNumber)")
+                        Text(L10n.PageReorder.page(page.displayPageNumber))
                             .font(.headline)
                         
                         PageThumbnailView(
@@ -321,7 +321,7 @@ struct PageReorderView: View {
                         )
                         
                         if page.originalIndex != selectedIndex {
-                            Label("Moved from position \(page.originalIndex + 1)", systemImage: "arrow.triangle.swap")
+                            Label(L10n.PageReorder.movedFrom(page.originalIndex + 1), systemImage: "arrow.triangle.swap")
                                 .font(.caption)
                                 .foregroundColor(.orange)
                         }
@@ -332,7 +332,7 @@ struct PageReorderView: View {
                         Image(systemName: "doc.text.magnifyingglass")
                             .font(.system(size: 48))
                             .foregroundColor(.secondary)
-                        Text("Select a page to preview")
+                        Text(L10n.PageReorder.selectPageToPreview)
                             .foregroundColor(.secondary)
                     }
                 }
@@ -345,7 +345,7 @@ struct PageReorderView: View {
     private var loadingView: some View {
         VStack(spacing: 16) {
             ProgressView()
-            Text("Loading pages...")
+            Text(L10n.PageReorder.loadingPages)
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -361,11 +361,11 @@ struct PageReorderView: View {
                     .progressViewStyle(.circular)
                     .scaleEffect(1.5)
                 
-                Text("Saving... \(Int(viewModel.saveProgress * 100))%")
+                Text(L10n.PageReorder.savingProgress(viewModel.saveProgress))
                     .font(.headline)
                     .foregroundColor(.white)
                 
-                Button("Cancel") {
+                Button(L10n.Action.cancel) {
                     viewModel.cancel()
                 }
                 .buttonStyle(.bordered)

@@ -83,7 +83,7 @@ struct OnboardingNavigationControls: View {
                     currentPage = max(0, currentPage - 1)
                 }
             } label: {
-                Label("Previous", systemImage: "chevron.left")
+                Label(L10n.Onboarding.previous, systemImage: "chevron.left")
             }
             .disabled(currentPage == 0)
             .opacity(currentPage == 0 ? 0.3 : 1)
@@ -102,10 +102,10 @@ struct OnboardingNavigationControls: View {
                         currentPage = min(pageCount - 1, currentPage + 1)
                     }
                 } label: {
-                    Label("Next", systemImage: "chevron.right")
+                    Label(L10n.Onboarding.next, systemImage: "chevron.right")
                 }
             } else {
-                Button("Get Started") {
+                Button(L10n.Action.getStarted) {
                     onComplete()
                 }
                 .buttonStyle(.borderedProminent)
@@ -133,13 +133,13 @@ struct OnboardingFinalPage: View {
                 .symbolRenderingMode(.hierarchical)
             
             // Title
-            Text("Ready to Start")
+            Text(L10n.Onboarding.readyTitle)
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
             
             // Description
-            Text("You have 5 free actions to try all features.\nUpgrade anytime for unlimited access.")
+            Text(L10n.Onboarding.readyDescription)
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -152,7 +152,7 @@ struct OnboardingFinalPage: View {
             Button {
                 onComplete()
             } label: {
-                Text("Get Started")
+                Text(L10n.Action.getStarted)
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -220,7 +220,7 @@ struct OnboardingView: View {
                     Spacer()
                     
                     if currentPage < Self.pageCount - 1 {
-                        Button("Skip") {
+                        Button(L10n.Action.skip) {
                             completeOnboarding()
                         }
                         .foregroundColor(.secondary)
@@ -234,8 +234,8 @@ struct OnboardingView: View {
                     OnboardingPage(
                         iconName: "doc.text.fill",
                         iconColor: .accentColor,
-                        title: "Welcome to ZapPDF",
-                        description: "Powerful PDF tools with zero compromises.\nMerge, split, and convert with ease."
+                        title: L10n.Onboarding.welcomeTitle,
+                        description: L10n.Onboarding.welcomeDescription
                     )
                     .tag(0)
                     
@@ -243,8 +243,8 @@ struct OnboardingView: View {
                     OnboardingPage(
                         iconName: "lock.shield.fill",
                         iconColor: .green,
-                        title: "Your Privacy Matters",
-                        description: "All processing happens locally on your device.\nYour files never leave your device."
+                        title: L10n.Onboarding.privacyTitle,
+                        description: L10n.Onboarding.privacyDescription
                     )
                     .tag(1)
                     
@@ -252,8 +252,8 @@ struct OnboardingView: View {
                     OnboardingPage(
                         iconName: "square.grid.2x2.fill",
                         iconColor: .orange,
-                        title: "Everything You Need",
-                        description: "Merge multiple PDFs into one.\nSplit PDFs by page range.\nConvert to other formats."
+                        title: L10n.Onboarding.featuresTitle,
+                        description: L10n.Onboarding.featuresDescription
                     )
                     .tag(2)
                     

@@ -72,7 +72,7 @@ struct ProcessingView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     if canDismiss {
-                        Button("Close") {
+                        Button(L10n.Action.close) {
                             dismiss()
                         }
                     }
@@ -86,50 +86,50 @@ struct ProcessingView: View {
                 )
             }
             .confirmationDialog(
-                "Cancel Processing?",
+                L10n.Processing.cancelConfirmTitle,
                 isPresented: $showCancelConfirmation,
                 titleVisibility: .visible
             ) {
-                Button("Cancel Operation", role: .destructive) {
+                Button(L10n.Processing.cancelOperation, role: .destructive) {
                     viewModel.cancel()
                 }
-                Button("Continue", role: .cancel) {}
+                Button(L10n.Action.continue, role: .cancel) {}
             } message: {
-                Text("The current operation will be stopped and any progress will be lost.")
+                Text(L10n.Processing.cancelConfirmMessage)
             }
-            .alert("File Saved", isPresented: $showFileSaveSuccess) {
-                Button("OK") {
+            .alert(L10n.Processing.fileSaved, isPresented: $showFileSaveSuccess) {
+                Button(L10n.Action.ok) {
                     dismiss()
                 }
                 #if os(macOS)
                 if let savedURL = savedFileURL {
-                    Button("Reveal in Finder") {
+                    Button(L10n.Processing.revealInFinder) {
                         NSWorkspace.shared.activateFileViewerSelecting([savedURL])
                         dismiss()
                     }
                 }
                 #endif
             } message: {
-                Text("Your PDF has been saved successfully.")
+                Text(L10n.Processing.fileSavedMessage)
             }
             #if os(macOS)
             .alert(
-                "Save Failed",
+                L10n.Common.saveFailed,
                 isPresented: .init(
                     get: { saveErrorMessage != nil },
                     set: { if !$0 { saveErrorMessage = nil } }
                 )
             ) {
-                Button("Try Again") {
+                Button(L10n.Action.retry) {
                     if case .completed(let urls) = viewModel.state {
                         saveFileOnMacOS(urls: urls)
                     }
                 }
-                Button("Cancel", role: .cancel) {
+                Button(L10n.Action.cancel, role: .cancel) {
                     saveErrorMessage = nil
                 }
             } message: {
-                Text(saveErrorMessage ?? "Unable to save the file.")
+                Text(saveErrorMessage ?? L10n.Common.unableToSave)
             }
             #endif
             .onChange(of: viewModel.state) { oldState, newState in
@@ -170,7 +170,7 @@ struct ProcessingView: View {
             ProgressView()
                 .scaleEffect(1.5)
             
-            Text("Preparing...")
+            Text(L10n.Processing.preparing)
                 .font(.headline)
                 .foregroundColor(.secondary)
         }
@@ -197,7 +197,7 @@ struct ProcessingView: View {
                     .progressViewStyle(.linear)
                     .tint(action.accentColor)
                 
-                Text("\(Int(progress * 100))%")
+                Text(L10n.Processing.progress(progress))
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .monospacedDigit()
@@ -216,17 +216,17 @@ struct ProcessingView: View {
                 .foregroundColor(.green)
             
             // Title
-            Text("Complete!")
+            Text(L10n.Processing.completed)
                 .font(.largeTitle)
                 .fontWeight(.bold)
             
             // Summary
             if resultURLs.count == 1 {
-                Text("Your PDF is ready to save")
+                Text(L10n.Processing.readyToSave)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             } else {
-                Text("\(resultURLs.count) files created")
+                Text(L10n.Processing.filesCreated(resultURLs.count))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -251,7 +251,7 @@ struct ProcessingView: View {
                 .foregroundColor(.red)
             
             // Title
-            Text("Something Went Wrong")
+            Text(L10n.Processing.somethingWentWrong)
                 .font(.title2)
                 .fontWeight(.bold)
             
@@ -276,7 +276,7 @@ struct ProcessingView: View {
             Button {
                 showCancelConfirmation = true
             } label: {
-                Text("Cancel")
+                Text(L10n.Action.cancel)
                     .font(.headline)
                     .foregroundColor(.red)
                     .frame(maxWidth: .infinity)
@@ -301,7 +301,7 @@ struct ProcessingView: View {
                         )
                     }
                 } label: {
-                    Text("Try Again")
+                    Text(L10n.Action.retry)
                         .font(.headline)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -315,7 +315,7 @@ struct ProcessingView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("Close")
+                    Text(L10n.Action.close)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -336,7 +336,7 @@ struct ProcessingView: View {
             Button {
                 saveFileOnMacOS(urls: resultURLs)
             } label: {
-                Label("Save File", systemImage: "square.and.arrow.down")
+                Label(L10n.Action.saveFile, systemImage: "square.and.arrow.down")
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -350,7 +350,7 @@ struct ProcessingView: View {
             Button {
                 showShareSheet = true
             } label: {
-                Label("Share", systemImage: "square.and.arrow.up")
+                Label(L10n.Processing.share, systemImage: "square.and.arrow.up")
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -400,7 +400,7 @@ struct ProcessingView: View {
                     savedFileURL = destinationURL
                     showFileSaveSuccess = true
                 } catch {
-                    saveErrorMessage = "Could not save file: \(error.localizedDescription)"
+                    saveErrorMessage = L10n.Processing.couldNotSaveFile(error.localizedDescription)
                 }
             }
         }

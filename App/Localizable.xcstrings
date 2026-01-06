@@ -1,0 +1,2162 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "... and %lld more files" : {
+      "comment" : "Truncated file list indicator"
+    },
+    "'%@' appears to be corrupted." : {
+      "comment" : "Error when PDF is corrupted"
+    },
+    "'%@' is not a valid PDF file." : {
+      "comment" : "Error when file is not a valid PDF"
+    },
+    "'%@' is password protected." : {
+      "comment" : "Error when PDF is encrypted"
+    },
+    "%@ • %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ • %2$@"
+          }
+        }
+      }
+    },
+    "%lld" : {
+
+    },
+    "%lld actions left" : {
+      "comment" : "Status showing remaining free actions"
+    },
+    "%lld files cleared" : {
+      "comment" : "Undo toast message"
+    },
+    "%lld files created" : {
+      "comment" : "Number of output files created"
+    },
+    "%lld free actions remaining" : {
+      "comment" : "Count of free actions remaining"
+    },
+    "%lld of %lld free" : {
+      "comment" : "Status showing X of Y free actions",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld free"
+          }
+        }
+      }
+    },
+    "%lld of %lld pages selected" : {
+      "comment" : "Page selection count",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld pages selected"
+          }
+        }
+      }
+    },
+    "%lld of %lld selected" : {
+      "comment" : "Selection count in status bar",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld selected"
+          }
+        }
+      }
+    },
+    "%lld page%@" : {
+      "comment" : "Page count for split options",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld page%2$@"
+          }
+        }
+      }
+    },
+    "%lld pages" : {
+      "comment" : "Number of pages (1 page, 5 pages)\nTotal page count in status bar"
+    },
+    "%lld pages selected" : {
+      "comment" : "Selected page count in page selector"
+    },
+    "•" : {
+
+    },
+    "∞" : {
+
+    },
+    "5" : {
+
+    },
+    "accessibility.deleteFile" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Remove file"
+          }
+        }
+      }
+    },
+    "accessibility.deselectFile" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Deselect file"
+          }
+        }
+      }
+    },
+    "accessibility.dragHandle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Drag to reorder"
+          }
+        }
+      }
+    },
+    "accessibility.pdfDocument" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "PDF Document"
+          }
+        }
+      }
+    },
+    "accessibility.selectedTapHint" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Selected. Double tap to deselect."
+          }
+        }
+      }
+    },
+    "accessibility.selectFile" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Select file"
+          }
+        }
+      }
+    },
+    "accessibility.tapToSelectHint" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Double tap to select."
+          }
+        }
+      }
+    },
+    "accessibility.upgradeHint" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Tap to view upgrade options"
+          }
+        }
+      }
+    },
+    "action.cancel" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "action.close" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Close"
+          }
+        }
+      }
+    },
+    "action.continue" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Continue"
+          }
+        }
+      }
+    },
+    "action.delete" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Delete"
+          }
+        }
+      }
+    },
+    "action.deselectAll" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Deselect All"
+          }
+        }
+      }
+    },
+    "action.done" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Done"
+          }
+        }
+      }
+    },
+    "action.getStarted" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Get Started"
+          }
+        }
+      }
+    },
+    "action.ok" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "action.remove" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Remove"
+          }
+        }
+      }
+    },
+    "action.retry" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Try Again"
+          }
+        }
+      }
+    },
+    "action.saveFile" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Save File"
+          }
+        }
+      }
+    },
+    "action.selectAll" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Select All"
+          }
+        }
+      }
+    },
+    "action.skip" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Skip"
+          }
+        }
+      }
+    },
+    "action.undo" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Undo"
+          }
+        }
+      }
+    },
+    "action.upgrade" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Upgrade"
+          }
+        }
+      }
+    },
+    "app.name" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "ZapPDF"
+          }
+        }
+      }
+    },
+    "Cannot access '%@'." : {
+      "comment" : "Error when file access is denied"
+    },
+    "Clear %lld Files" : {
+      "comment" : "Button showing count of files to clear"
+    },
+    "common.all" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "All"
+          }
+        }
+      }
+    },
+    "common.comingSoon" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Coming soon!"
+          }
+        }
+      }
+    },
+    "common.deselect" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Deselect"
+          }
+        }
+      }
+    },
+    "common.errorOccurred" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "An error occurred"
+          }
+        }
+      }
+    },
+    "common.errorTitle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Error"
+          }
+        }
+      }
+    },
+    "common.invalidFormat" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Invalid format"
+          }
+        }
+      }
+    },
+    "common.loading" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Loading..."
+          }
+        }
+      }
+    },
+    "common.mergeOrderHint" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Files merge in displayed order. Drag to reorder."
+          }
+        }
+      }
+    },
+    "common.none" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "None"
+          }
+        }
+      }
+    },
+    "common.pricingPlaceholder" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pricing will be available when StoreKit is integrated"
+          }
+        }
+      }
+    },
+    "common.proBadge" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "PRO"
+          }
+        }
+      }
+    },
+    "common.processing" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Processing..."
+          }
+        }
+      }
+    },
+    "common.saveFailed" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Save Failed"
+          }
+        }
+      }
+    },
+    "common.select" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Select"
+          }
+        }
+      }
+    },
+    "common.selection" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Selection"
+          }
+        }
+      }
+    },
+    "common.unableToSave" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unable to save the file."
+          }
+        }
+      }
+    },
+    "contextMenu.copyName" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Copy Name"
+          }
+        }
+      }
+    },
+    "contextMenu.showInFinder" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show in Finder"
+          }
+        }
+      }
+    },
+    "Converting PDF... %@" : {
+      "comment" : "Convert progress with percentage"
+    },
+    "Could not load '%@'. Please select a valid PDF file." : {
+      "comment" : "Single file load error"
+    },
+    "Could not load %lld files: %@" : {
+      "comment" : "Multiple file load error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Could not load %1$lld files: %2$@"
+          }
+        }
+      }
+    },
+    "Could not save file: %@" : {
+      "comment" : "File save error message"
+    },
+    "Could not save reference to '%@'" : {
+      "comment" : "Bookmark creation error"
+    },
+    "dashboard.addFiles" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Add PDF Files"
+          }
+        }
+      }
+    },
+    "dashboard.browseFiles" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Browse Files"
+          }
+        }
+      }
+    },
+    "dashboard.clearAll" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Clear All"
+          }
+        }
+      }
+    },
+    "dashboard.clearAllMessage" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will remove all PDF files from the list."
+          }
+        }
+      }
+    },
+    "dashboard.clearAllTitle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Clear All Files?"
+          }
+        }
+      }
+    },
+    "dashboard.dragAndDrop" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Drag and drop PDF files or use the button below"
+          }
+        }
+      }
+    },
+    "dashboard.dropHere" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Drop PDF files here"
+          }
+        }
+      }
+    },
+    "dashboard.dropToAdd" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Drop to add more files"
+          }
+        }
+      }
+    },
+    "dashboard.mergedOutputName" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Merged"
+          }
+        }
+      }
+    },
+    "dashboard.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "ZapPDF"
+          }
+        }
+      }
+    },
+    "Displaying %lld pages" : {
+      "comment" : "PDF viewer accessibility hint"
+    },
+    "error.cancelled" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Operation was cancelled."
+          }
+        }
+      }
+    },
+    "error.emptyInput" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No files provided for this operation."
+          }
+        }
+      }
+    },
+    "error.insufficientDiskSpace" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Not enough storage space to complete this operation."
+          }
+        }
+      }
+    },
+    "error.recovery.checkPermissions" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Check that you have write permission to the destination."
+          }
+        }
+      }
+    },
+    "error.recovery.fileMovedOrDeleted" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The file may have been moved or deleted."
+          }
+        }
+      }
+    },
+    "error.recovery.freeUpSpace" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Free up some storage space and try again."
+          }
+        }
+      }
+    },
+    "error.recovery.getFreshCopy" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Try obtaining a fresh copy of this file."
+          }
+        }
+      }
+    },
+    "error.recovery.reorderSomePages" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reorder some pages before saving."
+          }
+        }
+      }
+    },
+    "error.recovery.reselectFile" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please select the file again using the file picker."
+          }
+        }
+      }
+    },
+    "error.recovery.selectAtLeastOne" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please select at least one PDF file."
+          }
+        }
+      }
+    },
+    "error.recovery.selectValidPDF" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please select a valid PDF file."
+          }
+        }
+      }
+    },
+    "error.recovery.selectValidRange" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please select a valid page range within the document."
+          }
+        }
+      }
+    },
+    "error.recovery.tryAgain" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please try again."
+          }
+        }
+      }
+    },
+    "error.recovery.tryReorderingAgain" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please try reordering again."
+          }
+        }
+      }
+    },
+    "error.recovery.trySavingElsewhere" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Try saving to a different location."
+          }
+        }
+      }
+    },
+    "error.recovery.unlockPDF" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please unlock the PDF using another application first."
+          }
+        }
+      }
+    },
+    "error.recovery.upgradeForUnlimited" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Upgrade to Pro for unlimited PDF operations."
+          }
+        }
+      }
+    },
+    "Failed to import files: %@" : {
+      "comment" : "File import error message"
+    },
+    "Failed to save '%@'." : {
+      "comment" : "Error when file write fails"
+    },
+    "Failed to save PDF to '%@'." : {
+      "comment" : "Save failed error message"
+    },
+    "File not found: '%@'." : {
+      "comment" : "Error when file doesn't exist"
+    },
+    "fileAccess.bookmarkResolutionFailed" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Could not restore access to a previously used file."
+          }
+        }
+      }
+    },
+    "fileAccess.recovery.trySelectingAgain" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Try selecting the file again."
+          }
+        }
+      }
+    },
+    "help.clearAll" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Remove all files from the list"
+          }
+        }
+      }
+    },
+    "help.deletePage" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Delete Selected Page (⌫)"
+          }
+        }
+      }
+    },
+    "help.redo" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Redo (⌘⇧Z)"
+          }
+        }
+      }
+    },
+    "help.resetOrder" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reset to Original Order"
+          }
+        }
+      }
+    },
+    "help.undo" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Undo (⌘Z)"
+          }
+        }
+      }
+    },
+    "Invalid range format: '%@'" : {
+      "comment" : "Page range parsing error"
+    },
+    "Invalid range: %lld-%lld (start must be ≤ end)" : {
+      "comment" : "Inverted page range error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Invalid range: %1$lld-%2$lld (start must be ≤ end)"
+          }
+        }
+      }
+    },
+    "Merging PDFs... %@" : {
+      "comment" : "Merge progress with percentage"
+    },
+    "Moved from position %lld" : {
+      "comment" : "Label showing original page position"
+    },
+    "No actions left" : {
+      "comment" : "Status when free actions exhausted"
+    },
+    "onboarding.featuresDescription" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Merge multiple PDFs, split documents, and reorder pages with ease."
+          }
+        }
+      }
+    },
+    "onboarding.featuresTitle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Powerful Features"
+          }
+        }
+      }
+    },
+    "onboarding.next" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Next"
+          }
+        }
+      }
+    },
+    "onboarding.previous" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Previous"
+          }
+        }
+      }
+    },
+    "onboarding.privacyDescription" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "All your PDFs are processed locally on your device. Nothing is ever uploaded to the cloud."
+          }
+        }
+      }
+    },
+    "onboarding.privacyTitle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Privacy First"
+          }
+        }
+      }
+    },
+    "onboarding.readyDescription" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Start by adding some PDF files to get going."
+          }
+        }
+      }
+    },
+    "onboarding.readyTitle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You're All Set!"
+          }
+        }
+      }
+    },
+    "onboarding.welcomeDescription" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your privacy-first PDF toolkit for merging, splitting, and organizing documents."
+          }
+        }
+      }
+    },
+    "onboarding.welcomeTitle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Welcome to ZapPDF"
+          }
+        }
+      }
+    },
+    "operation.convert.description" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Convert PDF to other formats"
+          }
+        }
+      }
+    },
+    "operation.convert.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Convert PDF"
+          }
+        }
+      }
+    },
+    "operation.merge.description" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Combine multiple PDFs into one document"
+          }
+        }
+      }
+    },
+    "operation.merge.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Merge PDFs"
+          }
+        }
+      }
+    },
+    "operation.reorder.description" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reorder pages within a PDF"
+          }
+        }
+      }
+    },
+    "operation.reorder.saveReordered" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Save Reordered"
+          }
+        }
+      }
+    },
+    "operation.reorder.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reorder Pages"
+          }
+        }
+      }
+    },
+    "operation.split.description" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Extract pages or split into multiple documents"
+          }
+        }
+      }
+    },
+    "operation.split.extractRanges" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Extract Page Ranges"
+          }
+        }
+      }
+    },
+    "operation.split.selectPages" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Select Specific Pages"
+          }
+        }
+      }
+    },
+    "operation.split.splitEvery" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Split Every N Pages"
+          }
+        }
+      }
+    },
+    "operation.split.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Split PDF"
+          }
+        }
+      }
+    },
+    "Original position: %lld" : {
+      "comment" : "Tooltip showing original page position"
+    },
+    "Page %lld" : {
+      "comment" : "Page number label\nSingle page description"
+    },
+    "Page %lld is out of range (1-%lld)" : {
+      "comment" : "Page range bounds error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Page %1$lld is out of range (1-%2$lld)"
+          }
+        }
+      }
+    },
+    "Page %lld of %lld" : {
+      "comment" : "Page navigation indicator",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Page %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "Page range %lld-%lld is invalid. Document has %lld pages." : {
+      "comment" : "Error for invalid page range",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Page range %1$lld-%2$lld is invalid. Document has %3$lld pages."
+          }
+        }
+      }
+    },
+    "pageRange.emptyRange" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No page ranges specified"
+          }
+        }
+      }
+    },
+    "pageReorder.cannotDeleteLastPage" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cannot delete the last page"
+          }
+        }
+      }
+    },
+    "pageReorder.discard" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Discard"
+          }
+        }
+      }
+    },
+    "pageReorder.discardChangesMessage" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You have unsaved changes. Are you sure you want to discard them?"
+          }
+        }
+      }
+    },
+    "pageReorder.discardChangesTitle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Discard Changes?"
+          }
+        }
+      }
+    },
+    "pageReorder.invalidPageOrder" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Invalid page order."
+          }
+        }
+      }
+    },
+    "pageReorder.loadingPages" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Loading pages..."
+          }
+        }
+      }
+    },
+    "pageReorder.noChangesToSave" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No changes to save."
+          }
+        }
+      }
+    },
+    "pageReorder.selectPageToPreview" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Select a page to preview"
+          }
+        }
+      }
+    },
+    "pageReorder.tapDoneToSave" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Tap Done to save changes"
+          }
+        }
+      }
+    },
+    "Pages %lld-%lld" : {
+      "comment" : "Page range description",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pages %1$lld-%2$lld"
+          }
+        }
+      }
+    },
+    "Pages: %@" : {
+      "comment" : "Selected pages list"
+    },
+    "paywall.features" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Features"
+          }
+        }
+      }
+    },
+    "paywall.free" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Free"
+          }
+        }
+      }
+    },
+    "paywall.noFreeActionsRemaining" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No free actions remaining"
+          }
+        }
+      }
+    },
+    "paywall.oneFreeActionRemaining" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "1 free action remaining"
+          }
+        }
+      }
+    },
+    "paywall.pdfActions" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "PDF Actions"
+          }
+        }
+      }
+    },
+    "paywall.privacyNote" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "All PDF processing happens locally on your device"
+          }
+        }
+      }
+    },
+    "paywall.pro" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pro"
+          }
+        }
+      }
+    },
+    "paywall.purchaseFailed" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Purchase failed. Please try again."
+          }
+        }
+      }
+    },
+    "paywall.purchaseSuccess" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Welcome to Pro!"
+          }
+        }
+      }
+    },
+    "paywall.purchaseSuccessMessage" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Thank you for upgrading to Pro! Enjoy unlimited PDF actions."
+          }
+        }
+      }
+    },
+    "paywall.restoreFailed" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Restore failed. Please try again."
+          }
+        }
+      }
+    },
+    "paywall.restorePurchases" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Restore Purchases"
+          }
+        }
+      }
+    },
+    "paywall.restoring" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Restoring..."
+          }
+        }
+      }
+    },
+    "paywall.unlimited" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unlimited"
+          }
+        }
+      }
+    },
+    "paywall.upgradeSubtitle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unlock unlimited PDF actions and premium features"
+          }
+        }
+      }
+    },
+    "paywall.upgradeTitle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Upgrade to ZapPDF Pro"
+          }
+        }
+      }
+    },
+    "pdfDisplay.continuous" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Continuous"
+          }
+        }
+      }
+    },
+    "pdfDisplay.singlePage" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Single Page"
+          }
+        }
+      }
+    },
+    "pdfDisplay.twoPages" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Two Pages"
+          }
+        }
+      }
+    },
+    "pdfDisplay.twoPagesContinuous" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Two Pages (Continuous)"
+          }
+        }
+      }
+    },
+    "Permission denied for '%@'" : {
+      "comment" : "File permission error"
+    },
+    "processing.cancelConfirmMessage" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The current operation will be stopped and any progress will be lost."
+          }
+        }
+      }
+    },
+    "processing.cancelConfirmTitle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cancel Operation?"
+          }
+        }
+      }
+    },
+    "processing.cancelOperation" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cancel Operation"
+          }
+        }
+      }
+    },
+    "processing.completed" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Completed!"
+          }
+        }
+      }
+    },
+    "processing.converting" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Converting PDF..."
+          }
+        }
+      }
+    },
+    "processing.failed" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Operation Failed"
+          }
+        }
+      }
+    },
+    "processing.fileSaved" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "File Saved"
+          }
+        }
+      }
+    },
+    "processing.fileSavedMessage" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your PDF has been saved successfully."
+          }
+        }
+      }
+    },
+    "processing.merging" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Merging PDFs..."
+          }
+        }
+      }
+    },
+    "processing.pdfOperationFailed" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "PDF operation failed."
+          }
+        }
+      }
+    },
+    "processing.preparing" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Preparing..."
+          }
+        }
+      }
+    },
+    "processing.readyToSave" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your PDF is ready to save"
+          }
+        }
+      }
+    },
+    "processing.reordering" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reordering pages..."
+          }
+        }
+      }
+    },
+    "processing.revealInFinder" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reveal in Finder"
+          }
+        }
+      }
+    },
+    "processing.share" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Share"
+          }
+        }
+      }
+    },
+    "processing.somethingWentWrong" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Something Went Wrong"
+          }
+        }
+      }
+    },
+    "processing.splitting" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Splitting PDF..."
+          }
+        }
+      }
+    },
+    "processing.unexpectedError" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "An unexpected error occurred."
+          }
+        }
+      }
+    },
+    "processing.usageLimitReached" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Usage limit reached."
+          }
+        }
+      }
+    },
+    "Reordering pages... %@" : {
+      "comment" : "Reorder progress with percentage"
+    },
+    "savePanel.reorder.message" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Choose where to save the reordered PDF"
+          }
+        }
+      }
+    },
+    "savePanel.reorder.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Save Reordered PDF"
+          }
+        }
+      }
+    },
+    "Saving... %@" : {
+      "comment" : "Save progress indicator"
+    },
+    "splitOptions.divideIntoChunks" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Divide into equal chunks"
+          }
+        }
+      }
+    },
+    "splitOptions.enterPageRanges" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enter page numbers and ranges separated by commas"
+          }
+        }
+      }
+    },
+    "splitOptions.everyN" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Every N"
+          }
+        }
+      }
+    },
+    "splitOptions.modeDesc.pageRange" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enter page ranges like 1-5, 10, 15-20"
+          }
+        }
+      }
+    },
+    "splitOptions.modeDesc.selectPages" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Tap pages to select them"
+          }
+        }
+      }
+    },
+    "splitOptions.modeDesc.splitEvery" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Divide PDF into chunks of N pages each"
+          }
+        }
+      }
+    },
+    "splitOptions.noOutput" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No output files will be created"
+          }
+        }
+      }
+    },
+    "splitOptions.options" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Options"
+          }
+        }
+      }
+    },
+    "splitOptions.outputPreview" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Output Preview"
+          }
+        }
+      }
+    },
+    "splitOptions.pagesPerFile" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pages per file:"
+          }
+        }
+      }
+    },
+    "splitOptions.pickPagesVisually" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pick individual pages visually"
+          }
+        }
+      }
+    },
+    "splitOptions.rangePlaceholder" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "e.g., 1-5, 10, 15-20"
+          }
+        }
+      }
+    },
+    "splitOptions.ranges" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Ranges"
+          }
+        }
+      }
+    },
+    "splitOptions.select" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Select"
+          }
+        }
+      }
+    },
+    "splitOptions.selectPagesToExtract" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Select pages to extract:"
+          }
+        }
+      }
+    },
+    "splitOptions.specifyRanges" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Specify ranges like 1-5, 10-15"
+          }
+        }
+      }
+    },
+    "splitOptions.split" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Split"
+          }
+        }
+      }
+    },
+    "splitOptions.splitMode" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Split Mode"
+          }
+        }
+      }
+    },
+    "splitOptions.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Split Options"
+          }
+        }
+      }
+    },
+    "splitOptions.validRange" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Valid range"
+          }
+        }
+      }
+    },
+    "Splitting PDF... %@" : {
+      "comment" : "Split progress with percentage"
+    },
+    "Total: %lld file%@" : {
+      "comment" : "Output file count summary",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Total: %1$lld file%2$@"
+          }
+        }
+      }
+    },
+    "Unable to access '%@'. Please re-select the file." : {
+      "comment" : "Sandbox access denied"
+    },
+    "usage.noActionsRemaining" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You've used all your free actions."
+          }
+        }
+      }
+    },
+    "usage.persistenceFailed" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Failed to save usage data."
+          }
+        }
+      }
+    },
+    "validation.selectMultipleForMerge" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please select at least 2 PDF files to merge."
+          }
+        }
+      }
+    },
+    "validation.selectOneFile" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please select a PDF file."
+          }
+        }
+      }
+    },
+    "validation.selectOnlyOne" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please select only one PDF file for this action."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

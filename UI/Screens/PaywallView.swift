@@ -82,13 +82,13 @@ struct PaywallView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Upgrade to Pro")
+            .navigationTitle(L10n.Paywall.upgradeTitle)
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") {
+                    Button(L10n.Action.close) {
                         dismiss()
                     }
                 }
@@ -96,12 +96,12 @@ struct PaywallView: View {
             .task {
                 await viewModel.loadState()
             }
-            .alert("Purchase Complete", isPresented: isPurchaseSuccessBinding) {
-                Button("OK") {
+            .alert(L10n.Paywall.purchaseSuccess, isPresented: isPurchaseSuccessBinding) {
+                Button(L10n.Action.ok) {
                     dismiss()
                 }
             } message: {
-                Text("Thank you for upgrading to Pro! Enjoy unlimited PDF actions.")
+                Text(L10n.Paywall.purchaseSuccessMessage)
             }
         }
     }
@@ -127,11 +127,11 @@ struct PaywallView: View {
                     .foregroundColor(.white)
             }
             
-            Text("Unlock Full Power")
+            Text(L10n.Paywall.upgradeTitle)
                 .font(.title2)
                 .fontWeight(.bold)
             
-            Text("Get unlimited access to all PDF tools")
+            Text(L10n.Paywall.upgradeSubtitle)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -145,18 +145,18 @@ struct PaywallView: View {
         VStack(spacing: 0) {
             // Header row
             HStack {
-                Text("Features")
+                Text(L10n.Paywall.features)
                     .font(.headline)
                 
                 Spacer()
                 
-                Text("Free")
+                Text(L10n.Paywall.free)
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundColor(.secondary)
                     .frame(width: 60)
                 
-                Text("Pro")
+                Text(L10n.Paywall.pro)
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundColor(.orange)
@@ -167,15 +167,15 @@ struct PaywallView: View {
             Divider()
             
             // Feature rows
-            FeatureComparisonRow(feature: "Merge PDFs", isFreeIncluded: true, isProIncluded: true)
-            FeatureComparisonRow(feature: "Split PDFs", isFreeIncluded: true, isProIncluded: true)
-            FeatureComparisonRow(feature: "Convert PDFs", isFreeIncluded: false, isProIncluded: true)
+            FeatureComparisonRow(feature: L10n.Operation.Merge.title, isFreeIncluded: true, isProIncluded: true)
+            FeatureComparisonRow(feature: L10n.Operation.Split.title, isFreeIncluded: true, isProIncluded: true)
+            FeatureComparisonRow(feature: L10n.Operation.Convert.title, isFreeIncluded: false, isProIncluded: true)
             
             Divider()
             
             // Actions row
             HStack {
-                Text("PDF Actions")
+                Text(L10n.Paywall.pdfActions)
                     .font(.body)
                 
                 Spacer()
@@ -240,7 +240,7 @@ struct PaywallView: View {
                             .tint(.white)
                     }
                     
-                    Text(viewModel.purchaseState == .purchasing ? "Processing..." : "Upgrade to Pro")
+                    Text(viewModel.purchaseState == .purchasing ? L10n.Common.processing : L10n.Paywall.upgradeTitle)
                         .font(.headline)
                 }
                 .foregroundColor(.white)
@@ -264,14 +264,14 @@ struct PaywallView: View {
                     await viewModel.restorePurchases()
                 }
             } label: {
-                Text(viewModel.purchaseState == .restoring ? "Restoring..." : "Restore Purchases")
+                Text(viewModel.purchaseState == .restoring ? L10n.Paywall.restoring : L10n.Paywall.restorePurchases)
                     .font(.subheadline)
                     .foregroundColor(.accentColor)
             }
             .disabled(viewModel.purchaseState == .purchasing || viewModel.purchaseState == .restoring)
             
             // Price note (placeholder for Phase 7)
-            Text("Pricing will be available when StoreKit is integrated")
+            Text(L10n.Common.pricingPlaceholder)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -284,7 +284,7 @@ struct PaywallView: View {
             Image(systemName: "lock.shield.fill")
                 .foregroundColor(.green)
             
-            Text("All processing happens locally on your device")
+            Text(L10n.Paywall.privacyNote)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }

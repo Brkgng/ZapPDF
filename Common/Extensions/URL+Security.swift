@@ -20,26 +20,26 @@ enum FileAccessError: Error, LocalizedError, Sendable {
     var errorDescription: String? {
         switch self {
         case .securityScopeAccessDenied(let url):
-            return "Unable to access '\(url.lastPathComponent)'. Please re-select the file."
+            return L10n.FileAccessError.securityScopeAccessDenied(url.lastPathComponent)
         case .bookmarkResolutionFailed:
-            return "Could not restore access to a previously used file."
+            return L10n.FileAccessError.bookmarkResolutionFailed
         case .fileNotFound(let url):
-            return "File not found: \(url.lastPathComponent)"
+            return L10n.Error.fileNotFound(filename: url.lastPathComponent)
         case .permissionDenied(let url):
-            return "Permission denied for '\(url.lastPathComponent)'"
+            return L10n.FileAccessError.permissionDenied(url.lastPathComponent)
         case .bookmarkCreationFailed(let url):
-            return "Could not save reference to '\(url.lastPathComponent)'"
+            return L10n.FileAccessError.bookmarkCreationFailed(url.lastPathComponent)
         }
     }
     
     var recoverySuggestion: String? {
         switch self {
         case .securityScopeAccessDenied, .bookmarkResolutionFailed, .permissionDenied:
-            return "Please select the file again using the file picker."
+            return L10n.Error.reselectFile
         case .fileNotFound:
-            return "The file may have been moved or deleted."
+            return L10n.Error.fileMovedOrDeleted
         case .bookmarkCreationFailed:
-            return "Try selecting the file again."
+            return L10n.FileAccessError.trySelectingAgain
         }
     }
 }

@@ -282,26 +282,25 @@ final class ProcessingViewModel: ObservableObject {
     }
     
     private func progressMessage(for action: UserAction, progress: Double = 0) -> String {
-        let percentage = Int(progress * 100)
         switch action {
         case .merge:
-            return percentage > 0 ? "Merging PDFs... \(percentage)%" : "Merging PDFs..."
+            return L10n.Processing.mergingProgress(progress)
         case .split:
-            return percentage > 0 ? "Splitting PDF... \(percentage)%" : "Splitting PDF..."
+            return L10n.Processing.splittingProgress(progress)
         case .reorder:
-            return percentage > 0 ? "Reordering pages... \(percentage)%" : "Reordering pages..."
+            return L10n.Processing.reorderingProgress(progress)
         case .convert:
-            return percentage > 0 ? "Converting PDF... \(percentage)%" : "Converting PDF..."
+            return L10n.Processing.convertingProgress(progress)
         }
     }
     
     private func errorMessage(for error: Error) -> String {
         if let pdfError = error as? PDFEngineError {
-            return pdfError.errorDescription ?? "PDF operation failed."
+            return pdfError.errorDescription ?? L10n.Processing.pdfOperationFailed
         }
         if let usageError = error as? UsageError {
-            return usageError.errorDescription ?? "Usage limit reached."
+            return usageError.errorDescription ?? L10n.Processing.usageLimitReached
         }
-        return "An unexpected error occurred."
+        return L10n.Processing.unexpectedError
     }
 }

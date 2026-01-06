@@ -180,7 +180,7 @@ struct DraggablePageGrid: View {
             }
         }
         .opacity(draggingItem?.id == page.id ? 0.5 : 1.0)
-        .accessibilityHint("Drag to reorder")
+        .accessibilityHint(L10n.Accessibility.dragHandle)
     }
 }
 
@@ -239,9 +239,9 @@ struct DraggablePageList: View {
                     )
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Page \(page.displayPageNumber)")
+                        Text(L10n.PageReorder.page(page.displayPageNumber))
                             .font(.headline)
-                        Text("Original position: \(page.originalIndex + 1)")
+                        Text(L10n.PageReorder.originalPosition(page.originalIndex + 1))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

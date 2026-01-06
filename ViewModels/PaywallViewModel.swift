@@ -111,7 +111,7 @@ final class PaywallViewModel: ObservableObject {
             purchaseState = .success
             
         } catch {
-            purchaseState = .failed(message: "Purchase failed. Please try again.")
+            purchaseState = .failed(message: L10n.Paywall.purchaseFailed)
         }
     }
     
@@ -132,7 +132,7 @@ final class PaywallViewModel: ObservableObject {
             purchaseState = .idle
             
         } catch {
-            purchaseState = .failed(message: "Restore failed. Please try again.")
+            purchaseState = .failed(message: L10n.Paywall.restoreFailed)
         }
     }
     
@@ -151,11 +151,9 @@ final class PaywallViewModel: ObservableObject {
     /// Description of remaining free actions.
     var remainingActionsText: String {
         if remainingFreeActions == 0 {
-            return "No free actions remaining"
-        } else if remainingFreeActions == 1 {
-            return "1 free action remaining"
+            return L10n.Paywall.noFreeActionsRemaining
         } else {
-            return "\(remainingFreeActions) free actions remaining"
+            return L10n.Paywall.freeActionsRemaining(remainingFreeActions)
         }
     }
 }

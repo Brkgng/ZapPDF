@@ -17,13 +17,13 @@ enum PageRangeParseError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidFormat(let text):
-            return "Invalid range format: '\(text)'"
+            return L10n.PageRangeError.invalidFormat(text)
         case .pageOutOfRange(let page, let maxPage):
-            return "Page \(page) is out of range (1-\(maxPage))"
+            return L10n.PageRangeError.pageOutOfRange(page, maxPage)
         case .emptyRange:
-            return "No page ranges specified"
+            return L10n.PageRangeError.emptyRange
         case .invalidRange(let start, let end):
-            return "Invalid range: \(start)-\(end) (start must be ≤ end)"
+            return L10n.PageRangeError.invalidRange(start, end)
         }
     }
 }

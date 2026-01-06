@@ -50,7 +50,7 @@ struct ClearAllButton: View {
                 Image(systemName: "trash")
                     .font(.subheadline.weight(.medium))
                 
-                Text("Clear All")
+                Text(L10n.Dashboard.clearAll)
                     .font(.subheadline.weight(.medium))
             }
             .foregroundStyle(buttonForegroundColor)
@@ -80,7 +80,7 @@ struct ClearAllButton: View {
                 .onEnded { _ in isPressed = false }
         )
         #if os(macOS)
-        .help("Remove all files from the list")
+        .help(L10n.Help.clearAll)
         #endif
     }
     

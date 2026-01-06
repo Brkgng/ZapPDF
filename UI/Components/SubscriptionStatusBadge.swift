@@ -56,7 +56,7 @@ struct SubscriptionStatusBadge: View {
             Image(systemName: "crown.fill")
                 .font(.caption)
             
-            Text("Pro")
+            Text(L10n.Paywall.pro)
                 .font(.caption.weight(.semibold))
         }
         .foregroundStyle(.white)
@@ -88,7 +88,7 @@ struct SubscriptionStatusBadge: View {
                     .font(.caption)
                 
                 if remainingActions == 0 {
-                    Text("Upgrade")
+                    Text(L10n.Action.upgrade)
                         .font(.caption.weight(.semibold))
                         .padding(.horizontal, 8)
                         .padding(.vertical, 2)
@@ -109,7 +109,7 @@ struct SubscriptionStatusBadge: View {
         }
         .buttonStyle(.plain)
         #if os(macOS)
-        .help("Tap to view upgrade options")
+        .help(L10n.Accessibility.upgradeHint)
         #endif
     }
     
@@ -129,13 +129,13 @@ struct SubscriptionStatusBadge: View {
     private var statusText: String {
         switch remainingActions {
         case 0:
-            return "No actions left"
+            return L10n.Paywall.noActionsLeft()
         case 1:
-            return "1 action left"
+            return L10n.Paywall.actionsLeft(1)
         case 2:
-            return "2 actions left"
+            return L10n.Paywall.actionsLeft(2)
         default:
-            return "\(remainingActions) of \(freeActionLimit) free"
+            return L10n.Paywall.actionsRemaining(remainingActions, of: freeActionLimit)
         }
     }
     

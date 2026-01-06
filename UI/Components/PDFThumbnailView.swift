@@ -99,7 +99,7 @@ struct PDFThumbnailView: View {
         VStack(spacing: 8) {
             ProgressView()
                 .scaleEffect(0.8)
-            Text("Loading...")
+            Text(L10n.Common.loading)
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }

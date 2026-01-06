@@ -162,26 +162,26 @@ enum PDFFileError: Error, LocalizedError, Sendable {
     var errorDescription: String? {
         switch self {
         case .fileNotFound(let url):
-            return "File not found: \(url.lastPathComponent)"
+            return L10n.Error.fileNotFound(filename: url.lastPathComponent)
         case .invalidPDF(let url):
-            return "'\(url.lastPathComponent)' is not a valid PDF file."
+            return L10n.Error.invalidPDF(filename: url.lastPathComponent)
         case .passwordProtected(let url):
-            return "'\(url.lastPathComponent)' is password protected."
+            return L10n.Error.passwordProtected(filename: url.lastPathComponent)
         case .accessDenied(let url):
-            return "Cannot access '\(url.lastPathComponent)'."
+            return L10n.Error.accessDenied(filename: url.lastPathComponent)
         }
     }
     
     var recoverySuggestion: String? {
         switch self {
         case .fileNotFound:
-            return "The file may have been moved or deleted."
+            return L10n.Error.fileMovedOrDeleted
         case .invalidPDF:
-            return "Please select a valid PDF file."
+            return L10n.Error.selectValidPDF
         case .passwordProtected:
-            return "Please unlock the PDF first using another application."
+            return L10n.Error.unlockPDF
         case .accessDenied:
-            return "Please select the file again using the file picker."
+            return L10n.Error.reselectFile
         }
     }
 }

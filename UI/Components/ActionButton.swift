@@ -205,7 +205,7 @@ extension ActionButton {
             ZStack(alignment: .topTrailing) {
                 styledButton()
                 
-                Text("PRO")
+                Text(L10n.Common.proBadge)
                     .font(.system(size: 8, weight: .bold))
                     .foregroundColor(.white)
                     .padding(.horizontal, 4)

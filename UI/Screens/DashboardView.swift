@@ -53,7 +53,7 @@ struct DashboardView: View {
     var body: some View {
         NavigationStack {
             mainContent
-                .navigationTitle("ZapPDF")
+                .navigationTitle(L10n.Dashboard.title)
                 #if os(iOS)
                 .navigationBarTitleDisplayMode(.large)
                 #endif
@@ -96,24 +96,24 @@ struct DashboardView: View {
                         PageReorderView(file: file)
                     }
                 }
-                .alert("Error", isPresented: hasError) {
-                    Button("OK") {
+                .alert(L10n.Common.errorTitle, isPresented: hasError) {
+                    Button(L10n.Action.ok) {
                         viewModel.errorMessage = nil
                     }
                 } message: {
-                    Text(viewModel.errorMessage ?? "An error occurred")
+                    Text(viewModel.errorMessage ?? L10n.Common.errorOccurred)
                 }
                 .confirmationDialog(
-                    "Clear All Files?",
+                    L10n.Dashboard.clearAllTitle,
                     isPresented: $showClearConfirmation,
                     titleVisibility: .visible
                 ) {
-                    Button("Clear \(viewModel.files.count) Files", role: .destructive) {
+                    Button(L10n.Dashboard.clearFiles(viewModel.files.count), role: .destructive) {
                         viewModel.clearAll()
                     }
-                    Button("Cancel", role: .cancel) { }
+                    Button(L10n.Action.cancel, role: .cancel) { }
                 } message: {
-                    Text("This will remove all files from the list. You can add them again later.")
+                    Text(L10n.Dashboard.clearAllMessage)
                 }
                 .task {
                     await viewModel.loadSubscriptionState()
@@ -229,7 +229,7 @@ struct DashboardView: View {
                             viewModel.toggleSelection(for: file)
                         } label: {
                             Label(
-                                viewModel.isSelected(file) ? "Deselect" : "Select",
+                                viewModel.isSelected(file) ? L10n.Common.deselect : L10n.Common.select,
                                 systemImage: viewModel.isSelected(file) ? "circle" : "checkmark.circle"
                             )
                         }
@@ -239,7 +239,7 @@ struct DashboardView: View {
                         Button(role: .destructive) {
                             viewModel.removeFile(file)
                         } label: {
-                            Label("Remove", systemImage: "trash")
+                            Label(L10n.Action.remove, systemImage: "trash")
                         }
                     }
                 }
@@ -273,7 +273,7 @@ struct DashboardView: View {
                         viewModel.toggleSelection(for: file)
                     } label: {
                         Label(
-                            viewModel.isSelected(file) ? "Deselect" : "Select",
+                            viewModel.isSelected(file) ? L10n.Common.deselect : L10n.Common.select,
                             systemImage: viewModel.isSelected(file) ? "circle" : "checkmark.circle"
                         )
                     }
@@ -283,7 +283,7 @@ struct DashboardView: View {
                     Button(role: .destructive) {
                         viewModel.removeFile(file)
                     } label: {
-                        Label("Remove", systemImage: "trash")
+                        Label(L10n.Action.remove, systemImage: "trash")
                     }
                 }
             }
@@ -305,13 +305,13 @@ struct DashboardView: View {
             // Summary
             HStack {
                 // Selection count
-                Text("\(viewModel.selectedCount) of \(viewModel.files.count) selected")
+                Text(L10n.Dashboard.selectedOfTotal(viewModel.selectedCount, viewModel.files.count))
                     .font(.subheadline)
                 
                 Text("•")
                     .foregroundColor(.secondary)
                 
-                Text("\(viewModel.totalPageCount) pages")
+                Text(L10n.Dashboard.totalPages(viewModel.totalPageCount))
                     .font(.subheadline)
                 
                 Text("•")
@@ -358,7 +358,7 @@ struct DashboardView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "info.circle.fill")
                             .foregroundColor(.accentColor)
-                        Text("Files merge in displayed order. Drag to reorder.")
+                        Text(L10n.Common.mergeOrderHint)
                             .multilineTextAlignment(.leading)
                     }
                     .font(.caption)
@@ -432,7 +432,7 @@ struct DashboardView: View {
             Button {
                 showFilePicker = true
             } label: {
-                Label("Add Files", systemImage: "plus")
+                Label(L10n.Dashboard.addFiles, systemImage: "plus")
             }
         }
         
@@ -443,18 +443,18 @@ struct DashboardView: View {
                     Button {
                         viewModel.selectAll()
                     } label: {
-                        Label("Select All", systemImage: "checkmark.circle")
+                        Label(L10n.Action.selectAll, systemImage: "checkmark.circle")
                     }
                     .keyboardShortcut("a", modifiers: .command)
                     
                     Button {
                         viewModel.deselectAll()
                     } label: {
-                        Label("Deselect All", systemImage: "circle")
+                        Label(L10n.Action.deselectAll, systemImage: "circle")
                     }
                     .keyboardShortcut("a", modifiers: [.command, .shift])
                 } label: {
-                    Label("Selection", systemImage: "checklist")
+                    Label(L10n.Common.selection, systemImage: "checklist")
                 }
             }
         }
@@ -467,16 +467,16 @@ struct DashboardView: View {
                     Button {
                         viewModel.selectAll()
                     } label: {
-                        Label("Select All", systemImage: "checkmark.circle")
+                        Label(L10n.Action.selectAll, systemImage: "checkmark.circle")
                     }
                     
                     Button {
                         viewModel.deselectAll()
                     } label: {
-                        Label("Deselect All", systemImage: "circle")
+                        Label(L10n.Action.deselectAll, systemImage: "circle")
                     }
                 } label: {
-                    Label("Selection", systemImage: "checklist")
+                    Label(L10n.Common.selection, systemImage: "checklist")
                 }
             }
         }
@@ -504,7 +504,7 @@ struct DashboardView: View {
             }
             
         case .failure(let error):
-            viewModel.errorMessage = "Failed to import files: \(error.localizedDescription)"
+            viewModel.errorMessage = L10n.Dashboard.failedToImport(error.localizedDescription)
         }
     }
     
@@ -519,7 +519,7 @@ struct DashboardView: View {
                     switch action {
                     case .merge:
                         // Show processing directly for merge
-                        startAction(.merge, options: .merge(outputFileName: "Merged"))
+                        startAction(.merge, options: .merge(outputFileName: L10n.Dashboard.mergedOutputName))
                         
                     case .split:
                         // Show split options sheet
@@ -531,7 +531,7 @@ struct DashboardView: View {
                         
                     case .convert:
                         // TODO: Show convert options sheet in future
-                        viewModel.errorMessage = "Convert is coming soon!"
+                        viewModel.errorMessage = L10n.Common.comingSoon
                     }
                 }
             }
@@ -561,7 +561,7 @@ struct DashboardView: View {
                 .font(.body)
                 .foregroundColor(.secondary)
             
-            Text("\(clearedFiles.count) files cleared")
+            Text(L10n.Dashboard.undoMessage(clearedFiles.count))
                 .font(.subheadline)
             
             Spacer()
@@ -569,7 +569,7 @@ struct DashboardView: View {
             Button {
                 undoClear()
             } label: {
-                Text("Undo")
+                Text(L10n.Action.undo)
                     .font(.subheadline.weight(.semibold))
                     .foregroundColor(.accentColor)
             }
@@ -709,19 +709,19 @@ struct SplitOptionsSheet: View {
                 }
                 .padding()
             }
-            .navigationTitle("Split Options")
+            .navigationTitle(L10n.SplitOptions.title)
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button(L10n.Action.cancel) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Split") {
+                    Button(L10n.SplitOptions.split) {
                         performSplit()
                     }
                     .disabled(!canSplit)
@@ -749,7 +749,7 @@ struct SplitOptionsSheet: View {
                     .font(.headline)
                     .lineLimit(1)
                     .truncationMode(.middle)
-                Text("\(pageCount) pages")
+                Text(L10n.Plural.pages(pageCount))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -762,7 +762,7 @@ struct SplitOptionsSheet: View {
     
     private var splitModePicker: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Split Mode")
+            Text(L10n.SplitOptions.splitMode)
                 .font(.headline)
             
             #if os(macOS)
@@ -771,30 +771,30 @@ struct SplitOptionsSheet: View {
                 modeRadioButton(
                     index: 0,
                     icon: "rectangle.split.3x1",
-                    title: "Split Every N Pages",
-                    subtitle: "Divide into equal chunks"
+                    title: L10n.Operation.Split.splitEvery,
+                    subtitle: L10n.SplitOptions.divideIntoChunks
                 )
                 
                 modeRadioButton(
                     index: 1,
                     icon: "number",
-                    title: "Extract Page Ranges",
-                    subtitle: "Specify ranges like 1-5, 10-15"
+                    title: L10n.Operation.Split.extractRanges,
+                    subtitle: L10n.SplitOptions.specifyRanges
                 )
                 
                 modeRadioButton(
                     index: 2,
                     icon: "hand.tap",
-                    title: "Select Specific Pages",
-                    subtitle: "Pick individual pages visually"
+                    title: L10n.Operation.Split.selectPages,
+                    subtitle: L10n.SplitOptions.pickPagesVisually
                 )
             }
             #else
             // iOS: Segmented picker for compact display
-            Picker("Split Mode", selection: $selectedModeIndex) {
-                Text("Every N").tag(0)
-                Text("Ranges").tag(1)
-                Text("Select").tag(2)
+            Picker(L10n.SplitOptions.splitMode, selection: $selectedModeIndex) {
+                Text(L10n.SplitOptions.everyN).tag(0)
+                Text(L10n.SplitOptions.ranges).tag(1)
+                Text(L10n.SplitOptions.select).tag(2)
             }
             .pickerStyle(.segmented)
             
@@ -857,9 +857,9 @@ struct SplitOptionsSheet: View {
     
     private var modeDescription: String {
         switch selectedModeIndex {
-        case 0: return "Divide PDF into chunks of N pages each"
-        case 1: return "Enter page ranges like 1-5, 10, 15-20"
-        case 2: return "Tap pages to select them"
+        case 0: return L10n.SplitOptions.modeDescSplitEvery
+        case 1: return L10n.SplitOptions.modeDescPageRange
+        case 2: return L10n.SplitOptions.modeDescSelectPages
         default: return ""
         }
     }
@@ -869,7 +869,7 @@ struct SplitOptionsSheet: View {
     @ViewBuilder
     private var modeOptionsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Options")
+            Text(L10n.SplitOptions.options)
                 .font(.headline)
             
             switch selectedModeIndex {
@@ -889,7 +889,7 @@ struct SplitOptionsSheet: View {
     private var splitEveryOptions: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Pages per file:")
+                Text(L10n.SplitOptions.pagesPerFile)
                     .foregroundColor(.secondary)
                 
                 Spacer()
@@ -898,7 +898,7 @@ struct SplitOptionsSheet: View {
                     .labelsHidden()
                     .frame(width: 100)
                 
-                Text("\(splitEveryN) page\(splitEveryN == 1 ? "" : "s")")
+                Text(L10n.SplitOptions.pageCount(splitEveryN))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .frame(width: 70, alignment: .trailing)
@@ -912,7 +912,7 @@ struct SplitOptionsSheet: View {
     // Mode 1: Page Ranges
     private var pageRangeOptions: some View {
         VStack(alignment: .leading, spacing: 8) {
-            TextField("e.g., 1-5, 10, 15-20", text: $pageRangeText)
+            TextField(L10n.SplitOptions.rangePlaceholder, text: $pageRangeText)
                 .textFieldStyle(.roundedBorder)
                 .onChange(of: pageRangeText) { _, newValue in
                     validateRanges(newValue)
@@ -930,13 +930,13 @@ struct SplitOptionsSheet: View {
                 HStack(spacing: 4) {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.green)
-                    Text("Valid range")
+                    Text(L10n.SplitOptions.validRange)
                         .font(.caption)
                         .foregroundColor(.green)
                 }
             }
             
-            Text("Enter page numbers and ranges separated by commas")
+            Text(L10n.SplitOptions.enterPageRanges)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -960,19 +960,19 @@ struct SplitOptionsSheet: View {
     private var simplePageSelector: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Select pages:")
+                Text(L10n.SplitOptions.selectPagesToExtract)
                     .foregroundColor(.secondary)
                 
                 Spacer()
                 
-                Button("All") {
+                Button(L10n.Common.all) {
                     selectedPages = Set(1...pageCount)
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
                 .font(.caption)
                 
-                Button("None") {
+                Button(L10n.Common.none) {
                     selectedPages.removeAll()
                 }
                 .buttonStyle(.plain)
@@ -1008,7 +1008,7 @@ struct SplitOptionsSheet: View {
                 }
             }
             
-            Text("\(selectedPages.count) pages selected")
+            Text(L10n.SplitOptions.pagesSelected(selectedPages.count))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -1021,7 +1021,7 @@ struct SplitOptionsSheet: View {
             HStack {
                 Image(systemName: "folder")
                     .foregroundColor(.accentColor)
-                Text("Output Preview")
+                Text(L10n.SplitOptions.outputPreview)
                     .font(.headline)
             }
             
@@ -1029,7 +1029,7 @@ struct SplitOptionsSheet: View {
                 HStack {
                     Image(systemName: "exclamationmark.circle")
                         .foregroundColor(.orange)
-                    Text("No output files will be created")
+                    Text(L10n.SplitOptions.noOutput)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -1053,7 +1053,7 @@ struct SplitOptionsSheet: View {
                     }
                     
                     if outputFiles.count > 5 {
-                        Text("... and \(outputFiles.count - 5) more files")
+                        Text(L10n.Dashboard.moreFiles(outputFiles.count - 5))
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .italic()
@@ -1063,7 +1063,7 @@ struct SplitOptionsSheet: View {
                 .background(Color.gray.opacity(0.05))
                 .cornerRadius(8)
                 
-                Text("Total: \(outputFiles.count) file\(outputFiles.count == 1 ? "" : "s")")
+                Text(L10n.SplitOptions.totalFiles(outputFiles.count))
                     .font(.subheadline.weight(.medium))
                     .foregroundColor(.accentColor)
             }
@@ -1099,7 +1099,7 @@ struct SplitOptionsSheet: View {
             var partNum = 1
             while start <= pageCount {
                 let end = min(start + splitEveryN - 1, pageCount)
-                let desc = start == end ? "Page \(start)" : "Pages \(start)-\(end)"
+                let desc = start == end ? L10n.SplitOptions.pageRange(start) : L10n.SplitOptions.pagesRange(start, end)
                 files.append(OutputFile(name: "part\(partNum).pdf", pageDescription: desc))
                 start = end + 1
                 partNum += 1
@@ -1112,8 +1112,8 @@ struct SplitOptionsSheet: View {
             }
             return ranges.enumerated().map { index, range in
                 let desc = range.lowerBound == range.upperBound
-                    ? "Page \(range.lowerBound)"
-                    : "Pages \(range.lowerBound)-\(range.upperBound)"
+                    ? L10n.SplitOptions.pageRange(range.lowerBound)
+                    : L10n.SplitOptions.pagesRange(range.lowerBound, range.upperBound)
                 return OutputFile(name: "range\(index + 1).pdf", pageDescription: desc)
             }
             
@@ -1123,7 +1123,7 @@ struct SplitOptionsSheet: View {
             let pageList = sortedPages.count <= 5
                 ? sortedPages.map(String.init).joined(separator: ", ")
                 : "\(sortedPages.prefix(3).map(String.init).joined(separator: ", "))..."
-            return [OutputFile(name: "extracted.pdf", pageDescription: "Pages: \(pageList)")]
+            return [OutputFile(name: "extracted.pdf", pageDescription: L10n.SplitOptions.pagesLabel(pageList))]
             
         default:
             return []
@@ -1144,7 +1144,7 @@ struct SplitOptionsSheet: View {
         } catch let error as PageRangeParseError {
             rangeError = error.localizedDescription
         } catch {
-            rangeError = "Invalid format"
+            rangeError = L10n.Common.invalidFormat
         }
     }
     

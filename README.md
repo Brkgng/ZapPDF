@@ -47,6 +47,7 @@ See [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) for detailed technical sp
 - **PDFKit** for all PDF operations
 - **Security-scoped resources** for sandboxed file access
 - **async/await** with cancellation support
+- **Type-safe localization** via `L10n` namespace (ready for 7 languages)
 - **RevenueCat** for subscription management
 
 ## Privacy

@@ -57,7 +57,7 @@ struct PageSelectorGrid: View {
         VStack(alignment: .leading, spacing: 8) {
             // Header with selection info
             HStack {
-                Text("Select pages to extract:")
+                Text(L10n.SplitOptions.selectPagesToExtract)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
@@ -65,14 +65,14 @@ struct PageSelectorGrid: View {
                 
                 // Quick actions
                 HStack(spacing: 12) {
-                    Button("All") {
+                    Button(L10n.Common.all) {
                         selectAll()
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.accentColor)
                     .font(.caption)
                     
-                    Button("None") {
+                    Button(L10n.Common.none) {
                         clearSelection()
                     }
                     .buttonStyle(.plain)
@@ -101,7 +101,7 @@ struct PageSelectorGrid: View {
             )
             
             // Selection summary
-            Text("\(selectedPages.count) of \(pageCount) pages selected")
+            Text(L10n.SplitOptions.selectedOfTotal(selectedPages.count, pageCount))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -138,7 +138,7 @@ struct PageSelectorGrid: View {
             }
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Page \(pageNumber)")
+        .accessibilityLabel(L10n.PageReorder.page(pageNumber))
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
     

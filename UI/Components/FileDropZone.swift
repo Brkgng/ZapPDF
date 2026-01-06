@@ -109,12 +109,12 @@ struct FileDropZone: View {
                 .symbolEffect(.bounce, value: isTargeted)
             
             // Title
-            Text(isTargeted ? "Drop PDF files here" : "Add PDF Files")
+            Text(isTargeted ? L10n.Dashboard.dropHere : L10n.Dashboard.addFiles)
                 .font(.headline)
                 .foregroundColor(isTargeted ? .accentColor : .primary)
             
             // Subtitle
-            Text("Drag and drop PDF files or use the button below")
+            Text(L10n.Dashboard.dragAndDrop)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -123,7 +123,7 @@ struct FileDropZone: View {
             Button {
                 onPickerRequested()
             } label: {
-                Label("Browse Files", systemImage: "folder")
+                Label(L10n.Dashboard.browseFiles, systemImage: "folder")
             }
             .buttonStyle(.primary)
             .padding(.top, 8)
@@ -345,7 +345,7 @@ struct FileDropZoneWithContent<Content: View>: View {
                     .font(.system(size: 48))
                     .foregroundColor(.accentColor)
                 
-                Text("Drop to add more files")
+                Text(L10n.Dashboard.dropToAdd)
                     .font(.headline)
                     .foregroundColor(.accentColor)
             }

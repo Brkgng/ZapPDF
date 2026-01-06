@@ -239,7 +239,7 @@ final class PageReorderViewModel: ObservableObject {
     /// - Note: Cannot delete the last remaining page
     func deletePage(at index: Int) {
         guard pages.count > 1 else {
-            errorMessage = "Cannot delete the last page"
+            errorMessage = L10n.PageReorder.cannotDeleteLastPage
             return
         }
         guard index >= 0 && index < pages.count else { return }
@@ -433,24 +433,24 @@ enum PageReorderError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .noChanges:
-            return "No changes to save."
+            return L10n.PageReorder.noChangesToSave
         case .invalidPageOrder:
-            return "Invalid page order."
+            return L10n.PageReorder.invalidPageOrder
         case .saveFailed(let url):
-            return "Failed to save PDF to '\(url.lastPathComponent)'."
+            return L10n.PageReorder.saveFailedTo(url.lastPathComponent)
         case .cancelled:
-            return "Operation was cancelled."
+            return L10n.Error.cancelled
         }
     }
     
     var recoverySuggestion: String? {
         switch self {
         case .noChanges:
-            return "Reorder some pages before saving."
+            return L10n.Error.reorderSomePages
         case .invalidPageOrder:
-            return "Please try reordering again."
+            return L10n.Error.tryReorderingAgain
         case .saveFailed:
-            return "Try saving to a different location."
+            return L10n.Error.trySavingElsewhere
         case .cancelled:
             return nil
         }

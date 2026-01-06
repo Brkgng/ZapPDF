@@ -22,13 +22,13 @@ enum PDFDisplayModeOption: Int, CaseIterable, Identifiable {
     var displayName: String {
         switch self {
         case .singlePage:
-            return "Single Page"
+            return L10n.PDFDisplay.singlePage
         case .singlePageContinuous:
-            return "Continuous"
+            return L10n.PDFDisplay.continuous
         case .twoUp:
-            return "Two Pages"
+            return L10n.PDFDisplay.twoPages
         case .twoUpContinuous:
-            return "Two Pages (Continuous)"
+            return L10n.PDFDisplay.twoPagesContinuous
         }
     }
     
@@ -97,8 +97,8 @@ struct PDFKitView: View {
             currentPage: $currentPage,
             totalPages: $totalPages
         )
-        .accessibilityLabel("PDF Document")
-        .accessibilityHint("Displaying \(totalPages) pages")
+        .accessibilityLabel(L10n.Accessibility.pdfDocument)
+        .accessibilityHint(L10n.Accessibility.displayingPages(totalPages))
     }
 }
 
@@ -393,7 +393,7 @@ struct PDFViewerWithControls: View {
                 Spacer()
                 
                 // Page indicator
-                Text("Page \(currentPage + 1) of \(totalPages)")
+                Text(L10n.PageReorder.pageOf(currentPage + 1, totalPages))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 

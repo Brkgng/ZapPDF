@@ -92,7 +92,7 @@ struct PDFFileRow: View {
                 
                 HStack(spacing: 8) {
                     // Page count
-                    Label("\(pdfFile.pageCount) pages", systemImage: "doc.text")
+                    Label(L10n.Plural.pages(pdfFile.pageCount), systemImage: "doc.text")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
@@ -116,7 +116,7 @@ struct PDFFileRow: View {
                 }
                 .buttonStyle(.plain)
                 .opacity(isHovered ? 1 : 0.6)
-                .help("Remove file")
+                .help(L10n.Accessibility.deleteFile)
             }
         }
         .padding(.vertical, 8)
@@ -161,7 +161,7 @@ struct PDFFileRow: View {
                 .foregroundColor(isSelected ? .accentColor : .secondary)
         }
         .buttonStyle(.plain)
-        .help(isSelected ? "Deselect file" : "Select file")
+        .help(isSelected ? L10n.Accessibility.deselectFile : L10n.Accessibility.selectFile)
     }
     
     // MARK: - Background Color
@@ -183,13 +183,13 @@ struct PDFFileRow: View {
         Button {
             openInFinder()
         } label: {
-            Label("Show in Finder", systemImage: "folder")
+            Label(L10n.ContextMenu.showInFinder, systemImage: "folder")
         }
         
         Button {
             copyFileName()
         } label: {
-            Label("Copy Name", systemImage: "doc.on.doc")
+            Label(L10n.ContextMenu.copyName, systemImage: "doc.on.doc")
         }
         
         if let onDelete = onDelete {
@@ -198,7 +198,7 @@ struct PDFFileRow: View {
             Button(role: .destructive) {
                 onDelete()
             } label: {
-                Label("Remove", systemImage: "trash")
+                Label(L10n.Action.remove, systemImage: "trash")
             }
         }
     }
@@ -242,7 +242,7 @@ struct PDFFileRowCompact: View {
                     .font(.subheadline)
                     .lineLimit(1)
                 
-                Text("\(pdfFile.pageCount) pages • \(pdfFile.formattedFileSize)")
+                Text("\(L10n.Plural.pages(pdfFile.pageCount)) • \(pdfFile.formattedFileSize)")
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
@@ -276,7 +276,7 @@ extension PDFFileRow {
                 Button(role: .destructive) {
                     onDelete()
                 } label: {
-                    Label("Delete", systemImage: "trash")
+                    Label(L10n.Action.delete, systemImage: "trash")
                 }
             }
         }

@@ -44,46 +44,46 @@ enum PDFEngineError: Error, LocalizedError, Sendable {
     var errorDescription: String? {
         switch self {
         case .invalidPDF(let url):
-            return "'\(url.lastPathComponent)' is not a valid PDF file."
+            return L10n.Error.invalidPDF(filename: url.lastPathComponent)
         case .passwordProtected(let url):
-            return "'\(url.lastPathComponent)' is password protected."
+            return L10n.Error.passwordProtected(filename: url.lastPathComponent)
         case .corruptedFile(let url):
-            return "'\(url.lastPathComponent)' appears to be corrupted."
+            return L10n.Error.corruptedFile(filename: url.lastPathComponent)
         case .insufficientDiskSpace:
-            return "Not enough storage space to complete this operation."
+            return L10n.Error.insufficientDiskSpace
         case .writeFailed(let url):
-            return "Failed to save '\(url.lastPathComponent)'."
+            return L10n.Error.writeFailed(filename: url.lastPathComponent)
         case .cancelled:
-            return "Operation was cancelled."
+            return L10n.Error.cancelled
         case .invalidPageRange(let range, let totalPages):
-            return "Page range \(range.lowerBound)-\(range.upperBound) is invalid. Document has \(totalPages) pages."
+            return L10n.Error.invalidPageRange(start: range.lowerBound, end: range.upperBound, total: totalPages)
         case .emptyInput:
-            return "No files provided for this operation."
+            return L10n.Error.emptyInput
         case .fileNotFound(let url):
-            return "File not found: '\(url.lastPathComponent)'."
+            return L10n.Error.fileNotFound(filename: url.lastPathComponent)
         }
     }
     
     var recoverySuggestion: String? {
         switch self {
         case .invalidPDF:
-            return "Please select a valid PDF file."
+            return L10n.Error.selectValidPDF
         case .passwordProtected:
-            return "Please unlock the PDF using another application first."
+            return L10n.Error.unlockPDF
         case .corruptedFile:
-            return "Try obtaining a fresh copy of this file."
+            return L10n.Error.getFreshCopy
         case .insufficientDiskSpace:
-            return "Free up some storage space and try again."
+            return L10n.Error.freeUpSpace
         case .writeFailed:
-            return "Check that you have write permission to the destination."
+            return L10n.Error.checkPermissions
         case .cancelled:
             return nil
         case .invalidPageRange:
-            return "Please select a valid page range within the document."
+            return L10n.Error.selectValidRange
         case .emptyInput:
-            return "Please select at least one PDF file."
+            return L10n.Error.selectAtLeastOne
         case .fileNotFound:
-            return "The file may have been moved or deleted."
+            return L10n.Error.fileMovedOrDeleted
         }
     }
 }

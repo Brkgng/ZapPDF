@@ -35,13 +35,13 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
     var displayName: String {
         switch self {
         case .merge:
-            return "Merge PDFs"
+            return L10n.Operation.Merge.title
         case .split:
-            return "Split PDF"
+            return L10n.Operation.Split.title
         case .reorder:
-            return "Reorder Pages"
+            return L10n.Operation.Reorder.title
         case .convert:
-            return "Convert PDF"
+            return L10n.Operation.Convert.title
         }
     }
     
@@ -63,13 +63,13 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
     var description: String {
         switch self {
         case .merge:
-            return "Combine multiple PDFs into one document"
+            return L10n.Operation.Merge.description
         case .split:
-            return "Extract pages or split into multiple documents"
+            return L10n.Operation.Split.description
         case .reorder:
-            return "Reorder pages within a PDF"
+            return L10n.Operation.Reorder.description
         case .convert:
-            return "Convert PDF to other formats"
+            return L10n.Operation.Convert.description
         }
     }
     
@@ -114,13 +114,13 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
     func fileCountError(for count: Int) -> String? {
         if count < minimumFileCount {
             if requiresMultipleFiles {
-                return "Please select at least 2 PDF files to merge."
+                return L10n.Validation.selectMultipleForMerge
             } else {
-                return "Please select a PDF file."
+                return L10n.Validation.selectOneFile
             }
         }
         if let max = maximumFileCount, count > max {
-            return "Please select only one PDF file for this action."
+            return L10n.Validation.selectOnlyOne
         }
         return nil
     }

@@ -143,9 +143,9 @@ final class DashboardViewModel: ObservableObject {
         if !errorURLs.isEmpty {
             let names = errorURLs.map { $0.lastPathComponent }.joined(separator: ", ")
             if errorURLs.count == 1 {
-                errorMessage = "Could not load '\(names)'. Please select a valid PDF file."
+                errorMessage = L10n.Dashboard.couldNotLoadFile(names)
             } else {
-                errorMessage = "Could not load \(errorURLs.count) files: \(names)"
+                errorMessage = L10n.Dashboard.couldNotLoadFiles(errorURLs.count, names)
             }
         }
         
