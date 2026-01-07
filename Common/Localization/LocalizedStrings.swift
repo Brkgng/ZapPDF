@@ -528,4 +528,28 @@ enum L10n {
         static let twoPages = String(localized: "pdfDisplay.twoPages", defaultValue: "Two Pages")
         static let twoPagesContinuous = String(localized: "pdfDisplay.twoPagesContinuous", defaultValue: "Two Pages (Continuous)")
     }
+    
+    // MARK: - Settings
+    
+    enum Settings {
+        static let title = String(localized: "settings.title", defaultValue: "Settings")
+        static let language = String(localized: "settings.language", defaultValue: "Language")
+        static let languageDescription = String(localized: "settings.languageDescription", defaultValue: "Choose your preferred language")
+        static let systemDefault = String(localized: "settings.systemDefault", defaultValue: "System Default")
+        static let appearance = String(localized: "settings.appearance", defaultValue: "Appearance")
+        static let about = String(localized: "settings.about", defaultValue: "About")
+        static let version = String(localized: "settings.version", defaultValue: "Version")
+    }
+    
+    // MARK: - Languages
+    
+    enum Language {
+        static let english = String(localized: "language.english", defaultValue: "English")
+        static let german = String(localized: "language.german", defaultValue: "German")
+        static let french = String(localized: "language.french", defaultValue: "French")
+        static let spanish = String(localized: "language.spanish", defaultValue: "Spanish")
+        static let japanese = String(localized: "language.japanese", defaultValue: "Japanese")
+        static let chineseSimplified = String(localized: "language.chineseSimplified", defaultValue: "Chinese (Simplified)")
+        static let turkish = String(localized: "language.turkish", defaultValue: "Turkish")
+    }
 }

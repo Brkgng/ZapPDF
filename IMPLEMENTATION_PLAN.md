@@ -209,6 +209,54 @@ Text(L10n.Error.fileNotFound(filename: url.lastPathComponent))
 - Chinese Simplified (ZH-Hans)
 - Turkish (TR)
 
+### Phase 12: In-App Language Switching ✅
+
+**Duration: 1 day** | Completed: 2026-01-07
+
+In-app language switching with Settings window and AppleLanguages override.
+
+- [x] `Models/AppLanguage.swift` – Enum for tier 1 languages with locales, native names, and language codes
+- [x] `Common/Localization/LanguageManager.swift` – Observable manager with AppleLanguages override
+- [x] `UI/Screens/SettingsView.swift` – Settings screen with language picker (macOS/iOS)
+- [x] App root integration with `Settings` scene (Cmd+, on macOS)
+- [x] iOS toolbar settings button
+
+**Architecture:**
+
+```swift
+// macOS: Settings scene with Cmd+, shortcut
+Settings {
+    SettingsView()
+        .environment(languageManager)
+}
+
+// Language switching via AppleLanguages (requires restart)
+UserDefaults.standard.set([languageCode], forKey: "AppleLanguages")
+```
+
+### Phase 13: Tier 1 Language Translations 🔄
+
+**Duration: 2-3 days** | In Progress
+
+Adding translations for 237 string keys across 6 languages.
+
+| Language             | Status     | Strings |
+| -------------------- | ---------- | ------- |
+| 🇩🇪 German (DE)       | ✅ Done    | 237/237 |
+| 🇫🇷 French (FR)       | ⏳ Pending | 0/237   |
+| 🇪🇸 Spanish (ES)      | ⏳ Pending | 0/237   |
+| 🇯🇵 Japanese (JA)     | ⏳ Pending | 0/237   |
+| 🇨🇳 Chinese (ZH-Hans) | ⏳ Pending | 0/237   |
+| 🇹🇷 Turkish (TR)      | ⏳ Pending | 0/237   |
+
+- [x] German translations added (237 strings)
+- [x] Complete remaining German translations
+- [ ] Add French translations
+- [ ] Add Spanish translations
+- [ ] Add Japanese translations
+- [ ] Add Chinese Simplified translations
+- [ ] Add Turkish translations
+
 ---
 
 ## 3. Layer Responsibilities

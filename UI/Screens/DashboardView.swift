@@ -47,6 +47,7 @@ struct DashboardView: View {
     @State private var showUndoToast = false
     @State private var clearedFiles: [PDFFile] = []
     @State private var clearedSelection: Set<UUID> = []
+    @State private var showSettings = false
     
     // MARK: - Body
     
@@ -70,6 +71,11 @@ struct DashboardView: View {
                 .sheet(isPresented: $viewModel.showPaywall) {
                     PaywallView()
                 }
+                #if os(iOS)
+                .sheet(isPresented: $showSettings) {
+                    SettingsView()
+                }
+                #endif
                 .navigationDestination(isPresented: $showProcessingView) {
                     if let action = selectedAction, let options = processingOptions {
                         ProcessingView(
@@ -435,6 +441,16 @@ struct DashboardView: View {
                 Label(L10n.Dashboard.addFiles, systemImage: "plus")
             }
         }
+        
+        #if os(iOS)
+        ToolbarItem(placement: .secondaryAction) {
+            Button {
+                showSettings = true
+            } label: {
+                Label(L10n.Settings.title, systemImage: "gearshape")
+            }
+        }
+        #endif
         
         #if os(macOS)
         if viewModel.hasFiles {
