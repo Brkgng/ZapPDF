@@ -145,7 +145,7 @@ enum L10n {
         static let select = String(localized: "splitOptions.select", defaultValue: "Select")
         
         static func totalFiles(_ count: Int) -> String {
-            String(localized: "Total: \(count) file\(count == 1 ? "" : "s")", comment: "Output file count summary")
+            String(localized: "splitOptions.totalFiles \(count)")
         }
         
         // Mode descriptions for iOS
@@ -155,7 +155,7 @@ enum L10n {
         
         // Page count display
         static func pageCount(_ count: Int) -> String {
-            String(localized: "\(count) page\(count == 1 ? "" : "s")", comment: "Page count for split options")
+            String(localized: "splitOptions.pageCountPlural \(count)")
         }
         
         static func pagesSelected(_ count: Int) -> String {
