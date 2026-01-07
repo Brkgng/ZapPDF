@@ -26,6 +26,12 @@
             "state": "translated",
             "value": "%1$@ • %2$@"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ • %2$@"
+          }
         }
       }
     },
@@ -44,6 +50,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
+          }
+        },
+        "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld"
@@ -71,6 +83,12 @@
             "state": "translated",
             "value": "%lld acciones restantes"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "残り %lld 回の操作"
+          }
         }
       }
     },
@@ -93,6 +111,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld archivos eliminados"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 件のファイルをクリアしました"
           }
         }
       }
@@ -117,6 +141,12 @@
             "state": "translated",
             "value": "%lld archivos creados"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 件のファイルを作成しました"
+          }
         }
       }
     },
@@ -139,6 +169,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld acciones gratuitas restantes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "残り %lld 回の無料操作"
           }
         }
       }
@@ -169,6 +205,12 @@
             "state": "translated",
             "value": "%1$lld de %2$lld gratis"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld / %2$lld 無料"
+          }
         }
       }
     },
@@ -197,6 +239,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld de %2$lld páginas seleccionadas"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld / %2$lld ページを選択"
           }
         }
       }
@@ -227,6 +275,12 @@
             "state": "translated",
             "value": "%1$lld de %2$lld seleccionados"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld / %2$lld 件を選択"
+          }
         }
       }
     },
@@ -256,6 +310,12 @@
             "state": "translated",
             "value": "%1$lld página%2$@"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld ページ%2$@"
+          }
         }
       }
     },
@@ -278,6 +338,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld páginas"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ページ"
           }
         }
       }
@@ -302,6 +368,12 @@
             "state": "translated",
             "value": "%lld páginas seleccionadas"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ページを選択"
+          }
         }
       }
     },
@@ -324,6 +396,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "'%@' parece estar dañado."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」は破損しているようです。"
           }
         }
       }
@@ -348,6 +426,12 @@
             "state": "translated",
             "value": "'%@' no es un archivo PDF válido."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」は有効なPDFファイルではありません。"
+          }
         }
       }
     },
@@ -370,6 +454,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "'%@' está protegido con contraseña."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」はパスワードで保護されています。"
           }
         }
       }
@@ -394,6 +484,12 @@
             "state": "translated",
             "value": "... y %lld archivos más"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "...他 %lld 件のファイル"
+          }
         }
       }
     },
@@ -412,6 +508,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5"
+          }
+        },
+        "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "5"
@@ -445,6 +547,12 @@
             "state": "translated",
             "value": "No se puede acceder a '%@'."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」にアクセスできません。"
+          }
         }
       }
     },
@@ -467,6 +575,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eliminar %lld archivos"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 件のファイルをクリア"
           }
         }
       }
@@ -497,6 +611,12 @@
             "state": "translated",
             "value": "Convirtiendo PDF... %@"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFを変換中... %@"
+          }
         }
       }
     },
@@ -525,6 +645,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se pudieron cargar %1$lld archivos: %2$@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld 件のファイルを読み込めませんでした: %2$@"
           }
         }
       }
@@ -555,6 +681,12 @@
             "state": "translated",
             "value": "No se pudo cargar '%@'. Por favor, selecciona un archivo PDF válido."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」を読み込めませんでした。有効なPDFファイルを選択してください。"
+          }
         }
       }
     },
@@ -583,6 +715,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se pudo guardar el archivo: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルを保存できませんでした: %@"
           }
         }
       }
@@ -613,6 +751,12 @@
             "state": "translated",
             "value": "No se pudo guardar la referencia a '%@'"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」への参照を保存できませんでした"
+          }
         }
       }
     },
@@ -642,6 +786,12 @@
             "state": "translated",
             "value": "Mostrando %lld páginas"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ページを表示中"
+          }
         }
       }
     },
@@ -664,6 +814,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Error al importar archivos: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルのインポートに失敗しました: %@"
           }
         }
       }
@@ -694,6 +850,12 @@
             "state": "translated",
             "value": "Error al guardar '%@'."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」の保存に失敗しました。"
+          }
         }
       }
     },
@@ -722,6 +884,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Error al guardar PDF en '%@'."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」へのPDFの保存に失敗しました。"
           }
         }
       }
@@ -752,6 +920,12 @@
             "state": "translated",
             "value": "Archivo no encontrado: '%@'."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルが見つかりません: 「%@」"
+          }
         }
       }
     },
@@ -780,6 +954,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Formato de rango inválido: '%@'"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無効な範囲形式: 「%@」"
           }
         }
       }
@@ -810,6 +990,12 @@
             "state": "translated",
             "value": "Rango inválido: %1$lld-%2$lld (el inicio debe ser ≤ al final)"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無効な範囲: %1$lld-%2$lld (開始は終了以下である必要があります)"
+          }
         }
       }
     },
@@ -838,6 +1024,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Combinando PDFs... %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFを結合中... %@"
           }
         }
       }
@@ -868,6 +1060,12 @@
             "state": "translated",
             "value": "Movido desde la posición %lld"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "位置 %lld から移動"
+          }
         }
       }
     },
@@ -896,6 +1094,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No quedan acciones"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "操作回数がありません"
           }
         }
       }
@@ -926,6 +1130,12 @@
             "state": "translated",
             "value": "Posición original: %lld"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "元の位置: %lld"
+          }
         }
       }
     },
@@ -948,6 +1158,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Página %lld"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページ %lld"
           }
         }
       }
@@ -978,6 +1194,12 @@
             "state": "translated",
             "value": "La página %1$lld está fuera de rango (1-%2$lld)"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページ %1$lld は範囲外です (1-%2$lld)"
+          }
         }
       }
     },
@@ -1006,6 +1228,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Página %1$lld de %2$lld"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページ %1$lld / %2$lld"
           }
         }
       }
@@ -1036,6 +1264,12 @@
             "state": "translated",
             "value": "El rango de páginas %1$lld-%2$lld no es válido. El documento tiene %3$lld páginas."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページ範囲 %1$lld-%2$lld は無効です。ドキュメントには %3$lld ページあります。"
+          }
         }
       }
     },
@@ -1065,6 +1299,12 @@
             "state": "translated",
             "value": "Páginas %1$lld-%2$lld"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページ %1$lld-%2$lld"
+          }
         }
       }
     },
@@ -1087,6 +1327,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Páginas: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページ: %@"
           }
         }
       }
@@ -1117,6 +1363,12 @@
             "state": "translated",
             "value": "Permiso denegado para '%@'"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」へのアクセスが拒否されました"
+          }
         }
       }
     },
@@ -1145,6 +1397,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reordenando páginas... %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページを並べ替え中... %@"
           }
         }
       }
@@ -1175,6 +1433,12 @@
             "state": "translated",
             "value": "Guardando... %@"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存中... %@"
+          }
         }
       }
     },
@@ -1203,6 +1467,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dividiendo PDF... %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFを分割中... %@"
           }
         }
       }
@@ -1233,6 +1503,12 @@
             "state": "translated",
             "value": "Total: %1$lld archivo%2$@"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "合計: %1$lld ファイル%2$@"
+          }
         }
       }
     },
@@ -1261,6 +1537,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se puede acceder a '%@'. Por favor, vuelve a seleccionar el archivo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」にアクセスできません。ファイルを再度選択してください。"
           }
         }
       }
@@ -1291,6 +1573,12 @@
             "state": "translated",
             "value": "Eliminar archivo"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルを削除"
+          }
         }
       }
     },
@@ -1319,6 +1607,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deseleccionar archivo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルの選択を解除"
           }
         }
       }
@@ -1349,6 +1643,12 @@
             "state": "translated",
             "value": "Arrastra para reordenar"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドラッグして並べ替え"
+          }
         }
       }
     },
@@ -1377,6 +1677,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Documento PDF"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFドキュメント"
           }
         }
       }
@@ -1407,6 +1713,12 @@
             "state": "translated",
             "value": "Seleccionar archivo"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルを選択"
+          }
         }
       }
     },
@@ -1435,6 +1747,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Seleccionado. Toca dos veces para deseleccionar."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択済み。ダブルタップで解除。"
           }
         }
       }
@@ -1465,6 +1783,12 @@
             "state": "translated",
             "value": "Toca dos veces para seleccionar."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ダブルタップで選択。"
+          }
         }
       }
     },
@@ -1493,6 +1817,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toca para ver opciones de mejora"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タップしてアップグレードオプションを表示"
           }
         }
       }
@@ -1523,6 +1853,12 @@
             "state": "translated",
             "value": "Cancelar"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャンセル"
+          }
         }
       }
     },
@@ -1551,6 +1887,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cerrar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "閉じる"
           }
         }
       }
@@ -1581,6 +1923,12 @@
             "state": "translated",
             "value": "Continuar"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "続ける"
+          }
         }
       }
     },
@@ -1609,6 +1957,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eliminar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "削除"
           }
         }
       }
@@ -1639,6 +1993,12 @@
             "state": "translated",
             "value": "Deseleccionar todo"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべて解除"
+          }
         }
       }
     },
@@ -1667,6 +2027,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Listo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了"
           }
         }
       }
@@ -1697,6 +2063,12 @@
             "state": "translated",
             "value": "Comenzar"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "始める"
+          }
         }
       }
     },
@@ -1722,6 +2094,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "OK"
@@ -1755,6 +2133,12 @@
             "state": "translated",
             "value": "Quitar"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "削除"
+          }
         }
       }
     },
@@ -1783,6 +2167,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Intentar de nuevo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "再試行"
           }
         }
       }
@@ -1813,6 +2203,12 @@
             "state": "translated",
             "value": "Guardar archivo"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルを保存"
+          }
         }
       }
     },
@@ -1841,6 +2237,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Seleccionar todo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべて選択"
           }
         }
       }
@@ -1871,6 +2273,12 @@
             "state": "translated",
             "value": "Omitir"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スキップ"
+          }
         }
       }
     },
@@ -1899,6 +2307,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deshacer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "元に戻す"
           }
         }
       }
@@ -1929,6 +2343,12 @@
             "state": "translated",
             "value": "Mejorar"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アップグレード"
+          }
         }
       }
     },
@@ -1954,6 +2374,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZapPDF"
+          }
+        },
+        "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "ZapPDF"
@@ -1987,6 +2413,12 @@
             "state": "translated",
             "value": "Todo"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべて"
+          }
         }
       }
     },
@@ -2015,6 +2447,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "¡Próximamente!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "近日公開！"
           }
         }
       }
@@ -2045,6 +2483,12 @@
             "state": "translated",
             "value": "Deseleccionar"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解除"
+          }
         }
       }
     },
@@ -2073,6 +2517,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ocurrió un error"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エラーが発生しました"
           }
         }
       }
@@ -2103,6 +2553,12 @@
             "state": "translated",
             "value": "Error"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エラー"
+          }
         }
       }
     },
@@ -2131,6 +2587,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Formato inválido"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無効な形式"
           }
         }
       }
@@ -2161,6 +2623,12 @@
             "state": "translated",
             "value": "Cargando..."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "読み込み中..."
+          }
         }
       }
     },
@@ -2189,6 +2657,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Los archivos se combinan en el orden mostrado. Arrastra para reordenar."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルは表示順に結合されます。ドラッグして並べ替え。"
           }
         }
       }
@@ -2219,6 +2693,12 @@
             "state": "translated",
             "value": "Ninguno"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なし"
+          }
         }
       }
     },
@@ -2248,6 +2728,12 @@
             "state": "translated",
             "value": "Los precios estarán disponibles cuando se integre StoreKit"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "StoreKit統合後に価格が利用可能になります"
+          }
         }
       }
     },
@@ -2273,6 +2759,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PRO"
+          }
+        },
+        "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "PRO"
@@ -2306,6 +2798,12 @@
             "state": "translated",
             "value": "Procesando..."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "処理中..."
+          }
         }
       }
     },
@@ -2334,6 +2832,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Error al guardar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存に失敗"
           }
         }
       }
@@ -2364,6 +2868,12 @@
             "state": "translated",
             "value": "Seleccionar"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択"
+          }
         }
       }
     },
@@ -2392,6 +2902,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Selección"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択"
           }
         }
       }
@@ -2422,6 +2938,12 @@
             "state": "translated",
             "value": "No se puede guardar el archivo."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルを保存できません。"
+          }
         }
       }
     },
@@ -2450,6 +2972,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copiar nombre"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名前をコピー"
           }
         }
       }
@@ -2480,6 +3008,12 @@
             "state": "translated",
             "value": "Mostrar en Finder"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finderで表示"
+          }
         }
       }
     },
@@ -2508,6 +3042,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Agregar archivos PDF"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFファイルを追加"
           }
         }
       }
@@ -2538,6 +3078,12 @@
             "state": "translated",
             "value": "Explorar archivos"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルを選択"
+          }
         }
       }
     },
@@ -2566,6 +3112,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eliminar todo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべてクリア"
           }
         }
       }
@@ -2596,6 +3148,12 @@
             "state": "translated",
             "value": "Esto eliminará todos los archivos PDF de la lista."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リストからすべてのPDFファイルが削除されます。"
+          }
         }
       }
     },
@@ -2624,6 +3182,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "¿Eliminar todos los archivos?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべてのファイルをクリアしますか？"
           }
         }
       }
@@ -2654,6 +3218,12 @@
             "state": "translated",
             "value": "Arrastra y suelta archivos PDF o usa el botón de abajo"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFファイルをドラッグ＆ドロップ、または下のボタンを使用"
+          }
         }
       }
     },
@@ -2682,6 +3252,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Arrastra archivos PDF aquí"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFファイルをここにドロップ"
           }
         }
       }
@@ -2712,6 +3288,12 @@
             "state": "translated",
             "value": "Suelta para agregar más archivos"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドロップしてファイルを追加"
+          }
         }
       }
     },
@@ -2741,6 +3323,12 @@
             "state": "translated",
             "value": "Combinado"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結合済み"
+          }
         }
       }
     },
@@ -2766,6 +3354,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZapPDF"
+          }
+        },
+        "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "ZapPDF"
@@ -2799,6 +3393,12 @@
             "state": "translated",
             "value": "La operación fue cancelada."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "操作がキャンセルされました。"
+          }
         }
       }
     },
@@ -2827,6 +3427,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se proporcionaron archivos para esta operación."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この操作に対してファイルが提供されていません。"
           }
         }
       }
@@ -2857,6 +3463,12 @@
             "state": "translated",
             "value": "No hay suficiente espacio de almacenamiento para completar esta operación."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この操作を完了するためのストレージ容量が不足しています。"
+          }
         }
       }
     },
@@ -2885,6 +3497,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verifica que tengas permiso de escritura en el destino."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存先への書き込み権限を確認してください。"
           }
         }
       }
@@ -2915,6 +3533,12 @@
             "state": "translated",
             "value": "El archivo puede haber sido movido o eliminado."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルが移動または削除された可能性があります。"
+          }
         }
       }
     },
@@ -2943,6 +3567,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Libera espacio de almacenamiento e inténtalo de nuevo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ストレージ容量を空けてから再試行してください。"
           }
         }
       }
@@ -2973,6 +3603,12 @@
             "state": "translated",
             "value": "Intenta obtener una copia nueva de este archivo."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このファイルの新しいコピーを取得してください。"
+          }
         }
       }
     },
@@ -3001,6 +3637,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reordena algunas páginas antes de guardar."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存する前にページを並べ替えてください。"
           }
         }
       }
@@ -3031,6 +3673,12 @@
             "state": "translated",
             "value": "Por favor, selecciona el archivo nuevamente usando el selector de archivos."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルピッカーを使用してファイルを再選択してください。"
+          }
         }
       }
     },
@@ -3059,6 +3707,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Por favor, selecciona al menos un archivo PDF."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "少なくとも1つのPDFファイルを選択してください。"
           }
         }
       }
@@ -3089,6 +3743,12 @@
             "state": "translated",
             "value": "Por favor, selecciona un archivo PDF válido."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有効なPDFファイルを選択してください。"
+          }
         }
       }
     },
@@ -3117,6 +3777,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Por favor, selecciona un rango de páginas válido dentro del documento."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドキュメント内の有効なページ範囲を選択してください。"
           }
         }
       }
@@ -3147,6 +3813,12 @@
             "state": "translated",
             "value": "Por favor, inténtalo de nuevo."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もう一度お試しください。"
+          }
         }
       }
     },
@@ -3175,6 +3847,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Por favor, intenta reordenar de nuevo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もう一度並べ替えてください。"
           }
         }
       }
@@ -3205,6 +3883,12 @@
             "state": "translated",
             "value": "Intenta guardar en una ubicación diferente."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "別の場所に保存してください。"
+          }
         }
       }
     },
@@ -3233,6 +3917,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Por favor, desbloquea el PDF usando otra aplicación primero."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "別のアプリケーションを使用してPDFのロックを解除してください。"
           }
         }
       }
@@ -3263,6 +3953,12 @@
             "state": "translated",
             "value": "Mejora a Pro para operaciones PDF ilimitadas."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proにアップグレードすると無制限のPDF操作が可能になります。"
+          }
         }
       }
     },
@@ -3291,6 +3987,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se pudo restaurar el acceso a un archivo usado previamente."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "以前使用したファイルへのアクセスを復元できませんでした。"
           }
         }
       }
@@ -3321,6 +4023,12 @@
             "state": "translated",
             "value": "Intenta seleccionar el archivo de nuevo."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルを再度選択してください。"
+          }
         }
       }
     },
@@ -3349,6 +4057,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eliminar todos los archivos de la lista"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リストからすべてのファイルを削除"
           }
         }
       }
@@ -3379,6 +4093,12 @@
             "state": "translated",
             "value": "Eliminar página seleccionada (⌫)"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択したページを削除 (⌫)"
+          }
         }
       }
     },
@@ -3407,6 +4127,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rehacer (⌘⇧Z)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "やり直し (⌘⇧Z)"
           }
         }
       }
@@ -3437,6 +4163,12 @@
             "state": "translated",
             "value": "Restablecer al orden original"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "元の順序に戻す"
+          }
         }
       }
     },
@@ -3465,6 +4197,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deshacer (⌘Z)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "元に戻す (⌘Z)"
           }
         }
       }
@@ -3495,6 +4233,12 @@
             "state": "translated",
             "value": "Chino (Simplificado)"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "中国語（簡体字）"
+          }
         }
       }
     },
@@ -3523,6 +4267,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inglés"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "英語"
           }
         }
       }
@@ -3553,6 +4303,12 @@
             "state": "translated",
             "value": "Francés"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フランス語"
+          }
         }
       }
     },
@@ -3581,6 +4337,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Alemán"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドイツ語"
           }
         }
       }
@@ -3611,6 +4373,12 @@
             "state": "translated",
             "value": "Japonés"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日本語"
+          }
         }
       }
     },
@@ -3639,6 +4407,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Español"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スペイン語"
           }
         }
       }
@@ -3669,6 +4443,12 @@
             "state": "translated",
             "value": "Turco"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トルコ語"
+          }
         }
       }
     },
@@ -3697,6 +4477,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Combina múltiples PDFs, divide documentos y reordena páginas con facilidad."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "複数のPDFを結合、ドキュメントを分割、ページを簡単に並べ替え。"
           }
         }
       }
@@ -3727,6 +4513,12 @@
             "state": "translated",
             "value": "Funciones potentes"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "強力な機能"
+          }
         }
       }
     },
@@ -3755,6 +4547,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Siguiente"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次へ"
           }
         }
       }
@@ -3785,6 +4583,12 @@
             "state": "translated",
             "value": "Anterior"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前へ"
+          }
         }
       }
     },
@@ -3813,6 +4617,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Todos tus PDFs se procesan localmente en tu dispositivo. Nada se sube nunca a la nube."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべてのPDFはお使いのデバイス上でローカル処理されます。クラウドへのアップロードは一切ありません。"
           }
         }
       }
@@ -3843,6 +4653,12 @@
             "state": "translated",
             "value": "Privacidad primero"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プライバシー優先"
+          }
         }
       }
     },
@@ -3871,6 +4687,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Comienza agregando algunos archivos PDF para empezar."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFファイルを追加して始めましょう。"
           }
         }
       }
@@ -3901,6 +4723,12 @@
             "state": "translated",
             "value": "¡Todo listo!"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "準備完了！"
+          }
         }
       }
     },
@@ -3929,6 +4757,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tu kit de herramientas PDF que prioriza la privacidad para combinar, dividir y organizar documentos."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プライバシー優先のPDFツールキット。結合、分割、整理に。"
           }
         }
       }
@@ -3959,6 +4793,12 @@
             "state": "translated",
             "value": "Bienvenido a ZapPDF"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZapPDFへようこそ"
+          }
         }
       }
     },
@@ -3987,6 +4827,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Convierte PDF a otros formatos"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFを他の形式に変換"
           }
         }
       }
@@ -4017,6 +4863,12 @@
             "state": "translated",
             "value": "Convertir PDF"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFを変換"
+          }
         }
       }
     },
@@ -4045,6 +4897,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Combina múltiples PDFs en un solo documento"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "複数のPDFを1つのドキュメントに結合"
           }
         }
       }
@@ -4075,6 +4933,12 @@
             "state": "translated",
             "value": "Combinar PDFs"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFを結合"
+          }
         }
       }
     },
@@ -4103,6 +4967,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reordena páginas dentro de un PDF"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF内のページを並べ替え"
           }
         }
       }
@@ -4133,6 +5003,12 @@
             "state": "translated",
             "value": "Guardar reordenado"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "並べ替えを保存"
+          }
         }
       }
     },
@@ -4161,6 +5037,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reordenar páginas"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページを並べ替え"
           }
         }
       }
@@ -4191,6 +5073,12 @@
             "state": "translated",
             "value": "Extrae páginas o divide en múltiples documentos"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページを抽出または複数のドキュメントに分割"
+          }
         }
       }
     },
@@ -4219,6 +5107,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Extraer rangos de páginas"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページ範囲を抽出"
           }
         }
       }
@@ -4249,6 +5143,12 @@
             "state": "translated",
             "value": "Seleccionar páginas específicas"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "特定のページを選択"
+          }
         }
       }
     },
@@ -4277,6 +5177,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dividir cada N páginas"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "N ページごとに分割"
           }
         }
       }
@@ -4307,6 +5213,12 @@
             "state": "translated",
             "value": "Dividir PDF"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFを分割"
+          }
         }
       }
     },
@@ -4335,6 +5247,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se especificaron rangos de páginas"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページ範囲が指定されていません"
           }
         }
       }
@@ -4365,6 +5283,12 @@
             "state": "translated",
             "value": "No se puede eliminar la última página"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最後のページは削除できません"
+          }
         }
       }
     },
@@ -4393,6 +5317,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Descartar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "破棄"
           }
         }
       }
@@ -4423,6 +5353,12 @@
             "state": "translated",
             "value": "Tienes cambios sin guardar. ¿Estás seguro de que quieres descartarlos?"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存されていない変更があります。破棄してもよろしいですか？"
+          }
         }
       }
     },
@@ -4451,6 +5387,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "¿Descartar cambios?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "変更を破棄しますか？"
           }
         }
       }
@@ -4481,6 +5423,12 @@
             "state": "translated",
             "value": "Orden de páginas inválido."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無効なページ順序。"
+          }
         }
       }
     },
@@ -4509,6 +5457,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cargando páginas..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページを読み込み中..."
           }
         }
       }
@@ -4539,6 +5493,12 @@
             "state": "translated",
             "value": "No hay cambios para guardar."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存する変更がありません。"
+          }
         }
       }
     },
@@ -4567,6 +5527,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Selecciona una página para previsualizar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プレビューするページを選択"
           }
         }
       }
@@ -4597,6 +5563,12 @@
             "state": "translated",
             "value": "Toca Listo para guardar los cambios"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了をタップして変更を保存"
+          }
         }
       }
     },
@@ -4625,6 +5597,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Funciones"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "機能"
           }
         }
       }
@@ -4655,6 +5633,12 @@
             "state": "translated",
             "value": "Gratis"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料"
+          }
         }
       }
     },
@@ -4683,6 +5667,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No quedan acciones gratuitas"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料操作が残っていません"
           }
         }
       }
@@ -4713,6 +5703,12 @@
             "state": "translated",
             "value": "1 acción gratuita restante"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料操作が1回残っています"
+          }
         }
       }
     },
@@ -4741,6 +5737,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Acciones PDF"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF操作"
           }
         }
       }
@@ -4771,6 +5773,12 @@
             "state": "translated",
             "value": "Todo el procesamiento de PDF ocurre localmente en tu dispositivo"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべてのPDF処理はお使いのデバイス上でローカルに行われます"
+          }
         }
       }
     },
@@ -4796,6 +5804,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro"
+          }
+        },
+        "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "Pro"
@@ -4829,6 +5843,12 @@
             "state": "translated",
             "value": "Error en la compra. Por favor, inténtalo de nuevo."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入に失敗しました。もう一度お試しください。"
+          }
         }
       }
     },
@@ -4857,6 +5877,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "¡Bienvenido a Pro!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proへようこそ！"
           }
         }
       }
@@ -4887,6 +5913,12 @@
             "state": "translated",
             "value": "¡Gracias por mejorar a Pro! Disfruta de acciones PDF ilimitadas."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proへのアップグレードありがとうございます！無制限のPDF操作をお楽しみください。"
+          }
         }
       }
     },
@@ -4915,6 +5947,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Error al restaurar. Por favor, inténtalo de nuevo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "復元に失敗しました。もう一度お試しください。"
           }
         }
       }
@@ -4945,6 +5983,12 @@
             "state": "translated",
             "value": "Restaurar compras"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入を復元"
+          }
         }
       }
     },
@@ -4973,6 +6017,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restaurando..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "復元中..."
           }
         }
       }
@@ -5003,6 +6053,12 @@
             "state": "translated",
             "value": "Ilimitado"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無制限"
+          }
         }
       }
     },
@@ -5031,6 +6087,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desbloquea acciones PDF ilimitadas y funciones premium"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無制限のPDF操作とプレミアム機能をアンロック"
           }
         }
       }
@@ -5061,6 +6123,12 @@
             "state": "translated",
             "value": "Mejora a ZapPDF Pro"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZapPDF Proにアップグレード"
+          }
         }
       }
     },
@@ -5089,6 +6157,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Continuo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "連続"
           }
         }
       }
@@ -5119,6 +6193,12 @@
             "state": "translated",
             "value": "Página única"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "単一ページ"
+          }
         }
       }
     },
@@ -5147,6 +6227,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dos páginas"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2ページ表示"
           }
         }
       }
@@ -5177,6 +6263,12 @@
             "state": "translated",
             "value": "Dos páginas (Continuo)"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2ページ（連続）"
+          }
         }
       }
     },
@@ -5205,6 +6297,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La operación actual se detendrá y se perderá todo el progreso."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "現在の操作は停止し、進行状況は失われます。"
           }
         }
       }
@@ -5235,6 +6333,12 @@
             "state": "translated",
             "value": "¿Cancelar operación?"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "操作をキャンセルしますか？"
+          }
         }
       }
     },
@@ -5263,6 +6367,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cancelar operación"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "操作をキャンセル"
           }
         }
       }
@@ -5293,6 +6403,12 @@
             "state": "translated",
             "value": "¡Completado!"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了しました！"
+          }
         }
       }
     },
@@ -5321,6 +6437,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Convirtiendo PDF..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFを変換中..."
           }
         }
       }
@@ -5351,6 +6473,12 @@
             "state": "translated",
             "value": "Operación fallida"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "操作に失敗しました"
+          }
         }
       }
     },
@@ -5379,6 +6507,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Archivo guardado"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルを保存しました"
           }
         }
       }
@@ -5409,6 +6543,12 @@
             "state": "translated",
             "value": "Tu PDF se ha guardado exitosamente."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFが正常に保存されました。"
+          }
         }
       }
     },
@@ -5437,6 +6577,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Combinando PDFs..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFを結合中..."
           }
         }
       }
@@ -5467,6 +6613,12 @@
             "state": "translated",
             "value": "La operación PDF falló."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF操作に失敗しました。"
+          }
         }
       }
     },
@@ -5495,6 +6647,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Preparando..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "準備中..."
           }
         }
       }
@@ -5525,6 +6683,12 @@
             "state": "translated",
             "value": "Tu PDF está listo para guardar"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFを保存する準備ができました"
+          }
         }
       }
     },
@@ -5553,6 +6717,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reordenando páginas..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページを並べ替え中..."
           }
         }
       }
@@ -5583,6 +6753,12 @@
             "state": "translated",
             "value": "Mostrar en Finder"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finderで表示"
+          }
         }
       }
     },
@@ -5611,6 +6787,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Compartir"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "共有"
           }
         }
       }
@@ -5641,6 +6823,12 @@
             "state": "translated",
             "value": "Algo salió mal"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "問題が発生しました"
+          }
         }
       }
     },
@@ -5669,6 +6857,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dividiendo PDF..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFを分割中..."
           }
         }
       }
@@ -5699,6 +6893,12 @@
             "state": "translated",
             "value": "Ocurrió un error inesperado."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "予期しないエラーが発生しました。"
+          }
         }
       }
     },
@@ -5727,6 +6927,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Límite de uso alcanzado."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用制限に達しました。"
           }
         }
       }
@@ -5757,6 +6963,12 @@
             "state": "translated",
             "value": "Elige dónde guardar el PDF reordenado"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "並べ替えたPDFの保存先を選択"
+          }
         }
       }
     },
@@ -5785,6 +6997,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Guardar PDF reordenado"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "並べ替えたPDFを保存"
           }
         }
       }
@@ -5815,6 +7033,12 @@
             "state": "translated",
             "value": "Acerca de"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZapPDFについて"
+          }
         }
       }
     },
@@ -5843,6 +7067,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apariencia"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "外観"
           }
         }
       }
@@ -5873,6 +7103,12 @@
             "state": "translated",
             "value": "Idioma"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "言語"
+          }
         }
       }
     },
@@ -5901,6 +7137,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Elige tu idioma preferido"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "優先言語を選択"
           }
         }
       }
@@ -5931,6 +7173,12 @@
             "state": "translated",
             "value": "Sistema predeterminado"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "システムのデフォルト"
+          }
         }
       }
     },
@@ -5959,6 +7207,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ajustes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定"
           }
         }
       }
@@ -5989,6 +7243,12 @@
             "state": "translated",
             "value": "Versión"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バージョン"
+          }
         }
       }
     },
@@ -6017,6 +7277,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dividir en fragmentos iguales"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "均等なチャンクに分割"
           }
         }
       }
@@ -6047,6 +7313,12 @@
             "state": "translated",
             "value": "Ingresa números de página y rangos separados por comas"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カンマ区切りでページ番号と範囲を入力"
+          }
         }
       }
     },
@@ -6075,6 +7347,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cada N"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "N ページごと"
           }
         }
       }
@@ -6105,6 +7383,12 @@
             "state": "translated",
             "value": "Ingresa rangos de páginas como 1-5, 10, 15-20"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1-5, 10, 15-20のような範囲を入力"
+          }
         }
       }
     },
@@ -6133,6 +7417,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toca las páginas para seleccionarlas"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タップしてページを選択"
           }
         }
       }
@@ -6163,6 +7453,12 @@
             "state": "translated",
             "value": "Divide el PDF en fragmentos de N páginas cada uno"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFをN ページずつに分割"
+          }
         }
       }
     },
@@ -6191,6 +7487,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se crearán archivos de salida"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "出力ファイルは作成されません"
           }
         }
       }
@@ -6221,6 +7523,12 @@
             "state": "translated",
             "value": "Opciones"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オプション"
+          }
         }
       }
     },
@@ -6249,6 +7557,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vista previa de salida"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "出力プレビュー"
           }
         }
       }
@@ -6279,6 +7593,12 @@
             "state": "translated",
             "value": "Páginas por archivo:"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルあたりのページ数:"
+          }
         }
       }
     },
@@ -6307,6 +7627,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Elige páginas individuales visualmente"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "個別のページを視覚的に選択"
           }
         }
       }
@@ -6337,6 +7663,12 @@
             "state": "translated",
             "value": "ej., 1-5, 10, 15-20"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "例: 1-5, 10, 15-20"
+          }
         }
       }
     },
@@ -6365,6 +7697,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rangos"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "範囲"
           }
         }
       }
@@ -6395,6 +7733,12 @@
             "state": "translated",
             "value": "Seleccionar"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択"
+          }
         }
       }
     },
@@ -6423,6 +7767,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Selecciona las páginas a extraer:"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "抽出するページを選択:"
           }
         }
       }
@@ -6453,6 +7803,12 @@
             "state": "translated",
             "value": "Especifica rangos como 1-5, 10-15"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1-5, 10-15のような範囲を指定"
+          }
         }
       }
     },
@@ -6481,6 +7837,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dividir"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分割"
           }
         }
       }
@@ -6511,6 +7873,12 @@
             "state": "translated",
             "value": "Modo de división"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分割モード"
+          }
         }
       }
     },
@@ -6539,6 +7907,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Opciones de división"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分割オプション"
           }
         }
       }
@@ -6569,6 +7943,12 @@
             "state": "translated",
             "value": "Rango válido"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有効な範囲"
+          }
         }
       }
     },
@@ -6597,6 +7977,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Has usado todas tus acciones gratuitas."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべての無料操作を使い切りました。"
           }
         }
       }
@@ -6627,6 +8013,12 @@
             "state": "translated",
             "value": "Error al guardar los datos de uso."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用データの保存に失敗しました。"
+          }
         }
       }
     },
@@ -6655,6 +8047,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Por favor, selecciona al menos 2 archivos PDF para combinar."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結合するには2つ以上のPDFファイルを選択してください。"
           }
         }
       }
@@ -6685,6 +8083,12 @@
             "state": "translated",
             "value": "Por favor, selecciona un archivo PDF."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFファイルを選択してください。"
+          }
         }
       }
     },
@@ -6714,6 +8118,12 @@
             "state": "translated",
             "value": "Por favor, selecciona solo un archivo PDF para esta acción."
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この操作には1つのPDFファイルのみ選択してください。"
+          }
         }
       }
     },
@@ -6736,6 +8146,12 @@
             "state": "translated",
             "value": "•"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "•"
+          }
         }
       }
     },
@@ -6754,6 +8170,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "∞"
+          }
+        },
+        "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "∞"
@@ -6835,6 +8257,18 @@
               }
             }
           }
+        },
+        "ja": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld ページ"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -6908,6 +8342,18 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "Total: %lld archivos"
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "合計: %lld ファイル"
                 }
               }
             }
