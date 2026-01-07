@@ -20,6 +20,12 @@
             "state": "translated",
             "value": "%1$@ • %2$@"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ • %2$@"
+          }
         }
       }
     },
@@ -32,6 +38,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld"
@@ -53,6 +65,12 @@
             "state": "translated",
             "value": "%lld actions restantes"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld acciones restantes"
+          }
         }
       }
     },
@@ -69,6 +87,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld fichiers supprimés"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld archivos eliminados"
           }
         }
       }
@@ -87,6 +111,12 @@
             "state": "translated",
             "value": "%lld fichiers créés"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld archivos creados"
+          }
         }
       }
     },
@@ -103,6 +133,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld actions gratuites restantes"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld acciones gratuitas restantes"
           }
         }
       }
@@ -127,6 +163,12 @@
             "state": "translated",
             "value": "%1$lld sur %2$lld gratuites"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld de %2$lld gratis"
+          }
         }
       }
     },
@@ -149,6 +191,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld sur %2$lld pages sélectionnées"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld de %2$lld páginas seleccionadas"
           }
         }
       }
@@ -173,6 +221,12 @@
             "state": "translated",
             "value": "%1$lld sur %2$lld sélectionnés"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld de %2$lld seleccionados"
+          }
         }
       }
     },
@@ -196,6 +250,12 @@
             "state": "translated",
             "value": "%1$lld page%2$@"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld página%2$@"
+          }
         }
       }
     },
@@ -212,6 +272,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld pages"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld páginas"
           }
         }
       }
@@ -230,6 +296,12 @@
             "state": "translated",
             "value": "%lld pages sélectionnées"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld páginas seleccionadas"
+          }
         }
       }
     },
@@ -246,6 +318,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "« %@ » semble être corrompu."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' parece estar dañado."
           }
         }
       }
@@ -264,6 +342,12 @@
             "state": "translated",
             "value": "« %@ » n'est pas un fichier PDF valide."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' no es un archivo PDF válido."
+          }
         }
       }
     },
@@ -280,6 +364,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "« %@ » est protégé par mot de passe."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' está protegido con contraseña."
           }
         }
       }
@@ -298,6 +388,12 @@
             "state": "translated",
             "value": "... et %lld autres fichiers"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "... y %lld archivos más"
+          }
         }
       }
     },
@@ -310,6 +406,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "5"
@@ -337,6 +439,12 @@
             "state": "translated",
             "value": "Impossible d'accéder à « %@ »."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede acceder a '%@'."
+          }
         }
       }
     },
@@ -353,6 +461,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Supprimer %lld fichiers"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar %lld archivos"
           }
         }
       }
@@ -377,6 +491,12 @@
             "state": "translated",
             "value": "Conversion du PDF... %@"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convirtiendo PDF... %@"
+          }
         }
       }
     },
@@ -399,6 +519,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Impossible de charger %1$lld fichiers : %2$@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudieron cargar %1$lld archivos: %2$@"
           }
         }
       }
@@ -423,6 +549,12 @@
             "state": "translated",
             "value": "Impossible de charger « %@ ». Veuillez sélectionner un fichier PDF valide."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo cargar '%@'. Por favor, selecciona un archivo PDF válido."
+          }
         }
       }
     },
@@ -445,6 +577,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Impossible d'enregistrer le fichier : %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo guardar el archivo: %@"
           }
         }
       }
@@ -469,6 +607,12 @@
             "state": "translated",
             "value": "Impossible d'enregistrer la référence à « %@ »"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo guardar la referencia a '%@'"
+          }
         }
       }
     },
@@ -492,6 +636,12 @@
             "state": "translated",
             "value": "Affichage de %lld pages"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrando %lld páginas"
+          }
         }
       }
     },
@@ -508,6 +658,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Échec de l'importation des fichiers : %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error al importar archivos: %@"
           }
         }
       }
@@ -532,6 +688,12 @@
             "state": "translated",
             "value": "Échec de l'enregistrement de « %@ »."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error al guardar '%@'."
+          }
         }
       }
     },
@@ -554,6 +716,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Échec de l'enregistrement du PDF dans « %@ »."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error al guardar PDF en '%@'."
           }
         }
       }
@@ -578,6 +746,12 @@
             "state": "translated",
             "value": "Fichier introuvable : « %@ »."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Archivo no encontrado: '%@'."
+          }
         }
       }
     },
@@ -600,6 +774,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Format de plage invalide : « %@ »"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formato de rango inválido: '%@'"
           }
         }
       }
@@ -624,6 +804,12 @@
             "state": "translated",
             "value": "Plage invalide : %1$lld-%2$lld (le début doit être ≤ à la fin)"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rango inválido: %1$lld-%2$lld (el inicio debe ser ≤ al final)"
+          }
         }
       }
     },
@@ -646,6 +832,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fusion des PDF... %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Combinando PDFs... %@"
           }
         }
       }
@@ -670,6 +862,12 @@
             "state": "translated",
             "value": "Déplacé depuis la position %lld"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Movido desde la posición %lld"
+          }
         }
       }
     },
@@ -692,6 +890,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucune action restante"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No quedan acciones"
           }
         }
       }
@@ -716,6 +920,12 @@
             "state": "translated",
             "value": "Position d'origine : %lld"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Posición original: %lld"
+          }
         }
       }
     },
@@ -732,6 +942,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Page %lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Página %lld"
           }
         }
       }
@@ -756,6 +972,12 @@
             "state": "translated",
             "value": "La page %1$lld est hors limites (1-%2$lld)"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La página %1$lld está fuera de rango (1-%2$lld)"
+          }
         }
       }
     },
@@ -778,6 +1000,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Page %1$lld sur %2$lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Página %1$lld de %2$lld"
           }
         }
       }
@@ -802,6 +1030,12 @@
             "state": "translated",
             "value": "La plage de pages %1$lld-%2$lld est invalide. Le document contient %3$lld pages."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El rango de páginas %1$lld-%2$lld no es válido. El documento tiene %3$lld páginas."
+          }
         }
       }
     },
@@ -825,6 +1059,12 @@
             "state": "translated",
             "value": "Pages %1$lld-%2$lld"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Páginas %1$lld-%2$lld"
+          }
         }
       }
     },
@@ -841,6 +1081,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pages : %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Páginas: %@"
           }
         }
       }
@@ -865,6 +1111,12 @@
             "state": "translated",
             "value": "Permission refusée pour « %@ »"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permiso denegado para '%@'"
+          }
         }
       }
     },
@@ -887,6 +1139,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réorganisation des pages... %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reordenando páginas... %@"
           }
         }
       }
@@ -911,6 +1169,12 @@
             "state": "translated",
             "value": "Enregistrement... %@"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardando... %@"
+          }
         }
       }
     },
@@ -933,6 +1197,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Division du PDF... %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dividiendo PDF... %@"
           }
         }
       }
@@ -957,6 +1227,12 @@
             "state": "translated",
             "value": "Total : %1$lld fichier%2$@"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total: %1$lld archivo%2$@"
+          }
         }
       }
     },
@@ -979,6 +1255,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Impossible d'accéder à « %@ ». Veuillez resélectionner le fichier."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede acceder a '%@'. Por favor, vuelve a seleccionar el archivo."
           }
         }
       }
@@ -1003,6 +1285,12 @@
             "state": "translated",
             "value": "Supprimer le fichier"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar archivo"
+          }
         }
       }
     },
@@ -1025,6 +1313,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Désélectionner le fichier"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deseleccionar archivo"
           }
         }
       }
@@ -1049,6 +1343,12 @@
             "state": "translated",
             "value": "Glisser pour réorganiser"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrastra para reordenar"
+          }
         }
       }
     },
@@ -1071,6 +1371,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Document PDF"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Documento PDF"
           }
         }
       }
@@ -1095,6 +1401,12 @@
             "state": "translated",
             "value": "Sélectionner le fichier"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleccionar archivo"
+          }
         }
       }
     },
@@ -1117,6 +1429,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sélectionné. Touchez deux fois pour désélectionner."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleccionado. Toca dos veces para deseleccionar."
           }
         }
       }
@@ -1141,6 +1459,12 @@
             "state": "translated",
             "value": "Touchez deux fois pour sélectionner."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca dos veces para seleccionar."
+          }
         }
       }
     },
@@ -1163,6 +1487,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Touchez pour voir les options de mise à niveau"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca para ver opciones de mejora"
           }
         }
       }
@@ -1187,6 +1517,12 @@
             "state": "translated",
             "value": "Annuler"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar"
+          }
         }
       }
     },
@@ -1209,6 +1545,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fermer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cerrar"
           }
         }
       }
@@ -1233,6 +1575,12 @@
             "state": "translated",
             "value": "Continuer"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuar"
+          }
         }
       }
     },
@@ -1255,6 +1603,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Supprimer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar"
           }
         }
       }
@@ -1279,6 +1633,12 @@
             "state": "translated",
             "value": "Tout désélectionner"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deseleccionar todo"
+          }
         }
       }
     },
@@ -1301,6 +1661,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Terminé"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listo"
           }
         }
       }
@@ -1325,6 +1691,12 @@
             "state": "translated",
             "value": "Commencer"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comenzar"
+          }
         }
       }
     },
@@ -1344,6 +1716,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "OK"
@@ -1371,6 +1749,12 @@
             "state": "translated",
             "value": "Retirer"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitar"
+          }
         }
       }
     },
@@ -1393,6 +1777,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réessayer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intentar de nuevo"
           }
         }
       }
@@ -1417,6 +1807,12 @@
             "state": "translated",
             "value": "Enregistrer le fichier"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar archivo"
+          }
         }
       }
     },
@@ -1439,6 +1835,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tout sélectionner"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleccionar todo"
           }
         }
       }
@@ -1463,6 +1865,12 @@
             "state": "translated",
             "value": "Ignorer"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omitir"
+          }
         }
       }
     },
@@ -1485,6 +1893,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Annuler"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deshacer"
           }
         }
       }
@@ -1509,6 +1923,12 @@
             "state": "translated",
             "value": "Mettre à niveau"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejorar"
+          }
         }
       }
     },
@@ -1528,6 +1948,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZapPDF"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "ZapPDF"
@@ -1555,6 +1981,12 @@
             "state": "translated",
             "value": "Tous"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todo"
+          }
         }
       }
     },
@@ -1577,6 +2009,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bientôt disponible !"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Próximamente!"
           }
         }
       }
@@ -1601,6 +2039,12 @@
             "state": "translated",
             "value": "Désélectionner"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deseleccionar"
+          }
         }
       }
     },
@@ -1623,6 +2067,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Une erreur s'est produite"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ocurrió un error"
           }
         }
       }
@@ -1647,6 +2097,12 @@
             "state": "translated",
             "value": "Erreur"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error"
+          }
         }
       }
     },
@@ -1669,6 +2125,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Format invalide"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formato inválido"
           }
         }
       }
@@ -1693,6 +2155,12 @@
             "state": "translated",
             "value": "Chargement..."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cargando..."
+          }
         }
       }
     },
@@ -1715,6 +2183,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Les fichiers seront fusionnés dans l'ordre affiché. Glissez pour réorganiser."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los archivos se combinan en el orden mostrado. Arrastra para reordenar."
           }
         }
       }
@@ -1739,6 +2213,12 @@
             "state": "translated",
             "value": "Aucun"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ninguno"
+          }
         }
       }
     },
@@ -1762,6 +2242,12 @@
             "state": "translated",
             "value": "Les tarifs seront disponibles après l'intégration de StoreKit"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los precios estarán disponibles cuando se integre StoreKit"
+          }
         }
       }
     },
@@ -1781,6 +2267,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PRO"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "PRO"
@@ -1808,6 +2300,12 @@
             "state": "translated",
             "value": "Traitement en cours..."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Procesando..."
+          }
         }
       }
     },
@@ -1830,6 +2328,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Échec de l'enregistrement"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error al guardar"
           }
         }
       }
@@ -1854,6 +2358,12 @@
             "state": "translated",
             "value": "Sélectionner"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleccionar"
+          }
         }
       }
     },
@@ -1876,6 +2386,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sélection"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selección"
           }
         }
       }
@@ -1900,6 +2416,12 @@
             "state": "translated",
             "value": "Impossible d'enregistrer le fichier."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede guardar el archivo."
+          }
         }
       }
     },
@@ -1922,6 +2444,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copier le nom"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar nombre"
           }
         }
       }
@@ -1946,6 +2474,12 @@
             "state": "translated",
             "value": "Afficher dans le Finder"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar en Finder"
+          }
         }
       }
     },
@@ -1968,6 +2502,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ajouter des fichiers PDF"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar archivos PDF"
           }
         }
       }
@@ -1992,6 +2532,12 @@
             "state": "translated",
             "value": "Parcourir les fichiers"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explorar archivos"
+          }
         }
       }
     },
@@ -2014,6 +2560,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tout effacer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar todo"
           }
         }
       }
@@ -2038,6 +2590,12 @@
             "state": "translated",
             "value": "Cela supprimera tous les fichiers PDF de la liste."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esto eliminará todos los archivos PDF de la lista."
+          }
         }
       }
     },
@@ -2060,6 +2618,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Effacer tous les fichiers ?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Eliminar todos los archivos?"
           }
         }
       }
@@ -2084,6 +2648,12 @@
             "state": "translated",
             "value": "Glissez-déposez des fichiers PDF ou utilisez le bouton ci-dessous"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrastra y suelta archivos PDF o usa el botón de abajo"
+          }
         }
       }
     },
@@ -2106,6 +2676,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Déposez vos fichiers PDF ici"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrastra archivos PDF aquí"
           }
         }
       }
@@ -2130,6 +2706,12 @@
             "state": "translated",
             "value": "Déposez pour ajouter d'autres fichiers"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suelta para agregar más archivos"
+          }
         }
       }
     },
@@ -2153,6 +2735,12 @@
             "state": "translated",
             "value": "Fusionné"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Combinado"
+          }
         }
       }
     },
@@ -2172,6 +2760,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZapPDF"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "ZapPDF"
@@ -2199,6 +2793,12 @@
             "state": "translated",
             "value": "L'opération a été annulée."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La operación fue cancelada."
+          }
         }
       }
     },
@@ -2221,6 +2821,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucun fichier fourni pour cette opération."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se proporcionaron archivos para esta operación."
           }
         }
       }
@@ -2245,6 +2851,12 @@
             "state": "translated",
             "value": "Espace de stockage insuffisant pour terminer cette opération."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay suficiente espacio de almacenamiento para completar esta operación."
+          }
         }
       }
     },
@@ -2267,6 +2879,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vérifiez que vous disposez des droits d'écriture sur la destination."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verifica que tengas permiso de escritura en el destino."
           }
         }
       }
@@ -2291,6 +2909,12 @@
             "state": "translated",
             "value": "Le fichier a peut-être été déplacé ou supprimé."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El archivo puede haber sido movido o eliminado."
+          }
         }
       }
     },
@@ -2313,6 +2937,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Libérez de l'espace de stockage et réessayez."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Libera espacio de almacenamiento e inténtalo de nuevo."
           }
         }
       }
@@ -2337,6 +2967,12 @@
             "state": "translated",
             "value": "Essayez d'obtenir une nouvelle copie de ce fichier."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intenta obtener una copia nueva de este archivo."
+          }
         }
       }
     },
@@ -2359,6 +2995,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réorganisez quelques pages avant d'enregistrer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reordena algunas páginas antes de guardar."
           }
         }
       }
@@ -2383,6 +3025,12 @@
             "state": "translated",
             "value": "Veuillez resélectionner le fichier via le sélecteur de fichiers."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, selecciona el archivo nuevamente usando el selector de archivos."
+          }
         }
       }
     },
@@ -2405,6 +3053,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Veuillez sélectionner au moins un fichier PDF."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, selecciona al menos un archivo PDF."
           }
         }
       }
@@ -2429,6 +3083,12 @@
             "state": "translated",
             "value": "Veuillez sélectionner un fichier PDF valide."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, selecciona un archivo PDF válido."
+          }
         }
       }
     },
@@ -2451,6 +3111,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Veuillez sélectionner une plage de pages valide dans le document."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, selecciona un rango de páginas válido dentro del documento."
           }
         }
       }
@@ -2475,6 +3141,12 @@
             "state": "translated",
             "value": "Veuillez réessayer."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, inténtalo de nuevo."
+          }
         }
       }
     },
@@ -2497,6 +3169,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Veuillez réessayer la réorganisation."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, intenta reordenar de nuevo."
           }
         }
       }
@@ -2521,6 +3199,12 @@
             "state": "translated",
             "value": "Essayez d'enregistrer dans un autre emplacement."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intenta guardar en una ubicación diferente."
+          }
         }
       }
     },
@@ -2543,6 +3227,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Veuillez d'abord déverrouiller le PDF avec une autre application."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, desbloquea el PDF usando otra aplicación primero."
           }
         }
       }
@@ -2567,6 +3257,12 @@
             "state": "translated",
             "value": "Passez à Pro pour des opérations PDF illimitées."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejora a Pro para operaciones PDF ilimitadas."
+          }
         }
       }
     },
@@ -2589,6 +3285,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Impossible de restaurer l'accès à un fichier précédemment utilisé."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo restaurar el acceso a un archivo usado previamente."
           }
         }
       }
@@ -2613,6 +3315,12 @@
             "state": "translated",
             "value": "Essayez de resélectionner le fichier."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intenta seleccionar el archivo de nuevo."
+          }
         }
       }
     },
@@ -2635,6 +3343,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Retirer tous les fichiers de la liste"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar todos los archivos de la lista"
           }
         }
       }
@@ -2659,6 +3373,12 @@
             "state": "translated",
             "value": "Supprimer la page sélectionnée (⌫)"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar página seleccionada (⌫)"
+          }
         }
       }
     },
@@ -2681,6 +3401,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rétablir (⌘⇧Z)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rehacer (⌘⇧Z)"
           }
         }
       }
@@ -2705,6 +3431,12 @@
             "state": "translated",
             "value": "Rétablir l'ordre d'origine"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restablecer al orden original"
+          }
         }
       }
     },
@@ -2727,6 +3459,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Annuler (⌘Z)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deshacer (⌘Z)"
           }
         }
       }
@@ -2751,6 +3489,12 @@
             "state": "translated",
             "value": "Chinois (simplifié)"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chino (Simplificado)"
+          }
         }
       }
     },
@@ -2773,6 +3517,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Anglais"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inglés"
           }
         }
       }
@@ -2797,6 +3547,12 @@
             "state": "translated",
             "value": "Français"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Francés"
+          }
         }
       }
     },
@@ -2819,6 +3575,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allemand"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alemán"
           }
         }
       }
@@ -2843,6 +3605,12 @@
             "state": "translated",
             "value": "Japonais"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Japonés"
+          }
         }
       }
     },
@@ -2865,6 +3633,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Espagnol"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Español"
           }
         }
       }
@@ -2889,6 +3663,12 @@
             "state": "translated",
             "value": "Turc"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turco"
+          }
         }
       }
     },
@@ -2911,6 +3691,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fusionnez plusieurs PDF, divisez des documents et réorganisez les pages en toute simplicité."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Combina múltiples PDFs, divide documentos y reordena páginas con facilidad."
           }
         }
       }
@@ -2935,6 +3721,12 @@
             "state": "translated",
             "value": "Fonctionnalités puissantes"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funciones potentes"
+          }
         }
       }
     },
@@ -2957,6 +3749,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suivant"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siguiente"
           }
         }
       }
@@ -2981,6 +3779,12 @@
             "state": "translated",
             "value": "Précédent"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anterior"
+          }
         }
       }
     },
@@ -3003,6 +3807,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tous vos PDF sont traités localement sur votre appareil. Rien n'est jamais envoyé vers le cloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos tus PDFs se procesan localmente en tu dispositivo. Nada se sube nunca a la nube."
           }
         }
       }
@@ -3027,6 +3837,12 @@
             "state": "translated",
             "value": "Confidentialité avant tout"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacidad primero"
+          }
         }
       }
     },
@@ -3049,6 +3865,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Commencez par ajouter quelques fichiers PDF pour démarrer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comienza agregando algunos archivos PDF para empezar."
           }
         }
       }
@@ -3073,6 +3895,12 @@
             "state": "translated",
             "value": "Vous êtes prêt !"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Todo listo!"
+          }
         }
       }
     },
@@ -3095,6 +3923,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Votre boîte à outils PDF axée sur la confidentialité pour fusionner, diviser et organiser vos documents."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu kit de herramientas PDF que prioriza la privacidad para combinar, dividir y organizar documentos."
           }
         }
       }
@@ -3119,6 +3953,12 @@
             "state": "translated",
             "value": "Bienvenue sur ZapPDF"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bienvenido a ZapPDF"
+          }
         }
       }
     },
@@ -3141,6 +3981,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Convertir un PDF vers d'autres formats"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convierte PDF a otros formatos"
           }
         }
       }
@@ -3165,6 +4011,12 @@
             "state": "translated",
             "value": "Convertir le PDF"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convertir PDF"
+          }
         }
       }
     },
@@ -3187,6 +4039,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Combiner plusieurs PDF en un seul document"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Combina múltiples PDFs en un solo documento"
           }
         }
       }
@@ -3211,6 +4069,12 @@
             "state": "translated",
             "value": "Fusionner les PDF"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Combinar PDFs"
+          }
         }
       }
     },
@@ -3233,6 +4097,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réorganiser les pages d'un PDF"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reordena páginas dentro de un PDF"
           }
         }
       }
@@ -3257,6 +4127,12 @@
             "state": "translated",
             "value": "Enregistrer la réorganisation"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar reordenado"
+          }
         }
       }
     },
@@ -3279,6 +4155,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réorganiser les pages"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reordenar páginas"
           }
         }
       }
@@ -3303,6 +4185,12 @@
             "state": "translated",
             "value": "Extraire des pages ou diviser en plusieurs documents"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extrae páginas o divide en múltiples documentos"
+          }
         }
       }
     },
@@ -3325,6 +4213,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Extraire des plages de pages"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extraer rangos de páginas"
           }
         }
       }
@@ -3349,6 +4243,12 @@
             "state": "translated",
             "value": "Sélectionner des pages spécifiques"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleccionar páginas específicas"
+          }
         }
       }
     },
@@ -3371,6 +4271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diviser toutes les N pages"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dividir cada N páginas"
           }
         }
       }
@@ -3395,6 +4301,12 @@
             "state": "translated",
             "value": "Diviser le PDF"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dividir PDF"
+          }
         }
       }
     },
@@ -3417,6 +4329,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucune plage de pages spécifiée"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se especificaron rangos de páginas"
           }
         }
       }
@@ -3441,6 +4359,12 @@
             "state": "translated",
             "value": "Impossible de supprimer la dernière page"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede eliminar la última página"
+          }
         }
       }
     },
@@ -3463,6 +4387,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Abandonner"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descartar"
           }
         }
       }
@@ -3487,6 +4417,12 @@
             "state": "translated",
             "value": "Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir les abandonner ?"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tienes cambios sin guardar. ¿Estás seguro de que quieres descartarlos?"
+          }
         }
       }
     },
@@ -3509,6 +4445,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Abandonner les modifications ?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Descartar cambios?"
           }
         }
       }
@@ -3533,6 +4475,12 @@
             "state": "translated",
             "value": "Ordre des pages invalide."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orden de páginas inválido."
+          }
         }
       }
     },
@@ -3555,6 +4503,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chargement des pages..."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cargando páginas..."
           }
         }
       }
@@ -3579,6 +4533,12 @@
             "state": "translated",
             "value": "Aucune modification à enregistrer."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay cambios para guardar."
+          }
         }
       }
     },
@@ -3601,6 +4561,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sélectionnez une page pour prévisualiser"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecciona una página para previsualizar"
           }
         }
       }
@@ -3625,6 +4591,12 @@
             "state": "translated",
             "value": "Appuyez sur Terminé pour enregistrer les modifications"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca Listo para guardar los cambios"
+          }
         }
       }
     },
@@ -3647,6 +4619,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fonctionnalités"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funciones"
           }
         }
       }
@@ -3671,6 +4649,12 @@
             "state": "translated",
             "value": "Gratuit"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis"
+          }
         }
       }
     },
@@ -3693,6 +4677,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucune action gratuite restante"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No quedan acciones gratuitas"
           }
         }
       }
@@ -3717,6 +4707,12 @@
             "state": "translated",
             "value": "1 action gratuite restante"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 acción gratuita restante"
+          }
         }
       }
     },
@@ -3739,6 +4735,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Actions PDF"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acciones PDF"
           }
         }
       }
@@ -3763,6 +4765,12 @@
             "state": "translated",
             "value": "Tout le traitement PDF s'effectue localement sur votre appareil"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todo el procesamiento de PDF ocurre localmente en tu dispositivo"
+          }
         }
       }
     },
@@ -3782,6 +4790,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Pro"
@@ -3809,6 +4823,12 @@
             "state": "translated",
             "value": "Échec de l'achat. Veuillez réessayer."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error en la compra. Por favor, inténtalo de nuevo."
+          }
         }
       }
     },
@@ -3831,6 +4851,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bienvenue chez Pro !"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Bienvenido a Pro!"
           }
         }
       }
@@ -3855,6 +4881,12 @@
             "state": "translated",
             "value": "Merci d'avoir effectué la mise à niveau vers Pro ! Profitez d'actions PDF illimitées."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Gracias por mejorar a Pro! Disfruta de acciones PDF ilimitadas."
+          }
         }
       }
     },
@@ -3877,6 +4909,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Échec de la restauration. Veuillez réessayer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error al restaurar. Por favor, inténtalo de nuevo."
           }
         }
       }
@@ -3901,6 +4939,12 @@
             "state": "translated",
             "value": "Restaurer les achats"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar compras"
+          }
         }
       }
     },
@@ -3923,6 +4967,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restauration..."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurando..."
           }
         }
       }
@@ -3947,6 +4997,12 @@
             "state": "translated",
             "value": "Illimité"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ilimitado"
+          }
         }
       }
     },
@@ -3969,6 +5025,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Débloquez des actions PDF illimitées et des fonctionnalités premium"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquea acciones PDF ilimitadas y funciones premium"
           }
         }
       }
@@ -3993,6 +5055,12 @@
             "state": "translated",
             "value": "Passez à ZapPDF Pro"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejora a ZapPDF Pro"
+          }
         }
       }
     },
@@ -4015,6 +5083,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Continu"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuo"
           }
         }
       }
@@ -4039,6 +5113,12 @@
             "state": "translated",
             "value": "Page unique"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Página única"
+          }
         }
       }
     },
@@ -4061,6 +5141,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deux pages"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dos páginas"
           }
         }
       }
@@ -4085,6 +5171,12 @@
             "state": "translated",
             "value": "Deux pages (continu)"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dos páginas (Continuo)"
+          }
         }
       }
     },
@@ -4107,6 +5199,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "L'opération en cours sera arrêtée et toute progression sera perdue."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La operación actual se detendrá y se perderá todo el progreso."
           }
         }
       }
@@ -4131,6 +5229,12 @@
             "state": "translated",
             "value": "Annuler l'opération ?"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Cancelar operación?"
+          }
         }
       }
     },
@@ -4153,6 +5257,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Annuler l'opération"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar operación"
           }
         }
       }
@@ -4177,6 +5287,12 @@
             "state": "translated",
             "value": "Terminé !"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Completado!"
+          }
         }
       }
     },
@@ -4199,6 +5315,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Conversion du PDF..."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convirtiendo PDF..."
           }
         }
       }
@@ -4223,6 +5345,12 @@
             "state": "translated",
             "value": "Échec de l'opération"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Operación fallida"
+          }
         }
       }
     },
@@ -4245,6 +5373,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fichier enregistré"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Archivo guardado"
           }
         }
       }
@@ -4269,6 +5403,12 @@
             "state": "translated",
             "value": "Votre PDF a été enregistré avec succès."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu PDF se ha guardado exitosamente."
+          }
         }
       }
     },
@@ -4291,6 +5431,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fusion des PDF..."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Combinando PDFs..."
           }
         }
       }
@@ -4315,6 +5461,12 @@
             "state": "translated",
             "value": "Échec de l'opération PDF."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La operación PDF falló."
+          }
         }
       }
     },
@@ -4337,6 +5489,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Préparation..."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparando..."
           }
         }
       }
@@ -4361,6 +5519,12 @@
             "state": "translated",
             "value": "Votre PDF est prêt à être enregistré"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu PDF está listo para guardar"
+          }
         }
       }
     },
@@ -4383,6 +5547,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réorganisation des pages..."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reordenando páginas..."
           }
         }
       }
@@ -4407,6 +5577,12 @@
             "state": "translated",
             "value": "Afficher dans le Finder"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar en Finder"
+          }
         }
       }
     },
@@ -4429,6 +5605,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Partager"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compartir"
           }
         }
       }
@@ -4453,6 +5635,12 @@
             "state": "translated",
             "value": "Une erreur s'est produite"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Algo salió mal"
+          }
         }
       }
     },
@@ -4475,6 +5663,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Division du PDF..."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dividiendo PDF..."
           }
         }
       }
@@ -4499,6 +5693,12 @@
             "state": "translated",
             "value": "Une erreur inattendue s'est produite."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ocurrió un error inesperado."
+          }
         }
       }
     },
@@ -4521,6 +5721,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Limite d'utilisation atteinte."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Límite de uso alcanzado."
           }
         }
       }
@@ -4545,6 +5751,12 @@
             "state": "translated",
             "value": "Choisissez où enregistrer le PDF réorganisé"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige dónde guardar el PDF reordenado"
+          }
         }
       }
     },
@@ -4567,6 +5779,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrer le PDF réorganisé"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar PDF reordenado"
           }
         }
       }
@@ -4591,6 +5809,12 @@
             "state": "translated",
             "value": "À propos"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acerca de"
+          }
         }
       }
     },
@@ -4613,6 +5837,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apparence"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apariencia"
           }
         }
       }
@@ -4637,6 +5867,12 @@
             "state": "translated",
             "value": "Langue"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idioma"
+          }
         }
       }
     },
@@ -4659,6 +5895,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choisissez votre langue préférée"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige tu idioma preferido"
           }
         }
       }
@@ -4683,6 +5925,12 @@
             "state": "translated",
             "value": "Par défaut du système"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema predeterminado"
+          }
         }
       }
     },
@@ -4705,6 +5953,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réglages"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes"
           }
         }
       }
@@ -4729,6 +5983,12 @@
             "state": "translated",
             "value": "Version"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versión"
+          }
         }
       }
     },
@@ -4751,6 +6011,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diviser en parties égales"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dividir en fragmentos iguales"
           }
         }
       }
@@ -4775,6 +6041,12 @@
             "state": "translated",
             "value": "Entrez les numéros de page et les plages séparés par des virgules"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingresa números de página y rangos separados por comas"
+          }
         }
       }
     },
@@ -4797,6 +6069,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toutes les N"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada N"
           }
         }
       }
@@ -4821,6 +6099,12 @@
             "state": "translated",
             "value": "Entrez des plages de pages comme 1-5, 10, 15-20"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingresa rangos de páginas como 1-5, 10, 15-20"
+          }
         }
       }
     },
@@ -4843,6 +6127,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Touchez les pages pour les sélectionner"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca las páginas para seleccionarlas"
           }
         }
       }
@@ -4867,6 +6157,12 @@
             "state": "translated",
             "value": "Diviser le PDF en sections de N pages chacune"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Divide el PDF en fragmentos de N páginas cada uno"
+          }
         }
       }
     },
@@ -4889,6 +6185,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucun fichier de sortie ne sera créé"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se crearán archivos de salida"
           }
         }
       }
@@ -4913,6 +6215,12 @@
             "state": "translated",
             "value": "Options"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opciones"
+          }
         }
       }
     },
@@ -4935,6 +6243,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aperçu de la sortie"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista previa de salida"
           }
         }
       }
@@ -4959,6 +6273,12 @@
             "state": "translated",
             "value": "Pages par fichier :"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Páginas por archivo:"
+          }
         }
       }
     },
@@ -4981,6 +6301,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sélectionner visuellement les pages"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige páginas individuales visualmente"
           }
         }
       }
@@ -5005,6 +6331,12 @@
             "state": "translated",
             "value": "ex. 1-5, 10, 15-20"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ej., 1-5, 10, 15-20"
+          }
         }
       }
     },
@@ -5027,6 +6359,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plages"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rangos"
           }
         }
       }
@@ -5051,6 +6389,12 @@
             "state": "translated",
             "value": "Sélectionner"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleccionar"
+          }
         }
       }
     },
@@ -5073,6 +6417,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sélectionnez les pages à extraire :"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecciona las páginas a extraer:"
           }
         }
       }
@@ -5097,6 +6447,12 @@
             "state": "translated",
             "value": "Spécifiez des plages comme 1-5, 10-15"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Especifica rangos como 1-5, 10-15"
+          }
         }
       }
     },
@@ -5119,6 +6475,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diviser"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dividir"
           }
         }
       }
@@ -5143,6 +6505,12 @@
             "state": "translated",
             "value": "Mode de division"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo de división"
+          }
         }
       }
     },
@@ -5165,6 +6533,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Options de division"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opciones de división"
           }
         }
       }
@@ -5189,6 +6563,12 @@
             "state": "translated",
             "value": "Plage valide"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rango válido"
+          }
         }
       }
     },
@@ -5211,6 +6591,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vous avez utilisé toutes vos actions gratuites."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Has usado todas tus acciones gratuitas."
           }
         }
       }
@@ -5235,6 +6621,12 @@
             "state": "translated",
             "value": "Échec de l'enregistrement des données d'utilisation."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error al guardar los datos de uso."
+          }
         }
       }
     },
@@ -5257,6 +6649,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Veuillez sélectionner au moins 2 fichiers PDF à fusionner."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, selecciona al menos 2 archivos PDF para combinar."
           }
         }
       }
@@ -5281,6 +6679,12 @@
             "state": "translated",
             "value": "Veuillez sélectionner un fichier PDF."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, selecciona un archivo PDF."
+          }
         }
       }
     },
@@ -5304,6 +6708,12 @@
             "state": "translated",
             "value": "Veuillez ne sélectionner qu'un seul fichier PDF pour cette action."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, selecciona solo un archivo PDF para esta acción."
+          }
         }
       }
     },
@@ -5320,6 +6730,12 @@
             "state": "translated",
             "value": "•"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "•"
+          }
         }
       }
     },
@@ -5332,6 +6748,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "∞"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "∞"
@@ -5395,6 +6817,24 @@
               }
             }
           }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld página"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld páginas"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -5450,6 +6890,24 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "Total : %lld fichiers"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Total: %lld archivo"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Total: %lld archivos"
                 }
               }
             }
