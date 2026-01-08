@@ -234,20 +234,20 @@ Settings {
 UserDefaults.standard.set([languageCode], forKey: "AppleLanguages")
 ```
 
-### Phase 13: Tier 1 Language Translations 🔄
+### Phase 13: Tier 1 Language Translations ✅
 
-**Duration: 2-3 days** | In Progress
+**Duration: 2-3 days** | Completed: 2026-01-08
 
 Adding translations for 237 string keys across 6 languages.
 
-| Language             | Status     | Strings |
-| -------------------- | ---------- | ------- |
-| 🇩🇪 German (DE)       | ✅ Done    | 237/237 |
-| 🇫🇷 French (FR)       | ✅ Done    | 237/237 |
-| 🇪🇸 Spanish (ES)      | ✅ Done    | 237/237 |
-| 🇯🇵 Japanese (JA)     | ✅ Done    | 237/237 |
-| 🇨🇳 Chinese (ZH-Hans) | ✅ Done    | 237/237 |
-| 🇹🇷 Turkish (TR)      | ⏳ Pending | 0/237   |
+| Language             | Status  | Strings |
+| -------------------- | ------- | ------- |
+| 🇩🇪 German (DE)       | ✅ Done | 237/237 |
+| 🇫🇷 French (FR)       | ✅ Done | 237/237 |
+| 🇪🇸 Spanish (ES)      | ✅ Done | 237/237 |
+| 🇯🇵 Japanese (JA)     | ✅ Done | 237/237 |
+| 🇨🇳 Chinese (ZH-Hans) | ✅ Done | 237/237 |
+| 🇹🇷 Turkish (TR)      | ✅ Done | 237/237 |
 
 - [x] German translations added (237 strings)
 - [x] Complete remaining German translations
@@ -255,7 +255,7 @@ Adding translations for 237 string keys across 6 languages.
 - [x] Add Spanish translations
 - [x] Add Japanese translations
 - [x] Add Chinese Simplified translations
-- [ ] Add Turkish translations
+- [x] Add Turkish translations
 
 ---
 

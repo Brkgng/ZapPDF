@@ -38,6 +38,12 @@
             "state": "translated",
             "value": "%1$@ • %2$@"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ • %2$@"
+          }
         }
       }
     },
@@ -68,6 +74,12 @@
           }
         },
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
+          }
+        },
+        "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld"
@@ -107,6 +119,12 @@
             "state": "translated",
             "value": "剩余 %lld 次操作"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld işlem kaldı"
+          }
         }
       }
     },
@@ -141,6 +159,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "已清除 %lld 个文件"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld dosya temizlendi"
           }
         }
       }
@@ -177,6 +201,12 @@
             "state": "translated",
             "value": "已创建 %lld 个文件"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld dosya oluşturuldu"
+          }
         }
       }
     },
@@ -211,6 +241,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "剩余 %lld 次免费操作"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ücretsiz işlem kaldı"
           }
         }
       }
@@ -253,6 +289,12 @@
             "state": "translated",
             "value": "免费 %1$lld / %2$lld"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld / %2$lld ücretsiz"
+          }
         }
       }
     },
@@ -293,6 +335,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "已选择 %1$lld / %2$lld 页"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld / %2$lld sayfa seçili"
           }
         }
       }
@@ -335,6 +383,12 @@
             "state": "translated",
             "value": "已选择 %1$lld / %2$lld"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld / %2$lld seçili"
+          }
         }
       }
     },
@@ -376,6 +430,12 @@
             "state": "translated",
             "value": "%1$lld 页%2$@"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld sayfa%2$@"
+          }
         }
       }
     },
@@ -410,6 +470,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld 页"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld sayfa"
           }
         }
       }
@@ -446,6 +512,12 @@
             "state": "translated",
             "value": "已选择 %lld 页"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld sayfa seçildi"
+          }
         }
       }
     },
@@ -480,6 +552,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "「%@」似乎已损坏。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' bozuk görünüyor."
           }
         }
       }
@@ -516,6 +594,12 @@
             "state": "translated",
             "value": "「%@」不是有效的PDF文件。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' geçerli bir PDF dosyası değil."
+          }
         }
       }
     },
@@ -550,6 +634,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "「%@」已设置密码保护。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' parola korumalı."
           }
         }
       }
@@ -586,6 +676,12 @@
             "state": "translated",
             "value": "...还有 %lld 个文件"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "...ve %lld dosya daha"
+          }
         }
       }
     },
@@ -616,6 +712,12 @@
           }
         },
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5"
+          }
+        },
+        "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "5"
@@ -661,6 +763,12 @@
             "state": "translated",
             "value": "无法访问「%@」。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' dosyasına erişilemiyor."
+          }
         }
       }
     },
@@ -695,6 +803,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "清除 %lld 个文件"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Dosyayı Temizle"
           }
         }
       }
@@ -737,6 +851,12 @@
             "state": "translated",
             "value": "正在转换PDF... %@"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF dönüştürülüyor... %@"
+          }
         }
       }
     },
@@ -777,6 +897,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "无法加载 %1$lld 个文件：%2$@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld dosya yüklenemedi: %2$@"
           }
         }
       }
@@ -819,6 +945,12 @@
             "state": "translated",
             "value": "无法加载「%@」。请选择有效的PDF文件。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' yüklenemedi. Lütfen geçerli bir PDF dosyası seç."
+          }
         }
       }
     },
@@ -859,6 +991,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "无法保存文件：%@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosya kaydedilemedi: %@"
           }
         }
       }
@@ -901,6 +1039,12 @@
             "state": "translated",
             "value": "无法保存对「%@」的引用"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' referansı kaydedilemedi"
+          }
         }
       }
     },
@@ -942,6 +1086,12 @@
             "state": "translated",
             "value": "正在显示 %lld 页"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld sayfa görüntüleniyor"
+          }
         }
       }
     },
@@ -976,6 +1126,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "导入文件失败：%@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosyalar içe aktarılamadı: %@"
           }
         }
       }
@@ -1018,6 +1174,12 @@
             "state": "translated",
             "value": "保存「%@」失败。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' kaydedilemedi."
+          }
         }
       }
     },
@@ -1058,6 +1220,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "无法保存PDF到「%@」。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF '%@' konumuna kaydedilemedi."
           }
         }
       }
@@ -1100,6 +1268,12 @@
             "state": "translated",
             "value": "未找到文件：「%@」。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosya bulunamadı: '%@'."
+          }
         }
       }
     },
@@ -1140,6 +1314,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "无效的范围格式：「%@」"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçersiz aralık formatı: '%@'"
           }
         }
       }
@@ -1182,6 +1362,12 @@
             "state": "translated",
             "value": "无效范围：%1$lld-%2$lld（起始必须≤结束）"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçersiz aralık: %1$lld-%2$lld (başlangıç ≤ bitiş olmalı)"
+          }
         }
       }
     },
@@ -1222,6 +1408,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "正在合并PDF... %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF'ler birleştiriliyor... %@"
           }
         }
       }
@@ -1264,6 +1456,12 @@
             "state": "translated",
             "value": "从位置 %lld 移动"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konum %lld'den taşındı"
+          }
         }
       }
     },
@@ -1304,6 +1502,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "没有剩余操作"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İşlem kalmadı"
           }
         }
       }
@@ -1346,6 +1550,12 @@
             "state": "translated",
             "value": "原始位置：%lld"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orijinal konum: %lld"
+          }
         }
       }
     },
@@ -1380,6 +1590,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "第 %lld 页"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfa %lld"
           }
         }
       }
@@ -1422,6 +1638,12 @@
             "state": "translated",
             "value": "第 %1$lld 页超出范围（1-%2$lld）"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfa %1$lld aralık dışında (1-%2$lld)"
+          }
         }
       }
     },
@@ -1462,6 +1684,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "第 %1$lld / %2$lld 页"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfa %1$lld / %2$lld"
           }
         }
       }
@@ -1504,6 +1732,12 @@
             "state": "translated",
             "value": "页面范围 %1$lld-%2$lld 无效。文档共有 %3$lld 页。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfa aralığı %1$lld-%2$lld geçersiz. Belgede %3$lld sayfa var."
+          }
         }
       }
     },
@@ -1545,6 +1779,12 @@
             "state": "translated",
             "value": "第 %1$lld-%2$lld 页"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfa %1$lld-%2$lld"
+          }
         }
       }
     },
@@ -1579,6 +1819,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "页面：%@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfalar: %@"
           }
         }
       }
@@ -1621,6 +1867,12 @@
             "state": "translated",
             "value": "拒绝访问「%@」"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' için izin reddedildi"
+          }
         }
       }
     },
@@ -1661,6 +1913,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "正在重新排序页面... %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfalar yeniden sıralanıyor... %@"
           }
         }
       }
@@ -1703,6 +1961,12 @@
             "state": "translated",
             "value": "正在保存... %@"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydediliyor... %@"
+          }
         }
       }
     },
@@ -1743,6 +2007,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "正在拆分PDF... %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF bölünüyor... %@"
           }
         }
       }
@@ -1785,6 +2055,12 @@
             "state": "translated",
             "value": "共计：%1$lld 个文件%2$@"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam: %1$lld dosya%2$@"
+          }
         }
       }
     },
@@ -1825,6 +2101,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "无法访问「%@」。请重新选择文件。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'%@' dosyasına erişilemiyor. Lütfen dosyayı tekrar seç."
           }
         }
       }
@@ -1867,6 +2149,12 @@
             "state": "translated",
             "value": "移除文件"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosyayı kaldır"
+          }
         }
       }
     },
@@ -1907,6 +2195,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "取消选择文件"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosya seçimini kaldır"
           }
         }
       }
@@ -1949,6 +2243,12 @@
             "state": "translated",
             "value": "拖动以重新排序"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden sıralamak için sürükle"
+          }
         }
       }
     },
@@ -1989,6 +2289,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "PDF文档"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF Belgesi"
           }
         }
       }
@@ -2031,6 +2337,12 @@
             "state": "translated",
             "value": "选择文件"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosyayı seç"
+          }
         }
       }
     },
@@ -2071,6 +2383,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "已选择。双击取消选择。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçili. Seçimi kaldırmak için çift dokun."
           }
         }
       }
@@ -2113,6 +2431,12 @@
             "state": "translated",
             "value": "双击选择。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçmek için çift dokun."
+          }
         }
       }
     },
@@ -2153,6 +2477,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "点击查看升级选项"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yükseltme seçeneklerini görmek için dokun"
           }
         }
       }
@@ -2195,6 +2525,12 @@
             "state": "translated",
             "value": "取消"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İptal"
+          }
         }
       }
     },
@@ -2235,6 +2571,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "关闭"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kapat"
           }
         }
       }
@@ -2277,6 +2619,12 @@
             "state": "translated",
             "value": "继续"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Devam Et"
+          }
         }
       }
     },
@@ -2317,6 +2665,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "删除"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sil"
           }
         }
       }
@@ -2359,6 +2713,12 @@
             "state": "translated",
             "value": "取消全选"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçimi Kaldır"
+          }
         }
       }
     },
@@ -2399,6 +2759,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "完成"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamam"
           }
         }
       }
@@ -2441,6 +2807,12 @@
             "state": "translated",
             "value": "开始使用"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Başla"
+          }
         }
       }
     },
@@ -2481,6 +2853,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "OK"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamam"
           }
         }
       }
@@ -2523,6 +2901,12 @@
             "state": "translated",
             "value": "移除"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaldır"
+          }
         }
       }
     },
@@ -2563,6 +2947,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "重试"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tekrar Dene"
           }
         }
       }
@@ -2605,6 +2995,12 @@
             "state": "translated",
             "value": "保存文件"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosyayı Kaydet"
+          }
         }
       }
     },
@@ -2645,6 +3041,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "全选"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tümünü Seç"
           }
         }
       }
@@ -2687,6 +3089,12 @@
             "state": "translated",
             "value": "跳过"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atla"
+          }
         }
       }
     },
@@ -2727,6 +3135,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "撤销"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geri Al"
           }
         }
       }
@@ -2769,6 +3183,12 @@
             "state": "translated",
             "value": "升级"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yükselt"
+          }
         }
       }
     },
@@ -2806,6 +3226,12 @@
           }
         },
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZapPDF"
+          }
+        },
+        "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "ZapPDF"
@@ -2851,6 +3277,12 @@
             "state": "translated",
             "value": "全部"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tümü"
+          }
         }
       }
     },
@@ -2891,6 +3323,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "即将推出！"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yakında!"
           }
         }
       }
@@ -2933,6 +3371,12 @@
             "state": "translated",
             "value": "取消选择"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçimi Kaldır"
+          }
         }
       }
     },
@@ -2973,6 +3417,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "发生错误"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir hata oluştu"
           }
         }
       }
@@ -3015,6 +3465,12 @@
             "state": "translated",
             "value": "错误"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hata"
+          }
         }
       }
     },
@@ -3055,6 +3511,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "格式无效"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçersiz format"
           }
         }
       }
@@ -3097,6 +3559,12 @@
             "state": "translated",
             "value": "加载中..."
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yükleniyor..."
+          }
         }
       }
     },
@@ -3137,6 +3605,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "文件按显示顺序合并。拖动可重新排序。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosyalar görüntülenen sırada birleştirilir. Yeniden sıralamak için sürükle."
           }
         }
       }
@@ -3179,6 +3653,12 @@
             "state": "translated",
             "value": "无"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hiçbiri"
+          }
         }
       }
     },
@@ -3220,6 +3700,12 @@
             "state": "translated",
             "value": "集成StoreKit后将显示价格"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "StoreKit entegre edildiğinde fiyatlandırma görünecek"
+          }
         }
       }
     },
@@ -3257,6 +3743,12 @@
           }
         },
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PRO"
+          }
+        },
+        "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "PRO"
@@ -3302,6 +3794,12 @@
             "state": "translated",
             "value": "处理中..."
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İşleniyor..."
+          }
         }
       }
     },
@@ -3342,6 +3840,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "保存失败"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydetme Başarısız"
           }
         }
       }
@@ -3384,6 +3888,12 @@
             "state": "translated",
             "value": "选择"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seç"
+          }
         }
       }
     },
@@ -3424,6 +3934,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "选择"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçim"
           }
         }
       }
@@ -3466,6 +3982,12 @@
             "state": "translated",
             "value": "无法保存文件。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosya kaydedilemedi."
+          }
         }
       }
     },
@@ -3506,6 +4028,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "拷贝名称"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İsmi Kopyala"
           }
         }
       }
@@ -3548,6 +4076,12 @@
             "state": "translated",
             "value": "在Finder中显示"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finder'da Göster"
+          }
         }
       }
     },
@@ -3588,6 +4122,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "添加PDF文件"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF Dosyaları Ekle"
           }
         }
       }
@@ -3630,6 +4170,12 @@
             "state": "translated",
             "value": "浏览文件"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosyalara Gözat"
+          }
         }
       }
     },
@@ -3670,6 +4216,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "全部清除"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tümünü Temizle"
           }
         }
       }
@@ -3712,6 +4264,12 @@
             "state": "translated",
             "value": "这将从列表中移除所有PDF文件。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu işlem tüm PDF dosyalarını listeden kaldıracak."
+          }
         }
       }
     },
@@ -3752,6 +4310,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "清除所有文件？"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm Dosyalar Temizlensin mi?"
           }
         }
       }
@@ -3794,6 +4358,12 @@
             "state": "translated",
             "value": "拖放PDF文件或使用下方按钮"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF dosyalarını sürükleyip bırak veya aşağıdaki düğmeyi kullan"
+          }
         }
       }
     },
@@ -3834,6 +4404,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "将PDF文件拖放到此处"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF dosyalarını buraya bırak"
           }
         }
       }
@@ -3876,6 +4452,12 @@
             "state": "translated",
             "value": "放下以添加更多文件"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daha fazla dosya eklemek için bırak"
+          }
         }
       }
     },
@@ -3917,6 +4499,12 @@
             "state": "translated",
             "value": "已合并"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birleştirilmiş"
+          }
         }
       }
     },
@@ -3954,6 +4542,12 @@
           }
         },
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZapPDF"
+          }
+        },
+        "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "ZapPDF"
@@ -3999,6 +4593,12 @@
             "state": "translated",
             "value": "操作已取消。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İşlem iptal edildi."
+          }
         }
       }
     },
@@ -4039,6 +4639,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "未提供此操作所需的文件。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu işlem için dosya sağlanmadı."
           }
         }
       }
@@ -4081,6 +4687,12 @@
             "state": "translated",
             "value": "存储空间不足，无法完成此操作。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu işlemi tamamlamak için yeterli depolama alanı yok."
+          }
         }
       }
     },
@@ -4121,6 +4733,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "请检查你是否有目标位置的写入权限。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefe yazma izniniz olduğunu kontrol et."
           }
         }
       }
@@ -4163,6 +4781,12 @@
             "state": "translated",
             "value": "文件可能已被移动或删除。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosya taşınmış veya silinmiş olabilir."
+          }
         }
       }
     },
@@ -4203,6 +4827,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "请释放一些存储空间后重试。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biraz depolama alanı boşalt ve tekrar dene."
           }
         }
       }
@@ -4245,6 +4875,12 @@
             "state": "translated",
             "value": "尝试获取此文件的新副本。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu dosyanın yeni bir kopyasını almayı dene."
+          }
         }
       }
     },
@@ -4285,6 +4921,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "请先重新排序一些页面再保存。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydetmeden önce bazı sayfaları yeniden sırala."
           }
         }
       }
@@ -4327,6 +4969,12 @@
             "state": "translated",
             "value": "请使用文件选择器重新选择文件。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lütfen dosyayı dosya seçiciden tekrar seç."
+          }
         }
       }
     },
@@ -4367,6 +5015,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "请至少选择一个PDF文件。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lütfen en az bir PDF dosyası seç."
           }
         }
       }
@@ -4409,6 +5063,12 @@
             "state": "translated",
             "value": "请选择有效的PDF文件。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lütfen geçerli bir PDF dosyası seç."
+          }
         }
       }
     },
@@ -4449,6 +5109,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "请在文档内选择有效的页面范围。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lütfen belge içinde geçerli bir sayfa aralığı seç."
           }
         }
       }
@@ -4491,6 +5157,12 @@
             "state": "translated",
             "value": "请重试。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lütfen tekrar dene."
+          }
         }
       }
     },
@@ -4531,6 +5203,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "请重新尝试排序。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lütfen yeniden sıralamayı tekrar dene."
           }
         }
       }
@@ -4573,6 +5251,12 @@
             "state": "translated",
             "value": "尝试保存到其他位置。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Farklı bir konuma kaydetmeyi dene."
+          }
         }
       }
     },
@@ -4613,6 +5297,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "请先使用其他应用程序解锁该PDF。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lütfen PDF'in kilidini başka bir uygulamada aç."
           }
         }
       }
@@ -4655,6 +5345,12 @@
             "state": "translated",
             "value": "升级到Pro以获得无限PDF操作。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sınırsız PDF işlemleri için Pro'ya yükselt."
+          }
         }
       }
     },
@@ -4695,6 +5391,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "无法恢复对先前使用文件的访问。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daha önce kullanılan dosyaya erişim geri yüklenemedi."
           }
         }
       }
@@ -4737,6 +5439,12 @@
             "state": "translated",
             "value": "请尝试重新选择文件。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosyayı tekrar seçmeyi dene."
+          }
         }
       }
     },
@@ -4777,6 +5485,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "从列表中移除所有文件"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm dosyaları listeden kaldır"
           }
         }
       }
@@ -4819,6 +5533,12 @@
             "state": "translated",
             "value": "删除选定页面 (⌫)"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçili Sayfayı Sil (⌫)"
+          }
         }
       }
     },
@@ -4859,6 +5579,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "重做 (⌘⇧Z)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yinele (⌘⇧Z)"
           }
         }
       }
@@ -4901,6 +5627,12 @@
             "state": "translated",
             "value": "恢复原始顺序"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orijinal Sıraya Sıfırla"
+          }
         }
       }
     },
@@ -4941,6 +5673,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "撤销 (⌘Z)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geri Al (⌘Z)"
           }
         }
       }
@@ -4983,6 +5721,12 @@
             "state": "translated",
             "value": "简体中文"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çince (Basitleştirilmiş)"
+          }
         }
       }
     },
@@ -5023,6 +5767,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "英语"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İngilizce"
           }
         }
       }
@@ -5065,6 +5815,12 @@
             "state": "translated",
             "value": "法语"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fransızca"
+          }
         }
       }
     },
@@ -5105,6 +5861,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "德语"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Almanca"
           }
         }
       }
@@ -5147,6 +5909,12 @@
             "state": "translated",
             "value": "日语"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Japonca"
+          }
         }
       }
     },
@@ -5187,6 +5955,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "西班牙语"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İspanyolca"
           }
         }
       }
@@ -5229,6 +6003,12 @@
             "state": "translated",
             "value": "土耳其语"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Türkçe"
+          }
         }
       }
     },
@@ -5269,6 +6049,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "轻松合并多个PDF、拆分文档和重新排序页面。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birden fazla PDF'i birleştir, belgeleri böl ve sayfaları kolayca yeniden sırala."
           }
         }
       }
@@ -5311,6 +6097,12 @@
             "state": "translated",
             "value": "强大功能"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Güçlü Özellikler"
+          }
         }
       }
     },
@@ -5351,6 +6143,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "下一步"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İleri"
           }
         }
       }
@@ -5393,6 +6191,12 @@
             "state": "translated",
             "value": "上一步"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geri"
+          }
         }
       }
     },
@@ -5433,6 +6237,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "所有PDF均在你的设备本地处理。绝不上传到云端。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm PDF'lerin cihazında yerel olarak işlenir. Hiçbir şey buluta yüklenmez."
           }
         }
       }
@@ -5475,6 +6285,12 @@
             "state": "translated",
             "value": "隐私优先"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Önce Gizlilik"
+          }
         }
       }
     },
@@ -5515,6 +6331,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "添加一些PDF文件即可开始。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Başlamak için birkaç PDF dosyası ekle."
           }
         }
       }
@@ -5557,6 +6379,12 @@
             "state": "translated",
             "value": "一切就绪！"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hazırsın!"
+          }
         }
       }
     },
@@ -5597,6 +6425,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "你的隐私优先PDF工具，用于合并、拆分和整理文档。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birleştirme, bölme ve belge düzenleme için gizlilik öncelikli PDF araç setin."
           }
         }
       }
@@ -5639,6 +6473,12 @@
             "state": "translated",
             "value": "欢迎使用ZapPDF"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZapPDF'e Hoş Geldin"
+          }
         }
       }
     },
@@ -5679,6 +6519,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "将PDF转换为其他格式"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF'i diğer formatlara dönüştür"
           }
         }
       }
@@ -5721,6 +6567,12 @@
             "state": "translated",
             "value": "转换PDF"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF'i Dönüştür"
+          }
         }
       }
     },
@@ -5761,6 +6613,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "将多个PDF合并为一个文档"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birden fazla PDF'i tek belgede birleştir"
           }
         }
       }
@@ -5803,6 +6661,12 @@
             "state": "translated",
             "value": "合并PDF"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF'leri Birleştir"
+          }
         }
       }
     },
@@ -5843,6 +6707,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "对PDF内的页面重新排序"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF içindeki sayfaları yeniden sırala"
           }
         }
       }
@@ -5885,6 +6755,12 @@
             "state": "translated",
             "value": "保存排序"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden Sıralanmışı Kaydet"
+          }
         }
       }
     },
@@ -5925,6 +6801,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "重新排序页面"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfaları Yeniden Sırala"
           }
         }
       }
@@ -5967,6 +6849,12 @@
             "state": "translated",
             "value": "提取页面或拆分为多个文档"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfaları çıkart veya birden fazla belgeye böl"
+          }
         }
       }
     },
@@ -6007,6 +6895,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "提取页面范围"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfa Aralıklarını Çıkart"
           }
         }
       }
@@ -6049,6 +6943,12 @@
             "state": "translated",
             "value": "选择特定页面"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belirli Sayfaları Seç"
+          }
         }
       }
     },
@@ -6089,6 +6989,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "每N页拆分"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her N Sayfada Böl"
           }
         }
       }
@@ -6131,6 +7037,12 @@
             "state": "translated",
             "value": "拆分PDF"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF'i Böl"
+          }
         }
       }
     },
@@ -6171,6 +7083,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "未指定页面范围"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfa aralığı belirtilmedi"
           }
         }
       }
@@ -6213,6 +7131,12 @@
             "state": "translated",
             "value": "无法删除最后一页"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son sayfa silinemez"
+          }
         }
       }
     },
@@ -6253,6 +7177,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "放弃"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At"
           }
         }
       }
@@ -6295,6 +7225,12 @@
             "state": "translated",
             "value": "你有未保存的更改。确定要放弃吗？"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydedilmemiş değişiklikler var. Atmak istediğinden emin misin?"
+          }
         }
       }
     },
@@ -6335,6 +7271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "放弃更改？"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Değişiklikler Atılsın mı?"
           }
         }
       }
@@ -6377,6 +7319,12 @@
             "state": "translated",
             "value": "无效的页面顺序。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçersiz sayfa sırası."
+          }
         }
       }
     },
@@ -6417,6 +7365,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "正在加载页面..."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfalar yükleniyor..."
           }
         }
       }
@@ -6459,6 +7413,12 @@
             "state": "translated",
             "value": "没有需要保存的更改。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydedilecek değişiklik yok."
+          }
         }
       }
     },
@@ -6499,6 +7459,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "选择要预览的页面"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Önizlemek için bir sayfa seç"
           }
         }
       }
@@ -6541,6 +7507,12 @@
             "state": "translated",
             "value": "点击「完成」保存更改"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Değişiklikleri kaydetmek için Tamam'a dokun"
+          }
         }
       }
     },
@@ -6581,6 +7553,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "功能"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Özellikler"
           }
         }
       }
@@ -6623,6 +7601,12 @@
             "state": "translated",
             "value": "免费"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ücretsiz"
+          }
         }
       }
     },
@@ -6663,6 +7647,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "没有剩余免费操作"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ücretsiz işlem kalmadı"
           }
         }
       }
@@ -6705,6 +7695,12 @@
             "state": "translated",
             "value": "还剩1次免费操作"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 ücretsiz işlem kaldı"
+          }
         }
       }
     },
@@ -6745,6 +7741,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "PDF操作"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF İşlemleri"
           }
         }
       }
@@ -6787,6 +7789,12 @@
             "state": "translated",
             "value": "所有PDF处理均在你的设备本地完成"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm PDF işlemleri cihazında yerel olarak gerçekleşir"
+          }
         }
       }
     },
@@ -6824,6 +7832,12 @@
           }
         },
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro"
+          }
+        },
+        "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "Pro"
@@ -6869,6 +7883,12 @@
             "state": "translated",
             "value": "购买失败。请重试。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Satın alma başarısız. Lütfen tekrar dene."
+          }
         }
       }
     },
@@ -6909,6 +7929,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "欢迎使用Pro！"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro'ya Hoş Geldin!"
           }
         }
       }
@@ -6951,6 +7977,12 @@
             "state": "translated",
             "value": "感谢升级到Pro！尽情享受无限PDF操作。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro'ya yükselttiğin için teşekkürler! Sınırsız PDF işleminin keyfini çıkar."
+          }
         }
       }
     },
@@ -6991,6 +8023,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "恢复失败。请重试。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geri yükleme başarısız. Lütfen tekrar dene."
           }
         }
       }
@@ -7033,6 +8071,12 @@
             "state": "translated",
             "value": "恢复购买"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Satın Alımları Geri Yükle"
+          }
         }
       }
     },
@@ -7073,6 +8117,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "正在恢复..."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geri yükleniyor..."
           }
         }
       }
@@ -7115,6 +8165,12 @@
             "state": "translated",
             "value": "无限"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sınırsız"
+          }
         }
       }
     },
@@ -7155,6 +8211,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "解锁无限PDF操作和高级功能"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sınırsız PDF işlemi ve premium özelliklerin kilidini aç"
           }
         }
       }
@@ -7197,6 +8259,12 @@
             "state": "translated",
             "value": "升级到ZapPDF Pro"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZapPDF Pro'ya Yükselt"
+          }
         }
       }
     },
@@ -7237,6 +8305,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "连续"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sürekli"
           }
         }
       }
@@ -7279,6 +8353,12 @@
             "state": "translated",
             "value": "单页"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tek Sayfa"
+          }
         }
       }
     },
@@ -7319,6 +8399,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "双页"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İki Sayfa"
           }
         }
       }
@@ -7361,6 +8447,12 @@
             "state": "translated",
             "value": "双页（连续）"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İki Sayfa (Sürekli)"
+          }
         }
       }
     },
@@ -7401,6 +8493,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "当前操作将停止，所有进度将丢失。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mevcut işlem durdurulacak ve ilerleme kaybolacak."
           }
         }
       }
@@ -7443,6 +8541,12 @@
             "state": "translated",
             "value": "取消操作？"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İşlem İptal Edilsin mi?"
+          }
         }
       }
     },
@@ -7483,6 +8587,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "取消操作"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İşlemi İptal Et"
           }
         }
       }
@@ -7525,6 +8635,12 @@
             "state": "translated",
             "value": "完成！"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamamlandı!"
+          }
         }
       }
     },
@@ -7565,6 +8681,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "正在转换PDF..."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF dönüştürülüyor..."
           }
         }
       }
@@ -7607,6 +8729,12 @@
             "state": "translated",
             "value": "操作失败"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İşlem Başarısız"
+          }
         }
       }
     },
@@ -7647,6 +8775,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "文件已保存"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosya Kaydedildi"
           }
         }
       }
@@ -7689,6 +8823,12 @@
             "state": "translated",
             "value": "你的PDF已成功保存。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF başarıyla kaydedildi."
+          }
         }
       }
     },
@@ -7729,6 +8869,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "正在合并PDF..."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF'ler birleştiriliyor..."
           }
         }
       }
@@ -7771,6 +8917,12 @@
             "state": "translated",
             "value": "PDF操作失败。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF işlemi başarısız."
+          }
         }
       }
     },
@@ -7811,6 +8963,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "准备中..."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hazırlanıyor..."
           }
         }
       }
@@ -7853,6 +9011,12 @@
             "state": "translated",
             "value": "你的PDF已准备好保存"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF kaydetmeye hazır"
+          }
         }
       }
     },
@@ -7893,6 +9057,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "正在重新排序页面..."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfalar yeniden sıralanıyor..."
           }
         }
       }
@@ -7935,6 +9105,12 @@
             "state": "translated",
             "value": "在Finder中显示"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finder'da Göster"
+          }
         }
       }
     },
@@ -7975,6 +9151,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "分享"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paylaş"
           }
         }
       }
@@ -8017,6 +9199,12 @@
             "state": "translated",
             "value": "出错了"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir Şeyler Ters Gitti"
+          }
         }
       }
     },
@@ -8057,6 +9245,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "正在拆分PDF..."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF bölünüyor..."
           }
         }
       }
@@ -8099,6 +9293,12 @@
             "state": "translated",
             "value": "发生意外错误。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beklenmeyen bir hata oluştu."
+          }
         }
       }
     },
@@ -8139,6 +9339,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "已达到使用限制。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kullanım limitine ulaşıldı."
           }
         }
       }
@@ -8181,6 +9387,12 @@
             "state": "translated",
             "value": "选择保存重新排序PDF的位置"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden sıralanmış PDF'in kaydedileceği yeri seç"
+          }
         }
       }
     },
@@ -8221,6 +9433,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "保存重新排序的PDF"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden Sıralanmış PDF'i Kaydet"
           }
         }
       }
@@ -8263,6 +9481,12 @@
             "state": "translated",
             "value": "关于"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hakkında"
+          }
         }
       }
     },
@@ -8303,6 +9527,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "外观"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görünüm"
           }
         }
       }
@@ -8345,6 +9575,12 @@
             "state": "translated",
             "value": "语言"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dil"
+          }
         }
       }
     },
@@ -8385,6 +9621,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "选择你的首选语言"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tercih ettiğin dili seç"
           }
         }
       }
@@ -8427,6 +9669,12 @@
             "state": "translated",
             "value": "跟随系统"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistem Varsayılanı"
+          }
         }
       }
     },
@@ -8467,6 +9715,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "设置"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayarlar"
           }
         }
       }
@@ -8509,6 +9763,12 @@
             "state": "translated",
             "value": "版本"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sürüm"
+          }
         }
       }
     },
@@ -8549,6 +9809,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "等分拆分"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eşit parçalara böl"
           }
         }
       }
@@ -8591,6 +9857,12 @@
             "state": "translated",
             "value": "输入页码和范围，用逗号分隔"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfa numaralarını ve aralıklarını virgülle ayırarak gir"
+          }
         }
       }
     },
@@ -8631,6 +9903,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "每N页"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her N"
           }
         }
       }
@@ -8673,6 +9951,12 @@
             "state": "translated",
             "value": "输入页面范围，如 1-5, 10, 15-20"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1-5, 10, 15-20 gibi sayfa aralıkları gir"
+          }
         }
       }
     },
@@ -8713,6 +9997,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "点击页面进行选择"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçmek için sayfalara dokun"
           }
         }
       }
@@ -8755,6 +10045,12 @@
             "state": "translated",
             "value": "将PDF按每N页拆分"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF'i N sayfalık parçalara böl"
+          }
         }
       }
     },
@@ -8795,6 +10091,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "不会创建输出文件"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çıktı dosyası oluşturulmayacak"
           }
         }
       }
@@ -8837,6 +10139,12 @@
             "state": "translated",
             "value": "选项"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçenekler"
+          }
         }
       }
     },
@@ -8877,6 +10185,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "输出预览"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çıktı Önizleme"
           }
         }
       }
@@ -8919,6 +10233,12 @@
             "state": "translated",
             "value": "每个文件的页数："
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosya başına sayfa:"
+          }
         }
       }
     },
@@ -8959,6 +10279,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "可视化选择单独页面"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sayfaları görsel olarak seç"
           }
         }
       }
@@ -9001,6 +10327,12 @@
             "state": "translated",
             "value": "如：1-5, 10, 15-20"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ör. 1-5, 10, 15-20"
+          }
         }
       }
     },
@@ -9041,6 +10373,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "范围"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aralıklar"
           }
         }
       }
@@ -9083,6 +10421,12 @@
             "state": "translated",
             "value": "选择"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seç"
+          }
         }
       }
     },
@@ -9123,6 +10467,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "选择要提取的页面："
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çıkartılacak sayfaları seç:"
           }
         }
       }
@@ -9165,6 +10515,12 @@
             "state": "translated",
             "value": "指定范围，如 1-5, 10-15"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1-5, 10-15 gibi aralıklar belirt"
+          }
         }
       }
     },
@@ -9205,6 +10561,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "拆分"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Böl"
           }
         }
       }
@@ -9247,6 +10609,12 @@
             "state": "translated",
             "value": "拆分模式"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bölme Modu"
+          }
         }
       }
     },
@@ -9287,6 +10655,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "拆分选项"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bölme Seçenekleri"
           }
         }
       }
@@ -9329,6 +10703,12 @@
             "state": "translated",
             "value": "有效范围"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçerli aralık"
+          }
         }
       }
     },
@@ -9369,6 +10749,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "你已用完所有免费操作。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm ücretsiz işlemlerini kullandın."
           }
         }
       }
@@ -9411,6 +10797,12 @@
             "state": "translated",
             "value": "保存使用数据失败。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kullanım verileri kaydedilemedi."
+          }
         }
       }
     },
@@ -9451,6 +10843,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "请选择至少2个PDF文件进行合并。"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birleştirmek için en az 2 PDF dosyası seç."
           }
         }
       }
@@ -9493,6 +10891,12 @@
             "state": "translated",
             "value": "请选择一个PDF文件。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lütfen bir PDF dosyası seç."
+          }
         }
       }
     },
@@ -9534,6 +10938,12 @@
             "state": "translated",
             "value": "此操作请只选择一个PDF文件。"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu işlem için tek bir PDF dosyası seç."
+          }
         }
       }
     },
@@ -9568,6 +10978,12 @@
             "state": "translated",
             "value": "•"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "•"
+          }
         }
       }
     },
@@ -9598,6 +11014,12 @@
           }
         },
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "∞"
+          }
+        },
+        "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "∞"
@@ -9703,6 +11125,24 @@
               }
             }
           }
+        },
+        "tr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 sayfa"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sayfa"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -9800,6 +11240,24 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "共计：%lld 个文件"
+                }
+              }
+            }
+          }
+        },
+        "tr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 dosya"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld dosya"
                 }
               }
             }
