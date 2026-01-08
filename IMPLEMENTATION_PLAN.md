@@ -246,7 +246,7 @@ Adding translations for 237 string keys across 6 languages.
 | 🇫🇷 French (FR)       | ✅ Done    | 237/237 |
 | 🇪🇸 Spanish (ES)      | ✅ Done    | 237/237 |
 | 🇯🇵 Japanese (JA)     | ✅ Done    | 237/237 |
-| 🇨🇳 Chinese (ZH-Hans) | ⏳ Pending | 0/237   |
+| 🇨🇳 Chinese (ZH-Hans) | ✅ Done    | 237/237 |
 | 🇹🇷 Turkish (TR)      | ⏳ Pending | 0/237   |
 
 - [x] German translations added (237 strings)
@@ -254,7 +254,7 @@ Adding translations for 237 string keys across 6 languages.
 - [x] Add French translations
 - [x] Add Spanish translations
 - [x] Add Japanese translations
-- [ ] Add Chinese Simplified translations
+- [x] Add Chinese Simplified translations
 - [ ] Add Turkish translations
 
 ---
