@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D4BBECAC2F119DB90053CDB3 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4BBECAB2F119DB90053CDB3 /* StoreKit.framework */; };
+		D4BBECD52F12839E0053CDB3 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = D4BBECD42F12839E0053CDB3 /* RevenueCat */; };
+		D4BBECD72F12839E0053CDB3 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = D4BBECD62F12839E0053CDB3 /* RevenueCatUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		D48CA0052EFB500000C8D9A1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -19,22 +25,8 @@
 /* Begin PBXFileReference section */
 		D48C9FDE2EFB1D9900C8D9A1 /* ZapPDF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZapPDF.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D48CA0012EFB500000C8D9A1 /* ZapPDFTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZapPDFTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4BBECAB2F119DB90053CDB3 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D48CA0722EFDD25200C8D9A1 /* Exceptions for "Services" folder in "ZapPDF" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				PDFEngine/PDFEngineError.swift,
-				PDFEngine/PDFMerger.swift,
-				PDFEngine/PDFReorderer.swift,
-				PDFEngine/PDFSplitter.swift,
-				Persistence/KeychainHelper.swift,
-				Persistence/UsageManager.swift,
-			);
-			target = D48C9FDD2EFB1D9900C8D9A1 /* ZapPDF */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D48C9FE02EFB1D9900C8D9A1 /* App */ = {
@@ -59,9 +51,6 @@
 		};
 		D48CA06B2EFDD1EC00C8D9A1 /* Services */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				D48CA0722EFDD25200C8D9A1 /* Exceptions for "Services" folder in "ZapPDF" target */,
-			);
 			path = Services;
 			sourceTree = "<group>";
 		};
@@ -70,14 +59,14 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
-		D48CA0702EFDD23C00C8D9A1 /* Monetization */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Monetization;
-			sourceTree = "<group>";
-		};
 		D48CA0712EFDD24100C8D9A1 /* ViewModels */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		D4BBECCC2F11A0080053CDB3 /* Monetization */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Monetization;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -87,6 +76,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4BBECD52F12839E0053CDB3 /* RevenueCat in Frameworks */,
+				D4BBECAC2F119DB90053CDB3 /* StoreKit.framework in Frameworks */,
+				D4BBECD72F12839E0053CDB3 /* RevenueCatUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,7 +95,6 @@
 		D48C9FD52EFB1D9900C8D9A1 = {
 			isa = PBXGroup;
 			children = (
-				D48CA0702EFDD23C00C8D9A1 /* Monetization */,
 				D48CA06F2EFDD23A00C8D9A1 /* UI */,
 				D48CA06B2EFDD1EC00C8D9A1 /* Services */,
 				D48CA0712EFDD24100C8D9A1 /* ViewModels */,
@@ -111,7 +102,9 @@
 				D48C9FEC2EFB22F000C8D9A1 /* Common */,
 				D48C9FE02EFB1D9900C8D9A1 /* App */,
 				D48CA0102EFB500000C8D9A1 /* ZapPDFTests */,
+				D4BBECAA2F119DB90053CDB3 /* Frameworks */,
 				D48C9FDF2EFB1D9900C8D9A1 /* Products */,
+				D4BBECCC2F11A0080053CDB3 /* Monetization */,
 			);
 			sourceTree = "<group>";
 		};
@@ -122,6 +115,14 @@
 				D48CA0012EFB500000C8D9A1 /* ZapPDFTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D4BBECAA2F119DB90053CDB3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D4BBECAB2F119DB90053CDB3 /* StoreKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,11 +144,15 @@
 				D48C9FE02EFB1D9900C8D9A1 /* App */,
 				D48C9FEC2EFB22F000C8D9A1 /* Common */,
 				D48C9FED2EFB22FE00C8D9A1 /* Models */,
+				D48CA06B2EFDD1EC00C8D9A1 /* Services */,
 				D48CA06F2EFDD23A00C8D9A1 /* UI */,
 				D48CA0712EFDD24100C8D9A1 /* ViewModels */,
+				D4BBECCC2F11A0080053CDB3 /* Monetization */,
 			);
 			name = ZapPDF;
 			packageProductDependencies = (
+				D4BBECD42F12839E0053CDB3 /* RevenueCat */,
+				D4BBECD62F12839E0053CDB3 /* RevenueCatUI */,
 			);
 			productName = ZapPDF;
 			productReference = D48C9FDE2EFB1D9900C8D9A1 /* ZapPDF.app */;
@@ -204,6 +209,9 @@
 			);
 			mainGroup = D48C9FD52EFB1D9900C8D9A1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D4BBECA72F11526B0053CDB3 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D48C9FDF2EFB1D9900C8D9A1 /* Products */;
 			projectDirPath = "";
@@ -555,6 +563,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D4BBECA72F11526B0053CDB3 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.54.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D4BBECD42F12839E0053CDB3 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4BBECA72F11526B0053CDB3 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		D4BBECD62F12839E0053CDB3 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4BBECA72F11526B0053CDB3 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCatUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D48C9FD62EFB1D9900C8D9A1 /* Project object */;
 }

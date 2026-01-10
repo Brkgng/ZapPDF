@@ -309,43 +309,25 @@ enum L10n {
         static let unexpectedError = String(localized: "processing.unexpectedError", defaultValue: "An unexpected error occurred.")
     }
     
-    // MARK: - Paywall
+    // MARK: - Paywall / Subscription Status
     
     enum Paywall {
-        static let upgradeTitle = String(localized: "paywall.upgradeTitle", defaultValue: "Upgrade to ZapPDF Pro")
-        static let upgradeSubtitle = String(localized: "paywall.upgradeSubtitle", defaultValue: "Unlock unlimited PDF actions and premium features")
-        static let features = String(localized: "paywall.features", defaultValue: "Features")
-        static let free = String(localized: "paywall.free", defaultValue: "Free")
+        /// "Pro" badge text
         static let pro = String(localized: "paywall.pro", defaultValue: "Pro")
-        static let unlimited = String(localized: "paywall.unlimited", defaultValue: "Unlimited")
-        static let pdfActions = String(localized: "paywall.pdfActions", defaultValue: "PDF Actions")
-        static let restorePurchases = String(localized: "paywall.restorePurchases", defaultValue: "Restore Purchases")
-        static let restoring = String(localized: "paywall.restoring", defaultValue: "Restoring...")
-        static let privacyNote = String(localized: "paywall.privacyNote", defaultValue: "All PDF processing happens locally on your device")
-        static let purchaseSuccess = String(localized: "paywall.purchaseSuccess", defaultValue: "Welcome to Pro!")
-        static let purchaseSuccessMessage = String(localized: "paywall.purchaseSuccessMessage", defaultValue: "Thank you for upgrading to Pro! Enjoy unlimited PDF actions.")
-        static let purchaseFailed = String(localized: "paywall.purchaseFailed", defaultValue: "Purchase failed. Please try again.")
-        static let restoreFailed = String(localized: "paywall.restoreFailed", defaultValue: "Restore failed. Please try again.")
         
+        /// Status text when no actions left
         static func noActionsLeft() -> String {
             String(localized: "No actions left", comment: "Status when free actions exhausted")
         }
         
+        /// Status text showing remaining actions (e.g., "2 actions left")
         static func actionsLeft(_ count: Int) -> String {
             String(localized: "\(count) actions left", comment: "Status showing remaining free actions")
         }
         
+        /// Status text showing actions remaining of total (e.g., "4 of 5 free")
         static func actionsRemaining(_ count: Int, of total: Int) -> String {
             String(localized: "\(count) of \(total) free", comment: "Status showing X of Y free actions")
-        }
-        
-        static let noFreeActionsRemaining = String(localized: "paywall.noFreeActionsRemaining", defaultValue: "No free actions remaining")
-        
-        static func freeActionsRemaining(_ count: Int) -> String {
-            if count == 1 {
-                return String(localized: "paywall.oneFreeActionRemaining", defaultValue: "1 free action remaining")
-            }
-            return String(localized: "\(count) free actions remaining", comment: "Count of free actions remaining")
         }
     }
     
@@ -539,6 +521,8 @@ enum L10n {
         static let appearance = String(localized: "settings.appearance", defaultValue: "Appearance")
         static let about = String(localized: "settings.about", defaultValue: "About")
         static let version = String(localized: "settings.version", defaultValue: "Version")
+        static let subscription = String(localized: "settings.subscription", defaultValue: "Subscription")
+        static let manageSubscription = String(localized: "settings.manageSubscription", defaultValue: "Manage Subscription")
     }
     
     // MARK: - Languages

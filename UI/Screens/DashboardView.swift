@@ -8,6 +8,9 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+#if canImport(RevenueCatUI)
+import RevenueCatUI
+#endif
 // MARK: - DashboardView
 
 /// Main dashboard view for file selection and PDF operations.
@@ -70,6 +73,9 @@ struct DashboardView: View {
                 }
                 .sheet(isPresented: $viewModel.showPaywall) {
                     PaywallView()
+                        #if os(macOS)
+                        .frame(minWidth: 400, minHeight: 600)
+                        #endif
                 }
                 #if os(iOS)
                 .sheet(isPresented: $showSettings) {

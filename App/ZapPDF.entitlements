@@ -10,6 +10,10 @@
 	<key>com.apple.security.hardened-runtime</key>
 	<true/>
 	
+	<!-- Network Client: Required for RevenueCat API calls -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+	
 	<!-- User-Selected Files: Read/Write access for PDF operations -->
 	<key>com.apple.security.files.user-selected.read-write</key>
 	<true/>
@@ -19,3 +23,4 @@
 	<true/>
 </dict>
 </plist>
+

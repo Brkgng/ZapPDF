@@ -2,15 +2,20 @@
 //  SettingsView.swift
 //  ZapPDF
 //
-//  App settings screen with language selection.
+//  App settings screen with language selection and subscription management.
 //
 
 import SwiftUI
 
-/// Settings view with language picker and app information.
+#if canImport(RevenueCatUI)
+import RevenueCatUI
+#endif
+
+/// Settings view with language picker, subscription management, and app information.
 struct SettingsView: View {
     @Environment(LanguageManager.self) private var languageManager
     @Environment(\.dismiss) private var dismiss
+    @State private var showCustomerCenter = false
     
     var body: some View {
         #if os(macOS)
@@ -26,10 +31,14 @@ struct SettingsView: View {
     private var macOSContent: some View {
         Form {
             languageSection
+            subscriptionSection
             aboutSection
         }
         .formStyle(.grouped)
-        .frame(width: 400, height: 250)
+        .frame(width: 400, height: 300)
+        .sheet(isPresented: $showCustomerCenter) {
+            customerCenterSheet
+        }
     }
     #endif
     
@@ -40,6 +49,7 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 languageSection
+                subscriptionSection
                 aboutSection
             }
             .navigationTitle(L10n.Settings.title)
@@ -51,6 +61,9 @@ struct SettingsView: View {
                     }
                 }
             }
+        }
+        .sheet(isPresented: $showCustomerCenter) {
+            customerCenterSheet
         }
     }
     #endif
@@ -90,6 +103,19 @@ struct SettingsView: View {
     }
     
     @ViewBuilder
+    private var subscriptionSection: some View {
+        Section {
+            Button {
+                showCustomerCenter = true
+            } label: {
+                Label(L10n.Settings.manageSubscription, systemImage: "creditcard")
+            }
+        } header: {
+            Text(L10n.Settings.subscription)
+        }
+    }
+    
+    @ViewBuilder
     private var aboutSection: some View {
         Section {
             HStack {
@@ -101,6 +127,59 @@ struct SettingsView: View {
         } header: {
             Text(L10n.Settings.about)
         }
+    }
+    
+    // MARK: - Customer Center Sheet
+    
+    @ViewBuilder
+    private var customerCenterSheet: some View {
+        // CustomerCenterView is only available on iOS
+        #if os(iOS) && canImport(RevenueCatUI)
+        ZapPDFCustomerCenterView()
+        #else
+        // Fallback for macOS or when RevenueCatUI is unavailable
+        VStack(spacing: 16) {
+            Image(systemName: "person.crop.circle")
+                .font(.system(size: 48))
+                .foregroundColor(.secondary)
+            
+            Text(L10n.Settings.manageSubscription)
+                .font(.headline)
+            
+            subscriptionManagementMessage
+            
+            Button(L10n.Action.done) {
+                showCustomerCenter = false
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .padding()
+        #if os(macOS)
+        .frame(width: 350, height: 200)
+        #endif
+        #endif
+    }
+    
+    @ViewBuilder
+    private var subscriptionManagementMessage: some View {
+        #if os(macOS)
+        if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
+            Link(L10n.Settings.manageSubscription, destination: url)
+                .font(.headline)
+                .controlSize(.large)
+                .padding(.top, 4)
+        } else {
+            Text("To manage your subscription, please use the App Store app.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        #else
+        Text("Subscription management is not available.")
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+            .multilineTextAlignment(.center)
+        #endif
     }
 }
 
