@@ -68,6 +68,9 @@ protocol SubscriptionManaging: Actor {
     /// Whether the user currently has Pro entitlement.
     var isPro: Bool { get async }
     
+    /// Detailed subscription status including type, expiration, and renewal info.
+    var proStatus: ProStatus { get async }
+    
     /// Available subscription packages for purchase.
     var availablePackages: [SubscriptionPackage] { get async }
     

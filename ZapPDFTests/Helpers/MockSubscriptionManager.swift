@@ -14,6 +14,7 @@ actor MockSubscriptionManager: SubscriptionManaging {
     // MARK: - Mock State
     
     var isPro: Bool = false
+    var proStatus: ProStatus = .inactive
     var availablePackages: [SubscriptionPackage] = []
     
     // MARK: - Control Properties
@@ -22,10 +23,9 @@ actor MockSubscriptionManager: SubscriptionManaging {
     private var purchaseReturnsSuccess: Bool = true
     private var restoreReturnsSuccess: Bool = false
     private var shouldThrowOnRestore: Bool = false
+    private var mockProType: ProType = .annual
     
     // MARK: - SubscriptionManaging
-    
-
     
     func purchase(_ package: SubscriptionPackage) async throws -> Bool {
         if shouldThrowOnPurchase {
@@ -34,6 +34,7 @@ actor MockSubscriptionManager: SubscriptionManaging {
         
         if purchaseReturnsSuccess {
             isPro = true
+            proStatus = createProStatus(for: package.packageType)
         }
         return purchaseReturnsSuccess
     }
@@ -45,6 +46,7 @@ actor MockSubscriptionManager: SubscriptionManaging {
         
         if restoreReturnsSuccess {
             isPro = true
+            proStatus = createProStatus(for: mockProType)
         }
         return restoreReturnsSuccess
     }
@@ -53,10 +55,36 @@ actor MockSubscriptionManager: SubscriptionManaging {
         // No-op for tests
     }
     
+    // MARK: - Helper
+    
+    private func createProStatus(for packageType: SubscriptionPackageType) -> ProStatus {
+        createProStatus(for: mapToProType(packageType))
+    }
+    
+    private func createProStatus(for type: ProType) -> ProStatus {
+        ProStatus(
+            isActive: true,
+            type: type,
+            expirationDate: type == .lifetime ? nil : Date().addingTimeInterval(365 * 24 * 60 * 60),
+            willRenew: type != .lifetime,
+            productIdentifier: "mock_\(type.rawValue)"
+        )
+    }
+    
+    private func mapToProType(_ packageType: SubscriptionPackageType) -> ProType {
+        switch packageType {
+        case .monthly: return .monthly
+        case .annual: return .annual
+        case .lifetime: return .lifetime
+        case .unknown: return .annual
+        }
+    }
+    
     // MARK: - Test Helpers
     
-    func setMockPro(_ value: Bool) {
+    func setMockPro(_ value: Bool, type: ProType = .annual) {
         isPro = value
+        proStatus = value ? createProStatus(for: type) : .inactive
     }
     
     func setMockPackages(_ packages: [SubscriptionPackage]) {
@@ -71,8 +99,9 @@ actor MockSubscriptionManager: SubscriptionManaging {
         purchaseReturnsSuccess = value
     }
     
-    func setRestoreReturnsSuccess(_ value: Bool) {
+    func setRestoreReturnsSuccess(_ value: Bool, proType: ProType = .annual) {
         restoreReturnsSuccess = value
+        mockProType = proType
     }
     
     func setShouldThrowOnRestore(_ value: Bool) {

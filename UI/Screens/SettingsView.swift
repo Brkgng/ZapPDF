@@ -7,15 +7,22 @@
 
 import SwiftUI
 
-#if canImport(RevenueCatUI)
-import RevenueCatUI
-#endif
-
 /// Settings view with language picker, subscription management, and app information.
 struct SettingsView: View {
     @Environment(LanguageManager.self) private var languageManager
     @Environment(\.dismiss) private var dismiss
-    @State private var showCustomerCenter = false
+    @Environment(\.openURL) private var openURL
+    
+    @State private var isRestoring = false
+    @State private var showRestoreAlert = false
+    @State private var restoreMessage = ""
+    @State private var restoreSuccess = false
+    
+    // App Store subscription management URL
+    private let subscriptionURL = URL(string: "https://apps.apple.com/account/subscriptions")
+    
+    // Mock support email
+    private let supportEmail = "support@zappdf.app"
     
     var body: some View {
         #if os(macOS)
@@ -35,9 +42,11 @@ struct SettingsView: View {
             aboutSection
         }
         .formStyle(.grouped)
-        .frame(width: 400, height: 300)
-        .sheet(isPresented: $showCustomerCenter) {
-            customerCenterSheet
+        .frame(width: 400, height: 350)
+        .alert(restoreSuccess ? L10n.Processing.completed : L10n.Error.title, isPresented: $showRestoreAlert) {
+            Button(L10n.Action.ok, role: .cancel) { }
+        } message: {
+            Text(restoreMessage)
         }
     }
     #endif
@@ -62,8 +71,10 @@ struct SettingsView: View {
                 }
             }
         }
-        .sheet(isPresented: $showCustomerCenter) {
-            customerCenterSheet
+        .alert(restoreSuccess ? L10n.Processing.completed : L10n.Error.title, isPresented: $showRestoreAlert) {
+            Button(L10n.Action.ok, role: .cancel) { }
+        } message: {
+            Text(restoreMessage)
         }
     }
     #endif
@@ -105,10 +116,36 @@ struct SettingsView: View {
     @ViewBuilder
     private var subscriptionSection: some View {
         Section {
+            // Subscription status
+            SubscriptionStatusRow()
+            
+            // Manage Subscription - opens App Store
+            if let url = subscriptionURL {
+                Link(destination: url) {
+                    Label(L10n.Settings.manageSubscription, systemImage: "arrow.up.forward.app")
+                }
+            }
+            
+            // Restore Purchases
             Button {
-                showCustomerCenter = true
+                restorePurchases()
             } label: {
-                Label(L10n.Settings.manageSubscription, systemImage: "creditcard")
+                HStack {
+                    Label(L10n.Settings.restorePurchases, systemImage: "arrow.clockwise")
+                    Spacer()
+                    if isRestoring {
+                        ProgressView()
+                            .controlSize(.small)
+                    }
+                }
+            }
+            .disabled(isRestoring)
+            
+            // Contact Support
+            Button {
+                contactSupport()
+            } label: {
+                Label(L10n.Settings.contactSupport, systemImage: "envelope")
             }
         } header: {
             Text(L10n.Settings.subscription)
@@ -129,57 +166,39 @@ struct SettingsView: View {
         }
     }
     
-    // MARK: - Customer Center Sheet
+    // MARK: - Actions
     
-    @ViewBuilder
-    private var customerCenterSheet: some View {
-        // CustomerCenterView is only available on iOS
-        #if os(iOS) && canImport(RevenueCatUI)
-        ZapPDFCustomerCenterView()
-        #else
-        // Fallback for macOS or when RevenueCatUI is unavailable
-        VStack(spacing: 16) {
-            Image(systemName: "person.crop.circle")
-                .font(.system(size: 48))
-                .foregroundColor(.secondary)
-            
-            Text(L10n.Settings.manageSubscription)
-                .font(.headline)
-            
-            subscriptionManagementMessage
-            
-            Button(L10n.Action.done) {
-                showCustomerCenter = false
+    private func restorePurchases() {
+        isRestoring = true
+        
+        Task {
+            do {
+                let restored = try await RevenueCatManager.shared.restorePurchases()
+                await MainActor.run {
+                    isRestoring = false
+                    restoreSuccess = restored
+                    restoreMessage = restored 
+                        ? L10n.Settings.restoreSuccess 
+                        : L10n.Settings.restoreNoProducts
+                    showRestoreAlert = true
+                }
+            } catch {
+                await MainActor.run {
+                    isRestoring = false
+                    restoreSuccess = false
+                    restoreMessage = error.localizedDescription
+                    showRestoreAlert = true
+                }
             }
-            .buttonStyle(.borderedProminent)
         }
-        .padding()
-        #if os(macOS)
-        .frame(width: 350, height: 200)
-        #endif
-        #endif
     }
     
-    @ViewBuilder
-    private var subscriptionManagementMessage: some View {
-        #if os(macOS)
-        if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
-            Link(L10n.Settings.manageSubscription, destination: url)
-                .font(.headline)
-                .controlSize(.large)
-                .padding(.top, 4)
-        } else {
-            Text("To manage your subscription, please use the App Store app.")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
+    private func contactSupport() {
+        let mailURL = URL(string: "mailto:\(supportEmail)")
+        
+        if let url = mailURL {
+            openURL(url)
         }
-        #else
-        Text("Subscription management is not available.")
-            .font(.subheadline)
-            .foregroundColor(.secondary)
-            .multilineTextAlignment(.center)
-        #endif
     }
 }
 
@@ -190,6 +209,73 @@ private extension Bundle {
         let version = infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
         let build = infoDictionary?["CFBundleVersion"] as? String ?? "1"
         return "\(version) (\(build))"
+    }
+}
+
+// MARK: - Subscription Status Row
+
+/// Displays current subscription status with type, expiration, and renewal info.
+private struct SubscriptionStatusRow: View {
+    @State private var proStatus: ProStatus?
+    
+    var body: some View {
+        HStack {
+            Label(statusText, systemImage: statusIcon)
+            Spacer()
+            if let subtitle = statusSubtitle {
+                Text(subtitle)
+                    .foregroundStyle(.secondary)
+                    .font(.footnote)
+            }
+        }
+        .task {
+            proStatus = await RevenueCatManager.shared.proStatus
+        }
+    }
+    
+    private var statusText: String {
+        guard let status = proStatus, status.isActive else {
+            return L10n.Settings.freePlan
+        }
+        
+        switch status.type {
+        case .lifetime:
+            return L10n.Settings.proLifetime
+        case .annual:
+            return L10n.Settings.proAnnual
+        case .monthly:
+            return L10n.Settings.proMonthly
+        case .none:
+            return L10n.Settings.freePlan
+        }
+    }
+    
+    private var statusIcon: String {
+        guard let status = proStatus, status.isActive else {
+            return "person.fill"
+        }
+        return "star.fill"
+    }
+    
+    private var statusSubtitle: String? {
+        guard let status = proStatus, status.isActive else { return nil }
+        
+        // Lifetime has no expiration
+        if status.isLifetime { return nil }
+        
+        // Show expiration date if available
+        guard let expDate = status.expirationDate else { return nil }
+        
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        let dateString = formatter.string(from: expDate)
+        
+        if status.willRenew == true {
+            return L10n.Settings.renewsOn(dateString)
+        } else {
+            return L10n.Settings.expiresOn(dateString)
+        }
     }
 }
 

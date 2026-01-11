@@ -398,6 +398,11 @@ enum L10n {
         static let trySavingElsewhere = String(localized: "error.recovery.trySavingElsewhere", defaultValue: "Try saving to a different location.")
         static let tryAgain = String(localized: "error.recovery.tryAgain", defaultValue: "Please try again.")
         static let upgradeForUnlimited = String(localized: "error.recovery.upgradeForUnlimited", defaultValue: "Upgrade to Pro for unlimited PDF operations.")
+        
+        // Purchase/Restore errors
+        static let title = String(localized: "error.title", defaultValue: "Error")
+        static let purchaseFailed = String(localized: "error.purchaseFailed", defaultValue: "Purchase failed. Please try again.")
+        static let restoreFailed = String(localized: "error.restoreFailed", defaultValue: "Restore failed. Please try again.")
     }
     
     // MARK: - Page Range Errors
@@ -523,6 +528,26 @@ enum L10n {
         static let version = String(localized: "settings.version", defaultValue: "Version")
         static let subscription = String(localized: "settings.subscription", defaultValue: "Subscription")
         static let manageSubscription = String(localized: "settings.manageSubscription", defaultValue: "Manage Subscription")
+        
+        // Subscription status display
+        static let proLifetime = String(localized: "settings.subscription.proLifetime", defaultValue: "Pro Lifetime")
+        static let proAnnual = String(localized: "settings.subscription.proAnnual", defaultValue: "Pro Annual")
+        static let proMonthly = String(localized: "settings.subscription.proMonthly", defaultValue: "Pro Monthly")
+        static let freePlan = String(localized: "settings.subscription.freePlan", defaultValue: "Free Plan")
+        
+        static func renewsOn(_ date: String) -> String {
+            String(localized: "Renews \(date)", comment: "Subscription renewal date")
+        }
+        
+        static func expiresOn(_ date: String) -> String {
+            String(localized: "Expires \(date)", comment: "Subscription expiration date")
+        }
+        
+        // Subscription actions
+        static let restorePurchases = String(localized: "settings.restorePurchases", defaultValue: "Restore Purchases")
+        static let contactSupport = String(localized: "settings.contactSupport", defaultValue: "Contact Support")
+        static let restoreSuccess = String(localized: "settings.restoreSuccess", defaultValue: "Purchases restored successfully!")
+        static let restoreNoProducts = String(localized: "settings.restoreNoProducts", defaultValue: "No previous purchases found.")
     }
     
     // MARK: - Languages

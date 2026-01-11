@@ -30,6 +30,8 @@ import RevenueCatUI
 /// ```
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var errorMessage: String?
+    @State private var showError = false
     
     var body: some View {
         #if canImport(RevenueCatUI)
@@ -40,11 +42,32 @@ struct PaywallView: View {
                 #endif
                 handlePurchaseSuccess(customerInfo)
             }
+            .onPurchaseFailure { error in
+                #if DEBUG
+                print("❌ Purchase failed: \(error.localizedDescription)")
+                #endif
+                errorMessage = L10n.Error.purchaseFailed
+                showError = true
+            }
             .onRestoreCompleted { customerInfo in
                 #if DEBUG
                 print("✅ Restore completed!")
                 #endif
                 handleRestoreSuccess(customerInfo)
+            }
+            .onRestoreFailure { error in
+                #if DEBUG
+                print("❌ Restore failed: \(error.localizedDescription)")
+                #endif
+                errorMessage = L10n.Error.restoreFailed
+                showError = true
+            }
+            .alert(L10n.Error.title, isPresented: $showError) {
+                Button(L10n.Action.ok, role: .cancel) { }
+            } message: {
+                if let errorMessage {
+                    Text(errorMessage)
+                }
             }
         #else
         Text("RevenueCat not available")

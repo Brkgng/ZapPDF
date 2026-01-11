@@ -60,6 +60,9 @@ actor RevenueCatManager: SubscriptionManaging {
     /// Whether the user has an active Pro subscription.
     private(set) var isPro: Bool = false
     
+    /// Detailed subscription status.
+    private(set) var proStatus: ProStatus = .inactive
+    
     /// Whether the SDK has been configured.
     private(set) var isConfigured: Bool = false
     
@@ -153,20 +156,52 @@ actor RevenueCatManager: SubscriptionManaging {
         #if canImport(RevenueCat)
         guard let info = customerInfo as? CustomerInfo else { return }
         
-        let hasProEntitlement = info.entitlements[StoreConfiguration.EntitlementID.pro]?.isActive == true
+        let entitlement = info.entitlements[StoreConfiguration.EntitlementID.pro]
+        let hasProEntitlement = entitlement?.isActive == true
         
         // Update state
         isPro = hasProEntitlement
+        
+        // Extract detailed subscription info
+        if hasProEntitlement, let ent = entitlement {
+            let productId = ent.productIdentifier
+            let proType = determineProType(from: productId)
+            
+            proStatus = ProStatus(
+                isActive: true,
+                type: proType,
+                expirationDate: ent.expirationDate,
+                willRenew: ent.willRenew,
+                productIdentifier: productId
+            )
+            
+            debugLog("📊 Subscription: \(proType.rawValue), expires: \(ent.expirationDate?.description ?? "never"), willRenew: \(ent.willRenew)")
+        } else {
+            proStatus = .inactive
+            debugLog("📊 Subscription status: Free user")
+        }
         
         // Persist for offline support
         cacheState()
         
         // Sync with UsageManager
         await UsageManager.shared.setProStatus(hasProEntitlement)
-        
-        debugLog("📊 Subscription status: isPro = \(hasProEntitlement)")
         #endif
     }
+    
+    #if canImport(RevenueCat)
+    /// Determine ProType from product identifier.
+    private func determineProType(from productId: String) -> ProType {
+        if productId.contains("lifetime") || productId == StoreConfiguration.ProductID.lifetime {
+            return .lifetime
+        } else if productId.contains("yearly") || productId.contains("annual") || productId == StoreConfiguration.ProductID.yearly {
+            return .annual
+        } else if productId.contains("monthly") || productId == StoreConfiguration.ProductID.monthly {
+            return .monthly
+        }
+        return .annual // Default fallback
+    }
+    #endif
     
     // MARK: - Packages
     
