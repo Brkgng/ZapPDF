@@ -548,6 +548,8 @@ enum L10n {
         static let contactSupport = String(localized: "settings.contactSupport", defaultValue: "Contact Support")
         static let restoreSuccess = String(localized: "settings.restoreSuccess", defaultValue: "Purchases restored successfully!")
         static let restoreNoProducts = String(localized: "settings.restoreNoProducts", defaultValue: "No previous purchases found.")
+        static let restartRequired = String(localized: "settings.restartRequired", defaultValue: "Restart Required")
+        static let languageRestartMessage = String(localized: "settings.languageRestartMessage", defaultValue: "Language changes will take effect after restarting the app.")
     }
     
     // MARK: - Languages

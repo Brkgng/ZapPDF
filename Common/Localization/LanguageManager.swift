@@ -36,6 +36,7 @@ final class LanguageManager {
             guard currentLanguage != oldValue else { return }
             persist()
             applyLanguageOverride()
+            pendingRestart = true
         }
     }
     

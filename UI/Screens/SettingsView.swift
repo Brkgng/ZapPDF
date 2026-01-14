@@ -17,6 +17,7 @@ struct SettingsView: View {
     @State private var showRestoreAlert = false
     @State private var restoreMessage = ""
     @State private var restoreSuccess = false
+    @State private var showRestartAlert = false
     
     // App Store subscription management URL
     private let subscriptionURL = URL(string: "https://apps.apple.com/account/subscriptions")
@@ -110,6 +111,14 @@ struct SettingsView: View {
             Text(L10n.Settings.language)
         } footer: {
             Text(L10n.Settings.languageDescription)
+        }
+        .onChange(of: languageManager.currentLanguage) { _, _ in
+            showRestartAlert = true
+        }
+        .alert(L10n.Settings.restartRequired, isPresented: $showRestartAlert) {
+            Button(L10n.Action.ok, role: .cancel) { }
+        } message: {
+            Text(L10n.Settings.languageRestartMessage)
         }
     }
     
