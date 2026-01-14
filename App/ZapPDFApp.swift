@@ -38,6 +38,9 @@ struct ZapPDFApp: App {
             ContentView()
                 .environment(languageManager)
                 .environment(\.locale, languageManager.currentLocale)
+                #if os(macOS)
+                .frame(minWidth: 650, minHeight: 400)
+                #endif
         }
         
         #if os(macOS)

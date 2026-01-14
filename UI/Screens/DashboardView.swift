@@ -44,7 +44,6 @@ struct DashboardView: View {
     @State private var showSplitOptions = false
     @State private var showReorderView = false
     @State private var splitMode: PDFSplitter.SplitMode = .splitEvery(n: 1)
-    @State private var isMergeHelpHovered = false
     @State private var draggingFileID: UUID?  // For macOS drag-and-drop
     @State private var showClearConfirmation = false
     @State private var showUndoToast = false
@@ -313,7 +312,7 @@ struct DashboardView: View {
     // MARK: - Bottom Bar
     
     private var bottomBar: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 12) {
             // Summary
             HStack {
                 // Selection count
@@ -340,6 +339,17 @@ struct DashboardView: View {
             }
             .foregroundColor(.secondary)
             
+            // Merge order hint - show when merge is available
+            if viewModel.filesForAction(.merge).count >= 2 {
+                HStack(spacing: 6) {
+                    Image(systemName: "info.circle.fill")
+                        .foregroundColor(.accentColor)
+                    Text(L10n.Common.mergeOrderHint)
+                }
+                .font(.caption)
+                .foregroundColor(.secondary)
+            }
+            
             // Action buttons
             actionButtonsRow
         }
@@ -355,35 +365,14 @@ struct DashboardView: View {
     
     private var actionButtonsRow: some View {
         HStack(spacing: 12) {
-            // Merge button with instant hover help
+            // Merge button
             StyledActionButton(
                 action: .merge,
                 isEnabled: viewModel.canPerform(action: .merge)
             ) {
                 handleActionTap(.merge)
             }
-            .onHover { hovering in
-                isMergeHelpHovered = hovering && viewModel.filesForAction(.merge).count >= 2
-            }
-            .overlay(alignment: .top) {
-                if isMergeHelpHovered {
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle.fill")
-                            .foregroundColor(.accentColor)
-                        Text(L10n.Common.mergeOrderHint)
-                            .multilineTextAlignment(.leading)
-                    }
-                    .font(.caption)
-                    .padding(10)
-                    .background(.regularMaterial)
-                    .cornerRadius(8)
-                    .shadow(radius: 4)
-                    .fixedSize(horizontal: true, vertical: false)
-                    .offset(y: -50) // Position above the button
-                    .allowsHitTesting(false) // Critical: prevents tooltip from intercepting clicks
-                    .transition(.opacity.animation(.easeInOut(duration: 0.2)))
-                }
-            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             
             // Split button
             StyledActionButton(
@@ -392,6 +381,7 @@ struct DashboardView: View {
             ) {
                 handleActionTap(.split)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             
             // Reorder button
             StyledActionButton(
@@ -400,6 +390,7 @@ struct DashboardView: View {
             ) {
                 handleActionTap(.reorder)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             
             // Convert button (Pro)
             StyledActionButton(
@@ -408,7 +399,9 @@ struct DashboardView: View {
             ) {
                 handleActionTap(.convert)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .fixedSize(horizontal: false, vertical: true)
     }
     
     // MARK: - Toolbar Content

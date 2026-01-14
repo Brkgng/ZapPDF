@@ -70,8 +70,11 @@ struct ActionButton: View {
                 if showLabel {
                     Text(action.displayName)
                         .font(.headline)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             
         case .compact:
             VStack(spacing: 4) {
