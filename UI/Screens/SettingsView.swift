@@ -154,7 +154,10 @@ struct SettingsView: View {
             Button {
                 contactSupport()
             } label: {
-                Label(L10n.Settings.contactSupport, systemImage: "envelope")
+                HStack {
+                    Label(L10n.Settings.contactSupport, systemImage: "envelope")
+                    Spacer()
+                }
             }
         } header: {
             Text(L10n.Settings.subscription)
