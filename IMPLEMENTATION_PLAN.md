@@ -1,6 +1,6 @@
 # ZapPDF Implementation Plan
 
-> **Living Document** – Last updated: 2026-01-09
+> **Living Document** – Last updated: 2026-01-14
 
 ---
 
@@ -9,13 +9,13 @@
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                        SwiftUI Views                            │
-│  DashboardView │ ProcessingView │ PaywallView │ PageReorderView │
+│  DashboardView │ ProcessingView │ PaywallView │ PageEditorView  │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                        ViewModels                               │
-│  DashboardViewModel │ ProcessingViewModel │ PageReorderViewModel│
+│  DashboardViewModel │ ProcessingViewModel │ PageEditorViewModel │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -58,12 +58,10 @@
 | 5     | UI Components (FileDropZone, Thumbnails, ActionButton) |
 | 6     | Screens (Dashboard, Processing, Paywall, Onboarding)   |
 | 7     | Monetization Integration (RevenueCat)                  |
-| 10    | Page Reordering Feature                                |
+| 10    | Page Reordering Feature (initial)                      |
 | 11    | Internationalization & Localization                    |
 | 12    | In-App Language Switching                              |
 | 13    | Tier 1 Language Translations (DE, FR, ES, JA, ZH, TR)  |
-
-### 🚧 Pending Phases
 
 #### Phase 8: Testing & Polish
 
@@ -139,19 +137,19 @@ actor PDFCompressor {
 
 ### PDF Engine
 
-| Service        | Key Method                                             | Purpose               |
-| -------------- | ------------------------------------------------------ | --------------------- |
-| `PDFMerger`    | `merge(files:options:progress:) async throws -> URL`   | Combine multiple PDFs |
-| `PDFSplitter`  | `split(file:mode:progress:) async throws -> [URL]`     | Extract page ranges   |
-| `PDFReorderer` | `reorder(file:newOrder:progress:) async throws -> URL` | Reorder pages         |
+| Service        | Key Method                                                       | Purpose               |
+| -------------- | ---------------------------------------------------------------- | --------------------- |
+| `PDFMerger`    | `merge(files:options:progress:) async throws -> URL`             | Combine multiple PDFs |
+| `PDFSplitter`  | `split(file:mode:progress:) async throws -> [URL]`               | Extract page ranges   |
+| `PDFReorderer` | `reorder(file:newOrder:rotations:progress:) async throws -> URL` | Reorder/rotate pages  |
 
 ### State Management
 
-| ViewModel              | Key Properties                               | Purpose                     |
-| ---------------------- | -------------------------------------------- | --------------------------- |
-| `DashboardViewModel`   | `selectedFiles`, `isLoading`, `errorMessage` | File selection state        |
-| `ProcessingViewModel`  | `state` (idle/processing/completed/failed)   | Operation execution         |
-| `PageReorderViewModel` | `pages`, `canUndo`, `canRedo`, `hasChanges`  | Page reorder with undo/redo |
+| ViewModel             | Key Properties                               | Purpose                  |
+| --------------------- | -------------------------------------------- | ------------------------ |
+| `DashboardViewModel`  | `selectedFiles`, `isLoading`, `errorMessage` | File selection state     |
+| `ProcessingViewModel` | `state` (idle/processing/completed/failed)   | Operation execution      |
+| `PageEditorViewModel` | `pages`, `canUndo`, `canRedo`, `hasChanges`  | Page edit with undo/redo |
 
 ### Usage & Monetization
 

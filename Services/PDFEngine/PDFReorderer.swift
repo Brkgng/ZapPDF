@@ -8,18 +8,20 @@
 import Foundation
 import PDFKit
 
-/// Actor responsible for reordering pages within a PDF document.
+/// Actor responsible for reordering and rotating pages within a PDF document.
 ///
 /// `PDFReorderer` creates a new PDF with pages arranged according to
-/// the specified order. It supports progress reporting and cancellation.
+/// the specified order, with optional rotation applied to individual pages.
+/// It supports progress reporting and cancellation.
 ///
 /// Example:
 /// ```swift
 /// let reorderer = PDFReorderer()
-/// // Move page 3 to the first position: [2, 0, 1, 3, 4]
+/// // Move page 3 to first position and rotate it 90° clockwise
 /// let outputURL = try await reorderer.reorder(
 ///     file: pdfFile,
 ///     newOrder: [2, 0, 1, 3, 4],
+///     rotations: [2: .clockwise90],
 ///     progress: { print("Progress: \($0 * 100)%") }
 /// )
 /// ```
@@ -31,30 +33,38 @@ actor PDFReorderer {
     
     // MARK: - Public Methods
     
-    /// Reorder pages in a PDF according to the specified order.
+    /// Reorder and optionally rotate pages in a PDF.
     ///
     /// Creates a new PDF document with pages arranged in the order specified
-    /// by `newOrder`. Each element in `newOrder` is a 0-based index referring
-    /// to a page in the source document.
+    /// by `newOrder`, with optional rotations applied. Each element in `newOrder`
+    /// is a 0-based index referring to a page in the source document.
     ///
     /// - Parameters:
-    ///   - file: The source PDF file to reorder
+    ///   - file: The source PDF file to process
     ///   - newOrder: Array of 0-based page indices in the desired output order
+    ///   - rotations: Dictionary mapping original page indices to rotation values (default: empty)
     ///   - outputFileName: Optional custom output filename (without extension)
     ///   - includeTimestamp: Whether to append a timestamp suffix for uniqueness (default: true, only applies when outputFileName is nil)
     ///   - progress: Callback reporting progress from 0.0 to 1.0
-    /// - Returns: URL to the reordered PDF in the temporary directory
-    /// - Throws: `PDFEngineError` if reordering fails
+    /// - Returns: URL to the processed PDF in the temporary directory
+    /// - Throws: `PDFEngineError` if processing fails
     ///
     /// Example:
     /// ```swift
-    /// // Original 4-page document, swap pages 2 and 3
-    /// let newOrder = [0, 2, 1, 3]  // 0-based indices
-    /// let url = try await reorderer.reorder(file: pdf, newOrder: newOrder, progress: { _ in })
+    /// // Swap pages 2 and 3, rotate page 1 by 90°
+    /// let newOrder = [0, 2, 1, 3]
+    /// let rotations = [0: PageRotation.clockwise90]
+    /// let url = try await reorderer.reorder(
+    ///     file: pdf,
+    ///     newOrder: newOrder,
+    ///     rotations: rotations,
+    ///     progress: { _ in }
+    /// )
     /// ```
     func reorder(
         file: PDFFile,
         newOrder: [Int],
+        rotations: [Int: PageRotation] = [:],
         outputFileName: String? = nil,
         includeTimestamp: Bool = true,
         progress: @escaping @Sendable (Double) -> Void
@@ -92,12 +102,17 @@ actor PDFReorderer {
             let outputDocument = PDFDocument()
             let totalPages = newOrder.count
             
-            // Copy pages in new order
+            // Copy pages in new order with optional rotation
             for (newIndex, originalIndex) in newOrder.enumerated() {
                 try await self.checkCancellation()
                 
                 autoreleasepool {
                     if let page = sourceDocument.page(at: originalIndex) {
+                        // Apply rotation if specified for this page
+                        if let rotation = rotations[originalIndex] {
+                            // PDFKit rotation is cumulative, so add to existing
+                            page.rotation += rotation.degrees
+                        }
                         outputDocument.insert(page, at: newIndex)
                     }
                 }
@@ -120,7 +135,8 @@ actor PDFReorderer {
                 finalOutputName = customName
             } else {
                 // Default name with optional timestamp
-                finalOutputName = "\(baseName)_reordered"
+                // Use "edited" suffix since we now support more than just reordering
+                finalOutputName = "\(baseName)_edited"
                 if includeTimestamp {
                     finalOutputName += "_\(Date.filenameTimestamp())"
                 }

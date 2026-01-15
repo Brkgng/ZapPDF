@@ -40,6 +40,9 @@ struct PageThumbnailView: View {
     /// Size of the thumbnail.
     var size: CGSize = CGSize(width: 80, height: 110)
     
+    /// The rotation to apply to the page.
+    var rotation: PageRotation = .none
+    
     // MARK: - Private State
     
     @State private var thumbnail: CGImage?
@@ -59,6 +62,7 @@ struct PageThumbnailView: View {
             // Thumbnail content
             if let thumbnail = thumbnail {
                 thumbnailImage(thumbnail)
+                    .rotationEffect(.degrees(Double(rotation.degrees)))
             } else if isLoading {
                 ProgressView()
                     .controlSize(.small)
@@ -66,6 +70,7 @@ struct PageThumbnailView: View {
                 Image(systemName: "doc")
                     .font(.title2)
                     .foregroundColor(.secondary)
+                    .rotationEffect(.degrees(Double(rotation.degrees)))
             }
             
             // Page number badge
@@ -179,7 +184,8 @@ struct PageThumbnailView: View {
             url: mockURL,
             pageIndex: 0,
             displayNumber: 1,
-            isSelected: false
+            isSelected: false,
+            rotation: .none
         )
         
         PageThumbnailView(

@@ -103,7 +103,7 @@ struct DashboardView: View {
                     }
                 }
                 .navigationDestination(isPresented: $showReorderView) {
-                    if let file = viewModel.filesForAction(.reorder).first {
+                    if let file = viewModel.filesForAction(.editPages).first {
                         PageReorderView(file: file)
                     }
                 }
@@ -383,12 +383,12 @@ struct DashboardView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
-            // Reorder button
+            // Edit Pages button
             StyledActionButton(
-                action: .reorder,
-                isEnabled: viewModel.canPerform(action: .reorder)
+                action: .editPages,
+                isEnabled: viewModel.canPerform(action: .editPages)
             ) {
-                handleActionTap(.reorder)
+                handleActionTap(.editPages)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
@@ -540,8 +540,8 @@ struct DashboardView: View {
                         // Show split options sheet
                         showSplitOptions = true
                         
-                    case .reorder:
-                        // Show reorder view
+                    case .editPages:
+                        // Show page editor view
                         showReorderView = true
                         
                     case .convert:

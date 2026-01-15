@@ -428,6 +428,102 @@ struct PageReorderViewModelTests {
         viewModel.deletePage(at: 1)
         #expect(viewModel.canDeleteSelectedPage == false)
     }
+    
+    // MARK: - Rotation Tests
+    
+    @Test("rotateSelectedPageClockwise rotates selected page")
+    @MainActor
+    func rotateSelectedPageClockwiseRotatesSelectedPage() async throws {
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "rotate_clockwise_test")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 3, fileSize: 1000)
+        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
+        
+        await viewModel.loadPages()
+        viewModel.selectedPageIndex = 1
+        
+        viewModel.rotateSelectedPageClockwise()
+        
+        #expect(viewModel.pages[1].rotation == .clockwise90)
+        #expect(viewModel.hasChanges == true)
+    }
+    
+    @Test("rotateSelectedPageCounterClockwise rotates selected page")
+    @MainActor
+    func rotateSelectedPageCounterClockwiseRotatesSelectedPage() async throws {
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "rotate_ccw_test")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 3, fileSize: 1000)
+        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
+        
+        await viewModel.loadPages()
+        viewModel.selectedPageIndex = 0
+        
+        viewModel.rotateSelectedPageCounterClockwise()
+        
+        #expect(viewModel.pages[0].rotation == .clockwise270)
+        #expect(viewModel.hasChanges == true)
+    }
+    
+    @Test("rotatePage enables undo")
+    @MainActor
+    func rotatePageEnablesUndo() async throws {
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "rotate_undo_test")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 3, fileSize: 1000)
+        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
+        
+        await viewModel.loadPages()
+        
+        #expect(viewModel.canUndo == false)
+        
+        viewModel.rotatePage(at: 1, clockwise: true)
+        
+        #expect(viewModel.canUndo == true)
+    }
+    
+    @Test("undo reverts rotation")
+    @MainActor
+    func undoRevertsRotation() async throws {
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "undo_rotation_test")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 3, fileSize: 1000)
+        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
+        
+        await viewModel.loadPages()
+        
+        viewModel.rotatePage(at: 0, clockwise: true)
+        #expect(viewModel.pages[0].rotation == .clockwise90)
+        
+        viewModel.undo()
+        
+        #expect(viewModel.pages[0].rotation == .none)
+        #expect(viewModel.hasChanges == false)
+    }
+    
+    @Test("canRotateSelectedPage returns correct value")
+    @MainActor
+    func canRotateSelectedPageReturnsCorrectValue() async throws {
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 2, identifier: "can_rotate_test")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 2, fileSize: 1000)
+        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
+        
+        await viewModel.loadPages()
+        
+        // No selection - cannot rotate
+        viewModel.selectedPageIndex = nil
+        #expect(viewModel.canRotateSelectedPage == false)
+        
+        // With selection - can rotate
+        viewModel.selectedPageIndex = 0
+        #expect(viewModel.canRotateSelectedPage == true)
+    }
 }
 
 

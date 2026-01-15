@@ -109,6 +109,16 @@ enum L10n {
             static let splitEvery = String(localized: "operation.split.splitEvery", defaultValue: "Split Every N Pages")
         }
         
+        /// Edit Pages operation (reorder, rotate, delete).
+        enum EditPages {
+            static let title = String(localized: "operation.editPages.title", defaultValue: "Edit Pages")
+            static let description = String(localized: "operation.editPages.description", defaultValue: "Reorder, rotate, and delete pages")
+            static let save = String(localized: "operation.editPages.save", defaultValue: "Save")
+            static let saveEdited = String(localized: "operation.editPages.saveEdited", defaultValue: "Save Changes")
+        }
+        
+        /// Legacy: Reorder operation strings (kept for backward compatibility).
+        @available(*, deprecated, message: "Use EditPages instead")
         enum Reorder {
             static let title = String(localized: "operation.reorder.title", defaultValue: "Reorder Pages")
             static let description = String(localized: "operation.reorder.description", defaultValue: "Reorder pages within a PDF")
@@ -180,7 +190,7 @@ enum L10n {
     }
 
     
-    // MARK: - Page Reorder
+    // MARK: - Page Editor (Page Reorder)
     
     enum PageReorder {
         static let discardChangesTitle = String(localized: "pageReorder.discardChangesTitle", defaultValue: "Discard Changes?")
@@ -189,6 +199,15 @@ enum L10n {
         static let tapDoneToSave = String(localized: "pageReorder.tapDoneToSave", defaultValue: "Tap Done to save changes")
         static let selectPageToPreview = String(localized: "pageReorder.selectPageToPreview", defaultValue: "Select a page to preview")
         static let loadingPages = String(localized: "pageReorder.loadingPages", defaultValue: "Loading pages...")
+        
+        // Rotation
+        static let rotateLeft = String(localized: "pageEditor.rotateLeft", defaultValue: "Rotate Left")
+        static let rotateRight = String(localized: "pageEditor.rotateRight", defaultValue: "Rotate Right")
+        static let rotate180 = String(localized: "pageEditor.rotate180", defaultValue: "Rotate 180°")
+        
+        static func rotatedBy(_ degrees: Int) -> String {
+            String(localized: "Rotated \(degrees)°", comment: "Rotation indicator showing current rotation")
+        }
         
         static func page(_ number: Int) -> String {
             String(localized: "Page \(number)", comment: "Page number label")
@@ -495,9 +514,11 @@ enum L10n {
     enum Help {
         static let undo = String(localized: "help.undo", defaultValue: "Undo (⌘Z)")
         static let redo = String(localized: "help.redo", defaultValue: "Redo (⌘⇧Z)")
-        static let resetOrder = String(localized: "help.resetOrder", defaultValue: "Reset to Original Order")
+
         static let deletePage = String(localized: "help.deletePage", defaultValue: "Delete Selected Page (⌫)")
         static let clearAll = String(localized: "help.clearAll", defaultValue: "Remove all files from the list")
+        static let rotateLeft = String(localized: "help.rotateLeft", defaultValue: "Rotate Left (⌘L)")
+        static let rotateRight = String(localized: "help.rotateRight", defaultValue: "Rotate Right (⌘R)")
     }
     
     // MARK: - Save Panel (macOS)
@@ -505,6 +526,8 @@ enum L10n {
     enum SavePanel {
         static let reorderTitle = String(localized: "savePanel.reorder.title", defaultValue: "Save Reordered PDF")
         static let reorderMessage = String(localized: "savePanel.reorder.message", defaultValue: "Choose where to save the reordered PDF")
+        static let editPagesTitle = String(localized: "savePanel.editPages.title", defaultValue: "Save Edited PDF")
+        static let editPagesMessage = String(localized: "savePanel.editPages.message", defaultValue: "Choose where to save the edited PDF")
     }
     
     // MARK: - PDF Display Modes

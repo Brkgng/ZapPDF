@@ -24,6 +24,12 @@ import UniformTypeIdentifiers
 ///     selectedIndex: $viewModel.selectedPageIndex,
 ///     onMove: { source, destination in
 ///         viewModel.movePages(from: source, to: destination)
+///     },
+///     onRotate: { index, clockwise in
+///         viewModel.rotatePage(at: index, clockwise: clockwise)
+///     },
+///     onDelete: { index in
+///         viewModel.deletePage(at: index)
 ///     }
 /// )
 /// ```
@@ -42,6 +48,12 @@ struct DraggablePageGrid: View {
     
     /// Callback when pages are moved.
     let onMove: (IndexSet, Int) -> Void
+    
+    /// Callback when a page should be rotated. Parameters: (index, clockwise).
+    var onRotate: ((Int, Bool) -> Void)?
+    
+    /// Callback when a page should be deleted.
+    var onDelete: ((Int) -> Void)?
     
     // MARK: - Configuration Constants
     
@@ -149,7 +161,8 @@ struct DraggablePageGrid: View {
                                 pageIndex: page.originalIndex,
                                 displayNumber: page.displayPageNumber,
                                 isSelected: true,
-                                size: size
+                                size: size,
+                                rotation: page.rotation
                             )
                             .opacity(0.8)
                         }
@@ -171,13 +184,36 @@ struct DraggablePageGrid: View {
             pageIndex: page.originalIndex,
             displayNumber: page.displayPageNumber,
             isSelected: selectedIndex == index,
-            size: size
+            size: size,
+            rotation: page.rotation
         )
         .contentShape(Rectangle())
         .onTapGesture {
             withAnimation(.easeInOut(duration: 0.2)) {
                 selectedIndex = index
             }
+        }
+        .contextMenu {
+            Button {
+                onRotate?(index, false)  // counter-clockwise
+            } label: {
+                Label(L10n.PageReorder.rotateLeft, systemImage: "rotate.left")
+            }
+            
+            Button {
+                onRotate?(index, true)  // clockwise
+            } label: {
+                Label(L10n.PageReorder.rotateRight, systemImage: "rotate.right")
+            }
+            
+            Divider()
+            
+            Button(role: .destructive) {
+                onDelete?(index)
+            } label: {
+                Label(L10n.Action.delete, systemImage: "trash")
+            }
+            .disabled(pages.count <= 1)
         }
         .opacity(draggingItem?.id == page.id ? 0.5 : 1.0)
         .accessibilityHint(L10n.Accessibility.dragHandle)
@@ -226,6 +262,12 @@ struct DraggablePageList: View {
     @Binding var selectedIndex: Int?
     let onMove: (IndexSet, Int) -> Void
     
+    /// Callback when a page should be rotated. Parameters: (index, clockwise).
+    var onRotate: ((Int, Bool) -> Void)?
+    
+    /// Callback when a page should be deleted.
+    var onDelete: ((Int) -> Void)?
+    
     var body: some View {
         List {
             ForEach(Array(pages.enumerated()), id: \.element.id) { index, page in
@@ -235,7 +277,8 @@ struct DraggablePageList: View {
                         pageIndex: page.originalIndex,
                         displayNumber: page.displayPageNumber,
                         isSelected: selectedIndex == index,
-                        size: CGSize(width: 60, height: 85)
+                        size: CGSize(width: 60, height: 85),
+                        rotation: page.rotation
                     )
                     
                     VStack(alignment: .leading, spacing: 4) {
@@ -244,6 +287,13 @@ struct DraggablePageList: View {
                         Text(L10n.PageReorder.originalPosition(page.originalIndex + 1))
                             .font(.caption)
                             .foregroundColor(.secondary)
+                        
+                        // Show rotation indicator if rotated
+                        if page.rotation != .none {
+                            Text(L10n.PageReorder.rotatedBy(page.rotation.degrees))
+                                .font(.caption2)
+                                .foregroundColor(.blue)
+                        }
                     }
                     
                     Spacer()
@@ -251,6 +301,29 @@ struct DraggablePageList: View {
                 .contentShape(Rectangle())
                 .onTapGesture {
                     selectedIndex = index
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    Button(role: .destructive) {
+                        onDelete?(index)
+                    } label: {
+                        Label(L10n.Action.delete, systemImage: "trash")
+                    }
+                    .disabled(pages.count <= 1)
+                }
+                .swipeActions(edge: .leading) {
+                    Button {
+                        onRotate?(index, true)  // clockwise
+                    } label: {
+                        Label(L10n.PageReorder.rotateRight, systemImage: "rotate.right")
+                    }
+                    .tint(.blue)
+                    
+                    Button {
+                        onRotate?(index, false)  // counter-clockwise
+                    } label: {
+                        Label(L10n.PageReorder.rotateLeft, systemImage: "rotate.left")
+                    }
+                    .tint(.indigo)
                 }
                 .listRowBackground(
                     selectedIndex == index

@@ -10,10 +10,10 @@ import SwiftUI
 import PDFKit
 import Combine
 
-/// ViewModel managing page reorder state and operations.
+/// ViewModel managing page editing state and operations.
 ///
-/// `PageReorderViewModel` coordinates page loading, reordering, undo/redo,
-/// and saving for the PageReorderView. It tracks changes and provides
+/// `PageReorderViewModel` coordinates page loading, reordering, rotation,
+/// deletion, undo/redo, and saving. It tracks changes and provides
 /// state for enabling/disabling UI elements.
 ///
 /// Example:
@@ -23,10 +23,11 @@ import Combine
 /// // Load pages when view appears
 /// await viewModel.loadPages()
 ///
-/// // User reorders pages
+/// // User rotates and reorders pages
+/// viewModel.rotateSelectedPageClockwise()
 /// viewModel.movePages(from: IndexSet(integer: 0), to: 3)
 ///
-/// // Save reordered PDF
+/// // Save edited PDF
 /// try await viewModel.save(to: destinationURL)
 /// ```
 @MainActor
@@ -133,6 +134,12 @@ final class PageReorderViewModel: ObservableObject {
         selectedPageIndex != nil && pages.count > 1
     }
     
+    /// Whether rotation actions are available.
+    /// Requires a page to be selected.
+    var canRotateSelectedPage: Bool {
+        selectedPageIndex != nil
+    }
+    
     // MARK: - Public Methods
     
     /// Load pages from the source PDF.
@@ -217,21 +224,7 @@ final class PageReorderViewModel: ObservableObject {
         }
     }
     
-    /// Reset pages to original order.
-    ///
-    /// This pushes the current state to undo and restores the original sequence.
-    func resetOrder() {
-        guard hasChanges else { return }
-        
-        // Save current state for undo
-        pushUndoState()
-        
-        // Clear redo stack
-        redoStack.removeAll()
-        
-        // Sort back to original order
-        pages.sort { $0.originalIndex < $1.originalIndex }
-    }
+
     
     /// Delete page at the specified index.
     ///
@@ -269,6 +262,42 @@ final class PageReorderViewModel: ObservableObject {
     func deleteSelectedPage() {
         guard let index = selectedPageIndex else { return }
         deletePage(at: index)
+    }
+    
+    // MARK: - Rotation Methods
+    
+    /// Rotate the selected page 90° clockwise.
+    func rotateSelectedPageClockwise() {
+        guard let index = selectedPageIndex else { return }
+        rotatePage(at: index, clockwise: true)
+    }
+    
+    /// Rotate the selected page 90° counter-clockwise.
+    func rotateSelectedPageCounterClockwise() {
+        guard let index = selectedPageIndex else { return }
+        rotatePage(at: index, clockwise: false)
+    }
+    
+    /// Rotate page at the specified index.
+    ///
+    /// - Parameters:
+    ///   - index: Index of the page to rotate
+    ///   - clockwise: If true, rotate 90° clockwise; otherwise counter-clockwise
+    func rotatePage(at index: Int, clockwise: Bool) {
+        guard index >= 0 && index < pages.count else { return }
+        
+        // Save current state for undo
+        pushUndoState()
+        
+        // Clear redo stack on new action
+        redoStack.removeAll()
+        
+        // Apply rotation
+        if clockwise {
+            pages[index].rotation.rotateClockwise()
+        } else {
+            pages[index].rotation.rotateCounterClockwise()
+        }
     }
     
     /// Undo the last reorder action.
@@ -309,16 +338,18 @@ final class PageReorderViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            // Get the new order
+            // Get the new order and rotations
             let newOrder = pages.reorderedIndices
+            let rotations = pages.rotationsMap
             
             // Generate output filename from destination
             let outputFileName = destinationURL.deletingPathExtension().lastPathComponent
             
-            // Reorder the PDF
+            // Process the PDF (reorder and/or rotate)
             let tempURL = try await reorderer.reorder(
                 file: sourceFile,
                 newOrder: newOrder,
+                rotations: rotations,
                 outputFileName: outputFileName,
                 progress: { [weak self] progress in
                     Task { @MainActor in
@@ -370,10 +401,12 @@ final class PageReorderViewModel: ObservableObject {
         
         do {
             let newOrder = pages.reorderedIndices
+            let rotations = pages.rotationsMap
             
             let tempURL = try await reorderer.reorder(
                 file: sourceFile,
                 newOrder: newOrder,
+                rotations: rotations,
                 progress: { [weak self] progress in
                     Task { @MainActor in
                         self?.saveProgress = progress

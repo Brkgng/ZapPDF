@@ -8,21 +8,71 @@
 import Foundation
 import CoreGraphics
 
-/// Represents a single page in a PDF document for reordering.
+// MARK: - PageRotation
+
+/// Represents the rotation angle for a PDF page.
 ///
-/// `PageItem` wraps page information needed for the page reorder UI,
-/// including the original index and optional cached thumbnail. It
-/// conforms to `Identifiable` for use with SwiftUI lists and grids.
+/// `PageRotation` tracks the cumulative rotation applied to a page
+/// during editing. Rotations are always in 90° increments.
+///
+/// Example:
+/// ```swift
+/// var rotation = PageRotation.none
+/// rotation.rotateClockwise()      // now .clockwise90
+/// rotation.rotateClockwise()      // now .clockwise180
+/// rotation.rotateCounterClockwise() // back to .clockwise90
+/// ```
+enum PageRotation: Int, Sendable, CaseIterable, Codable {
+    case none = 0
+    case clockwise90 = 90
+    case clockwise180 = 180
+    case clockwise270 = 270  // Same as counterClockwise90
+    
+    /// The rotation in degrees (0, 90, 180, or 270).
+    var degrees: Int { rawValue }
+    
+    /// Rotate 90° clockwise.
+    mutating func rotateClockwise() {
+        self = PageRotation(rawValue: (self.rawValue + 90) % 360) ?? .none
+    }
+    
+    /// Rotate 90° counter-clockwise.
+    mutating func rotateCounterClockwise() {
+        self = PageRotation(rawValue: (self.rawValue + 270) % 360) ?? .none
+    }
+    
+    /// Returns a new rotation rotated 90° clockwise.
+    func rotatedClockwise() -> PageRotation {
+        PageRotation(rawValue: (self.rawValue + 90) % 360) ?? .none
+    }
+    
+    /// Returns a new rotation rotated 90° counter-clockwise.
+    func rotatedCounterClockwise() -> PageRotation {
+        PageRotation(rawValue: (self.rawValue + 270) % 360) ?? .none
+    }
+}
+
+// MARK: - PageItem
+
+
+/// Represents a single page in a PDF document for editing.
+///
+/// `PageItem` wraps page information needed for the page editor UI,
+/// including the original index, rotation state, and identity for
+/// SwiftUI lists and grids.
 ///
 /// Example:
 /// ```swift
 /// // Create pages for a 5-page document
-/// let pages = (0..<5).map { PageItem(originalIndex: $0) }
+/// var pages = (0..<5).map { PageItem(originalIndex: $0) }
 ///
-/// // Check if order has changed after reordering
+/// // Rotate a page
+/// pages[0].rotation.rotateClockwise()
+///
+/// // Check if any changes exist
 /// if pages.hasChanges {
 ///     let newOrder = pages.reorderedIndices
-///     // newOrder: [0, 2, 1, 3, 4] - page 2 and 3 swapped
+///     let rotations = pages.rotationsMap
 /// }
 /// ```
 struct PageItem: Identifiable, Hashable, Sendable {
@@ -35,6 +85,9 @@ struct PageItem: Identifiable, Hashable, Sendable {
     /// Original 0-based page index in the source PDF.
     let originalIndex: Int
     
+    /// The rotation applied to this page (default: none).
+    var rotation: PageRotation = .none
+    
     // MARK: - Initialization
     
     /// Creates a PageItem for the given page index.
@@ -43,12 +96,14 @@ struct PageItem: Identifiable, Hashable, Sendable {
     init(originalIndex: Int) {
         self.id = UUID()
         self.originalIndex = originalIndex
+        self.rotation = .none
     }
     
-    /// Internal initializer for testing with specific ID.
-    init(id: UUID = UUID(), originalIndex: Int) {
+    /// Internal initializer for testing with specific ID and rotation.
+    init(id: UUID = UUID(), originalIndex: Int, rotation: PageRotation = .none) {
         self.id = id
         self.originalIndex = originalIndex
+        self.rotation = rotation
     }
     
     // MARK: - Computed Properties
@@ -56,6 +111,11 @@ struct PageItem: Identifiable, Hashable, Sendable {
     /// Display page number (1-based) for UI.
     var displayPageNumber: Int {
         originalIndex + 1
+    }
+    
+    /// Whether this page has been rotated from its original orientation.
+    var isRotated: Bool {
+        rotation != .none
     }
     
     // MARK: - Hashable & Equatable
@@ -88,15 +148,47 @@ extension Array where Element == PageItem {
         map { $0.originalIndex }
     }
     
-    /// Check if the order has changed from the original sequence.
+    /// Get all page rotations as a dictionary.
     ///
-    /// Returns `true` if any page is in a different position than its
-    /// original index. Used to enable/disable the "Save" button.
+    /// Maps original page index to rotation. Only includes pages
+    /// that have been rotated (rotation != .none).
+    ///
+    /// Example:
+    /// ```swift
+    /// // Page at original index 2 rotated 90° clockwise
+    /// let rotations = pages.rotationsMap  // [2: .clockwise90]
+    /// ```
+    var rotationsMap: [Int: PageRotation] {
+        var map: [Int: PageRotation] = [:]
+        for page in self where page.rotation != .none {
+            map[page.originalIndex] = page.rotation
+        }
+        return map
+    }
+    
+    /// Check if any changes have been made (position or rotation).
+    ///
+    /// Returns `true` if:
+    /// - Any page is in a different position than its original index
+    /// - Any page has been rotated
+    /// - Any page has been deleted (count differs from original positions)
+    ///
+    /// Used to enable/disable the "Save" button.
     var hasChanges: Bool {
         for (currentPosition, page) in enumerated() {
+            // Check position change
             if currentPosition != page.originalIndex {
                 return true
             }
+            // Check rotation change
+            if page.rotation != .none {
+                return true
+            }
+        }
+        // Check for deletions (original indices should be contiguous 0..<count)
+        let originalIndices = Set(map { $0.originalIndex })
+        if originalIndices.count != count {
+            return true
         }
         return false
     }
@@ -110,3 +202,4 @@ extension Array where Element == PageItem {
         return (0..<pageCount).map { PageItem(originalIndex: $0) }
     }
 }
+

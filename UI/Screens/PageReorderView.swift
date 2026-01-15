@@ -101,14 +101,20 @@ struct PageReorderView: View {
                         pages: viewModel.pages,
                         pdfURL: viewModel.sourceFile.url,
                         selectedIndex: $viewModel.selectedPageIndex,
-                        onMove: viewModel.movePages
+                        onMove: viewModel.movePages,
+                        onRotate: { index, clockwise in
+                            viewModel.rotatePage(at: index, clockwise: clockwise)
+                        },
+                        onDelete: { index in
+                            viewModel.deletePage(at: index)
+                        }
                     )
                 }
             }
             .frame(minWidth: 280, idealWidth: 400)
         }
         .frame(minWidth: 600, minHeight: 400)
-        .navigationTitle(L10n.Operation.Reorder.title)
+        .navigationTitle(L10n.Operation.EditPages.title)
     }
     
     private var macOSToolbar: some View {
@@ -128,14 +134,21 @@ struct PageReorderView: View {
             .help(L10n.Help.redo)
             .keyboardShortcut("z", modifiers: [.command, .shift])
             
-            Divider()
-                .frame(height: 16)
+
             
-            Button(action: viewModel.resetOrder) {
-                Image(systemName: "arrow.counterclockwise")
+            Button(action: viewModel.rotateSelectedPageCounterClockwise) {
+                Image(systemName: "rotate.left")
             }
-            .disabled(!viewModel.hasChanges)
-            .help(L10n.Help.resetOrder)
+            .disabled(!viewModel.canRotateSelectedPage)
+            .help(L10n.Help.rotateLeft)
+            .keyboardShortcut("l", modifiers: .command)
+            
+            Button(action: viewModel.rotateSelectedPageClockwise) {
+                Image(systemName: "rotate.right")
+            }
+            .disabled(!viewModel.canRotateSelectedPage)
+            .help(L10n.Help.rotateRight)
+            .keyboardShortcut("r", modifiers: .command)
             
             Divider()
                 .frame(height: 16)
@@ -155,7 +168,7 @@ struct PageReorderView: View {
                 .foregroundColor(.secondary)
             
             // Save button
-            Button(L10n.Operation.Reorder.saveReordered) {
+            Button(L10n.Operation.EditPages.save) {
                 showSavePanel()
             }
             .buttonStyle(.borderedProminent)
@@ -200,7 +213,13 @@ struct PageReorderView: View {
                         pages: viewModel.pages,
                         pdfURL: viewModel.sourceFile.url,
                         selectedIndex: $viewModel.selectedPageIndex,
-                        onMove: viewModel.movePages
+                        onMove: viewModel.movePages,
+                        onRotate: { index, clockwise in
+                            viewModel.rotatePage(at: index, clockwise: clockwise)
+                        },
+                        onDelete: { index in
+                            viewModel.deletePage(at: index)
+                        }
                     )
                     .environment(\.editMode, .constant(.active))
                 }
@@ -210,7 +229,7 @@ struct PageReorderView: View {
                     iOSBottomToolbar
                 }
             }
-            .navigationTitle(L10n.Operation.Reorder.title)
+            .navigationTitle(L10n.Operation.EditPages.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -245,7 +264,30 @@ struct PageReorderView: View {
             Divider()
             
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
+                // Rotation controls (only visible when page is selected)
+                if viewModel.canRotateSelectedPage {
+                    HStack(spacing: 20) {
+                        Button(action: viewModel.rotateSelectedPageCounterClockwise) {
+                            Image(systemName: "rotate.left")
+                                .font(.title3)
+                        }
+                        
+                        Button(action: viewModel.rotateSelectedPageClockwise) {
+                            Image(systemName: "rotate.right")
+                                .font(.title3)
+                        }
+                        
+                        Button(action: viewModel.deleteSelectedPage) {
+                            Image(systemName: "trash")
+                                .font(.title3)
+                                .foregroundColor(.red)
+                        }
+                    }
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .trailing, spacing: 2) {
                     Text(L10n.Plural.pages(viewModel.pageCount))
                         .font(.headline)
                     Text(L10n.PageReorder.tapDoneToSave)
@@ -317,7 +359,8 @@ struct PageReorderView: View {
                             pageIndex: page.originalIndex,
                             displayNumber: page.displayPageNumber,
                             isSelected: false,
-                            size: CGSize(width: previewWidth, height: previewHeight)
+                            size: CGSize(width: previewWidth, height: previewHeight),
+                            rotation: page.rotation
                         )
                         
                         if page.originalIndex != selectedIndex {

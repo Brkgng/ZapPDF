@@ -22,8 +22,8 @@ import SwiftUI
 enum UserAction: String, CaseIterable, Identifiable, Sendable {
     case merge
     case split
-    case reorder
-    case convert  // Future: PDF to image, etc.
+    case editPages  // Formerly "reorder" - now includes rotate, delete, reorder
+    case convert    // Future: PDF to image, etc.
     
     // MARK: - Identifiable
     
@@ -38,8 +38,8 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
             return L10n.Operation.Merge.title
         case .split:
             return L10n.Operation.Split.title
-        case .reorder:
-            return L10n.Operation.Reorder.title
+        case .editPages:
+            return L10n.Operation.EditPages.title
         case .convert:
             return L10n.Operation.Convert.title
         }
@@ -52,8 +52,8 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
             return "doc.on.doc"
         case .split:
             return "scissors"
-        case .reorder:
-            return "arrow.up.arrow.down"
+        case .editPages:
+            return "square.and.pencil"
         case .convert:
             return "arrow.triangle.2.circlepath"
         }
@@ -66,8 +66,8 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
             return L10n.Operation.Merge.description
         case .split:
             return L10n.Operation.Split.description
-        case .reorder:
-            return L10n.Operation.Reorder.description
+        case .editPages:
+            return L10n.Operation.EditPages.description
         case .convert:
             return L10n.Operation.Convert.description
         }
@@ -80,7 +80,7 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .merge:
             return true
-        case .split, .reorder, .convert:
+        case .split, .editPages, .convert:
             return false
         }
     }
@@ -96,7 +96,7 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .merge:
             return nil  // No limit for merging
-        case .split, .reorder, .convert:
+        case .split, .editPages, .convert:
             return 1  // Single file operations
         }
     }
@@ -134,7 +134,7 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
             return .blue
         case .split:
             return .orange
-        case .reorder:
+        case .editPages:
             return .green
         case .convert:
             return .purple
@@ -147,7 +147,7 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
 extension UserAction {
     /// Actions available in the free tier.
     static var freeActions: [UserAction] {
-        [.merge, .split, .reorder]
+        [.merge, .split, .editPages]
     }
     
     /// Actions that require Pro subscription.
