@@ -48,8 +48,9 @@ struct DashboardViewModelTests {
         #expect(viewModel.files.first?.fileName == testURL.lastPathComponent)
         #expect(viewModel.hasFiles == true)
         #expect(viewModel.isLoading == false)
-        // Verify default is NOT selected
-        #expect(viewModel.selectedFiles.isEmpty)
+        // Verify auto-selection for single file added to empty dashboard
+        #expect(viewModel.selectedFiles.count == 1)
+        #expect(viewModel.isSelected(viewModel.files[0]))
     }
     
     @Test("Adding multiple files works correctly")
@@ -171,25 +172,26 @@ struct DashboardViewModelTests {
         // No files
         #expect(viewModel.canPerform(action: .merge) == false)
         
-        // One file
+        // One file (auto-selected due to empty dashboard)
         await viewModel.addFiles(urls: [testURL])
+        // With 1 file selected, merge should still fail (need 2+)
         #expect(viewModel.canPerform(action: .merge) == false)
         
-        // Two files
+        // Two files - add second file (not auto-selected since dashboard not empty)
         let secondURL = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "second")
         defer { PDFTestHelpers.cleanup(url: secondURL) }
         
         await viewModel.addFiles(urls: [secondURL])
         
-        // Should default to true if NO files are selected (fallback behavior)
-        #expect(viewModel.canPerform(action: .merge) == true)
-        
-        // If we select just 1, it should fail
-        viewModel.selectFile(viewModel.files[0])
+        // First file is still selected, second is not - merge fails with just 1 selected
         #expect(viewModel.canPerform(action: .merge) == false)
         
         // If we select both, it should pass
         viewModel.selectAll()
+        #expect(viewModel.canPerform(action: .merge) == true)
+        
+        // Deselect all - fallback to all files for merge
+        viewModel.deselectAll()
         #expect(viewModel.canPerform(action: .merge) == true)
     }
     
@@ -203,17 +205,20 @@ struct DashboardViewModelTests {
         // No files
         #expect(viewModel.canPerform(action: .split) == false)
         
-        // One file added (none selected) -> Split requires selection
+        // One file added to empty dashboard -> auto-selected -> Split works immediately
         await viewModel.addFiles(urls: [urls[0]])
-        #expect(viewModel.canPerform(action: .split) == false)
-        
-        // Select one file -> Valid
-        viewModel.selectFile(viewModel.files[0])
         #expect(viewModel.canPerform(action: .split) == true)
         
-        // Two files selected -> Invalid
+        // Two files - add second (not auto-selected), first is still selected -> Split still works
         await viewModel.addFiles(urls: [urls[1]])
+        #expect(viewModel.canPerform(action: .split) == true)
+        
+        // Two files selected -> Invalid (split requires exactly 1)
         viewModel.selectAll()
+        #expect(viewModel.canPerform(action: .split) == false)
+        
+        // Deselect all -> Invalid (no selection)
+        viewModel.deselectAll()
         #expect(viewModel.canPerform(action: .split) == false)
     }
     
@@ -385,5 +390,181 @@ struct DashboardViewModelTests {
         
         // Verify that the ViewModel auto-updated
         #expect(viewModel.isPro == true)
+    }
+    
+    // MARK: - Auto-Selection Tests
+    
+    @Test("Auto-selects when adding 1 file to empty dashboard")
+    @MainActor
+    func autoSelectSingleFileToEmpty() async throws {
+        let viewModel = createViewModel()
+        
+        // Given: Empty dashboard
+        #expect(viewModel.files.isEmpty)
+        #expect(viewModel.selectedFiles.isEmpty)
+        
+        // When: Adding 1 file
+        let testURL = try PDFTestHelpers.createTestPDF(pageCount: 5, identifier: "auto_select_single")
+        defer { PDFTestHelpers.cleanup(url: testURL) }
+        
+        await viewModel.addFiles(urls: [testURL])
+        
+        // Then: File is auto-selected
+        #expect(viewModel.files.count == 1)
+        #expect(viewModel.selectedFiles.count == 1)
+        #expect(viewModel.isSelected(viewModel.files[0]))
+    }
+    
+    @Test("Does NOT auto-select when adding multiple files to empty dashboard")
+    @MainActor
+    func noAutoSelectMultipleFilesToEmpty() async throws {
+        let viewModel = createViewModel()
+        
+        // Given: Empty dashboard
+        #expect(viewModel.files.isEmpty)
+        
+        // When: Adding 2 files simultaneously
+        let urls = try PDFTestHelpers.createTestPDFs(counts: [5, 10])
+        defer { PDFTestHelpers.cleanup(urls: urls) }
+        
+        await viewModel.addFiles(urls: urls)
+        
+        // Then: No files are auto-selected
+        #expect(viewModel.files.count == 2)
+        #expect(viewModel.selectedFiles.isEmpty)
+    }
+    
+    @Test("Does NOT auto-select when adding file to non-empty dashboard")
+    @MainActor
+    func noAutoSelectWhenDashboardNotEmpty() async throws {
+        let viewModel = createViewModel()
+        
+        // Given: Dashboard with 1 existing file (already auto-selected)
+        let existingURL = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "existing")
+        defer { PDFTestHelpers.cleanup(url: existingURL) }
+        
+        await viewModel.addFiles(urls: [existingURL])
+        
+        // Clear selection to reset state
+        viewModel.deselectAll()
+        #expect(viewModel.files.count == 1)
+        #expect(viewModel.selectedFiles.isEmpty)
+        
+        // When: Adding 1 more file
+        let newURL = try PDFTestHelpers.createTestPDF(pageCount: 5, identifier: "new")
+        defer { PDFTestHelpers.cleanup(url: newURL) }
+        
+        await viewModel.addFiles(urls: [newURL])
+        
+        // Then: New file is NOT auto-selected (dashboard was not empty)
+        #expect(viewModel.files.count == 2)
+        #expect(viewModel.selectedFiles.isEmpty)
+    }
+    
+    @Test("Auto-select happens after clear all + add 1 file")
+    @MainActor
+    func autoSelectAfterClearAll() async throws {
+        let viewModel = createViewModel()
+        
+        // Given: Dashboard with files, then cleared
+        let url1 = try PDFTestHelpers.createTestPDF(pageCount: 5, identifier: "clear_first")
+        defer { PDFTestHelpers.cleanup(url: url1) }
+        
+        await viewModel.addFiles(urls: [url1])
+        viewModel.clearAll()
+        
+        #expect(viewModel.files.isEmpty)
+        
+        // When: Adding 1 file to now-empty dashboard
+        let url2 = try PDFTestHelpers.createTestPDF(pageCount: 10, identifier: "clear_second")
+        defer { PDFTestHelpers.cleanup(url: url2) }
+        
+        await viewModel.addFiles(urls: [url2])
+        
+        // Then: File is auto-selected
+        #expect(viewModel.files.count == 1)
+        #expect(viewModel.selectedFiles.count == 1)
+        #expect(viewModel.isSelected(viewModel.files[0]))
+    }
+    
+    @Test("Auto-selected file enables Split action immediately")
+    @MainActor
+    func autoSelectEnablesSplitAction() async throws {
+        let viewModel = createViewModel()
+        
+        // When: Adding 1 file to empty dashboard (auto-selected)
+        let testURL = try PDFTestHelpers.createTestPDF(pageCount: 10, identifier: "split_test")
+        defer { PDFTestHelpers.cleanup(url: testURL) }
+        
+        await viewModel.addFiles(urls: [testURL])
+        
+        // Then: Split action is immediately available
+        #expect(viewModel.canPerform(action: .split))
+        #expect(viewModel.filesForAction(.split).count == 1)
+        #expect(viewModel.validationError(for: .split) == nil)
+    }
+    
+    @Test("Auto-selected file enables Edit Pages action immediately")
+    @MainActor
+    func autoSelectEnablesEditPagesAction() async throws {
+        let viewModel = createViewModel()
+        
+        // When: Adding 1 file to empty dashboard (auto-selected)
+        let testURL = try PDFTestHelpers.createTestPDF(pageCount: 15, identifier: "edit_pages_test")
+        defer { PDFTestHelpers.cleanup(url: testURL) }
+        
+        await viewModel.addFiles(urls: [testURL])
+        
+        // Then: Edit Pages action is immediately available
+        #expect(viewModel.canPerform(action: .editPages))
+        #expect(viewModel.filesForAction(.editPages).count == 1)
+        #expect(viewModel.validationError(for: .editPages) == nil)
+    }
+    
+    @Test("Does NOT auto-select when file loading fails")
+    @MainActor
+    func noAutoSelectOnLoadFailure() async throws {
+        let viewModel = createViewModel()
+        
+        // Given: Empty dashboard
+        #expect(viewModel.files.isEmpty)
+        
+        // When: Adding invalid URL (will fail to load)
+        let invalidURL = URL(fileURLWithPath: "/nonexistent/invalid.pdf")
+        await viewModel.addFiles(urls: [invalidURL])
+        
+        // Then: No files added, no selection
+        #expect(viewModel.files.isEmpty)
+        #expect(viewModel.selectedFiles.isEmpty)
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test("Selection can be manually toggled after auto-select")
+    @MainActor
+    func canToggleAfterAutoSelect() async throws {
+        let viewModel = createViewModel()
+        
+        // Given: 1 file auto-selected
+        let testURL = try PDFTestHelpers.createTestPDF(pageCount: 5, identifier: "toggle_test")
+        defer { PDFTestHelpers.cleanup(url: testURL) }
+        
+        await viewModel.addFiles(urls: [testURL])
+        
+        #expect(viewModel.selectedFiles.count == 1)
+        let file = viewModel.files[0]
+        
+        // When: Deselecting the file
+        viewModel.deselectFile(file)
+        
+        // Then: File is deselected
+        #expect(viewModel.selectedFiles.isEmpty)
+        #expect(!viewModel.isSelected(file))
+        
+        // When: Re-selecting the file
+        viewModel.selectFile(file)
+        
+        // Then: File is selected again
+        #expect(viewModel.selectedFiles.count == 1)
+        #expect(viewModel.isSelected(file))
     }
 }

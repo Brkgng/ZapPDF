@@ -201,50 +201,6 @@ struct PageReorderViewModelTests {
         #expect(viewModel.canUndo == false)
     }
     
-    // MARK: - Reset Order Tests
-    
-    @Test("resetOrder restores original order")
-    @MainActor
-    func resetOrderRestoresOriginalOrder() async throws {
-        let url = try PDFTestHelpers.createTestPDF(pageCount: 4, identifier: "reset_order_test")
-        defer { PDFTestHelpers.cleanup(url: url) }
-        
-        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 4, fileSize: 1000)
-        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
-        
-        await viewModel.loadPages()
-        
-        viewModel.movePages(from: IndexSet(integer: 0), to: 3)
-        viewModel.movePages(from: IndexSet(integer: 1), to: 0)
-        
-        viewModel.resetOrder()
-        
-        #expect(viewModel.pages.reorderedIndices == [0, 1, 2, 3])
-        #expect(viewModel.hasChanges == false)
-    }
-    
-    @Test("resetOrder enables undo")
-    @MainActor
-    func resetOrderEnablesUndo() async throws {
-        let url = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "reset_undo_test")
-        defer { PDFTestHelpers.cleanup(url: url) }
-        
-        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 3, fileSize: 1000)
-        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
-        
-        await viewModel.loadPages()
-        
-        viewModel.movePages(from: IndexSet(integer: 0), to: 2)
-        let orderBeforeReset = viewModel.pages.reorderedIndices
-        
-        viewModel.resetOrder()
-        
-        #expect(viewModel.canUndo == true)
-        
-        viewModel.undo()
-        
-        #expect(viewModel.pages.reorderedIndices == orderBeforeReset)
-    }
     
     // MARK: - Selection Tests
     

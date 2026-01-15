@@ -114,7 +114,8 @@ final class DashboardViewModel: ObservableObject {
     ///
     /// This method loads metadata from each URL and creates PDFFile instances.
     /// Invalid URLs or non-PDF files will set an error message.
-    /// Note: Newly added files are NOT selected by default (Option B).
+    /// Note: Files are auto-selected only when adding exactly 1 file to an empty dashboard.
+    /// In all other cases, files are not selected by default.
     ///
     /// - Parameter urls: Array of file URLs to add
     func addFiles(urls: [URL]) async {
@@ -122,6 +123,9 @@ final class DashboardViewModel: ObservableObject {
         
         isLoading = true
         errorMessage = nil
+        
+        // Track if dashboard was empty to determine auto-selection
+        let wasEmpty = files.isEmpty
         
         var addedFiles: [PDFFile] = []
         var errorURLs: [URL] = []
@@ -136,8 +140,13 @@ final class DashboardViewModel: ObservableObject {
             }
         }
         
-        // Add successfully loaded files (not selected by default)
+        // Add successfully loaded files
         files.append(contentsOf: addedFiles)
+        
+        // Auto-select ONLY when adding exactly 1 file to an empty dashboard
+        if wasEmpty && addedFiles.count == 1, let firstFile = addedFiles.first {
+            selectedFileIDs.insert(firstFile.id)
+        }
         
         // Set error message if any files failed
         if !errorURLs.isEmpty {
