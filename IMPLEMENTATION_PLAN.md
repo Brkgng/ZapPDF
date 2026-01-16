@@ -1,6 +1,6 @@
 # ZapPDF Implementation Plan
 
-> **Living Document** – Last updated: 2026-01-14
+> **Living Document** – Last updated: 2026-01-16
 
 ---
 
@@ -21,8 +21,8 @@
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                         Services                                │
-│  PDFMerger │ PDFSplitter │ PDFReorderer │ UsageManager          │
-│  (Future: PDFCompressor │ RevenueCatManager)                    │
+│  PDFMerger │ PDFSplitter │ PDFReorderer │ PDFFlattener          │
+│  UsageManager │ (Future: PDFCompressor │ RevenueCatManager)     │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -62,6 +62,7 @@
 | 11    | Internationalization & Localization                    |
 | 12    | In-App Language Switching                              |
 | 13    | Tier 1 Language Translations (DE, FR, ES, JA, ZH, TR)  |
+| 14    | Flatten PDF Feature                                    |
 
 #### Phase 8: Testing & Polish
 
@@ -141,7 +142,9 @@ actor PDFCompressor {
 | -------------- | ---------------------------------------------------------------- | --------------------- |
 | `PDFMerger`    | `merge(files:options:progress:) async throws -> URL`             | Combine multiple PDFs |
 | `PDFSplitter`  | `split(file:mode:progress:) async throws -> [URL]`               | Extract page ranges   |
+| `PDFSplitter`  | `split(file:mode:progress:) async throws -> [URL]`               | Extract page ranges   |
 | `PDFReorderer` | `reorder(file:newOrder:rotations:progress:) async throws -> URL` | Reorder/rotate pages  |
+| `PDFFlattener` | `flatten(file:options:progress:) async throws -> URL`            | Flatten annotations   |
 
 ### State Management
 

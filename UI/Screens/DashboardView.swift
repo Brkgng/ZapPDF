@@ -392,6 +392,15 @@ struct DashboardView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
+            // Flatten button
+            StyledActionButton(
+                action: .flatten,
+                isEnabled: viewModel.canPerform(action: .flatten)
+            ) {
+                handleActionTap(.flatten)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
             // Convert button (Pro)
             StyledActionButton(
                 action: .convert,
@@ -543,6 +552,10 @@ struct DashboardView: View {
                     case .editPages:
                         // Show page editor view
                         showReorderView = true
+                        
+                    case .flatten:
+                        // Show processing directly for flatten
+                        startAction(.flatten, options: .flatten())
                         
                     case .convert:
                         // TODO: Show convert options sheet in future

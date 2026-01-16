@@ -129,6 +129,11 @@ enum L10n {
             static let title = String(localized: "operation.convert.title", defaultValue: "Convert PDF")
             static let description = String(localized: "operation.convert.description", defaultValue: "Convert PDF to other formats")
         }
+        
+        enum Flatten {
+            static let title = String(localized: "operation.flatten.title", defaultValue: "Flatten PDF")
+            static let description = String(localized: "operation.flatten.description", defaultValue: "Bake annotations and forms into page content")
+        }
     }
     
     // MARK: - Split Options
@@ -321,6 +326,14 @@ enum L10n {
                 return String(localized: "Converting PDF... \(formatted)", comment: "Convert progress with percentage")
             }
             return String(localized: "processing.converting", defaultValue: "Converting PDF...")
+        }
+        
+        static func flatteningProgress(_ progress: Double) -> String {
+            if progress > 0 {
+                let formatted = progress.formatted(.percent.precision(.fractionLength(0)))
+                return String(localized: "Flattening PDF... \(formatted)", comment: "Flatten progress with percentage")
+            }
+            return String(localized: "processing.flattening", defaultValue: "Flattening PDF...")
         }
         
         static let pdfOperationFailed = String(localized: "processing.pdfOperationFailed", defaultValue: "PDF operation failed.")

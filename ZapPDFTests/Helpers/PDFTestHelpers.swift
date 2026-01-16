@@ -69,7 +69,41 @@ enum PDFTestHelpers {
         try? FileManager.default.removeItem(at: url)
     }
     
-    // MARK: - Private
+    /// Create a PDF with annotations for testing flattening.
+    ///
+    /// Each page will have a text annotation added to it.
+    ///
+    /// - Parameters:
+    ///   - pageCount: Number of pages to create
+    ///   - identifier: Unique identifier for the filename
+    /// - Returns: URL to the created PDF with annotations
+    /// - Throws: Error if PDF creation fails
+    static func createTestPDFWithAnnotations(pageCount: Int, identifier: String) throws -> URL {
+        let url = try createTestPDF(pageCount: pageCount, identifier: identifier)
+        guard let document = PDFDocument(url: url) else {
+            throw TestHelperError.pdfCreationFailed
+        }
+        
+        // Add a text annotation to each page
+        for i in 0..<document.pageCount {
+            guard let page = document.page(at: i) else { continue }
+            
+            let annotation = PDFAnnotation(
+                bounds: CGRect(x: 50, y: 50, width: 200, height: 50),
+                forType: .text,
+                withProperties: nil
+            )
+            annotation.contents = "Test annotation on page \(i + 1)"
+            page.addAnnotation(annotation)
+        }
+        
+        // Save with annotations
+        guard document.write(to: url) else {
+            throw TestHelperError.pdfCreationFailed
+        }
+        
+        return url
+    }
     
     private static func createPage(number: Int) -> PDFPage? {
         // Create a simple page with text

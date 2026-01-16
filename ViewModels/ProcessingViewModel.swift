@@ -18,13 +18,18 @@ struct ProcessingOptions: Sendable {
     /// Split mode for split operations.
     var splitMode: PDFSplitter.SplitMode?
     
+    /// Options for flatten operations.
+    var flattenOptions: PDFFlattener.FlattenOptions?
+    
     /// Creates default processing options.
     init(
         mergeOptions: PDFMerger.MergeOptions? = nil,
-        splitMode: PDFSplitter.SplitMode? = nil
+        splitMode: PDFSplitter.SplitMode? = nil,
+        flattenOptions: PDFFlattener.FlattenOptions? = nil
     ) {
         self.mergeOptions = mergeOptions
         self.splitMode = splitMode
+        self.flattenOptions = flattenOptions
     }
     
     /// Creates options for a merge operation.
@@ -35,6 +40,11 @@ struct ProcessingOptions: Sendable {
     /// Creates options for a split operation.
     static func split(mode: PDFSplitter.SplitMode) -> ProcessingOptions {
         ProcessingOptions(splitMode: mode)
+    }
+    
+    /// Creates options for a flatten operation.
+    static func flatten(outputFileName: String = "flattened") -> ProcessingOptions {
+        ProcessingOptions(flattenOptions: .init(outputFileName: outputFileName))
     }
 }
 
@@ -115,6 +125,7 @@ final class ProcessingViewModel: ObservableObject {
     private var processingTask: Task<Void, Never>?
     private let merger: PDFMerger
     private let splitter: PDFSplitter
+    private let flattener: PDFFlattener
     private let usageManager: any UsageManaging
     
     /// Last time progress was updated (for throttling)
@@ -129,6 +140,7 @@ final class ProcessingViewModel: ObservableObject {
     init() {
         self.merger = PDFMerger()
         self.splitter = PDFSplitter()
+        self.flattener = PDFFlattener()
         self.usageManager = UsageManager.shared
     }
     
@@ -136,10 +148,12 @@ final class ProcessingViewModel: ObservableObject {
     init(
         merger: PDFMerger = PDFMerger(),
         splitter: PDFSplitter = PDFSplitter(),
+        flattener: PDFFlattener = PDFFlattener(),
         usageManager: any UsageManaging
     ) {
         self.merger = merger
         self.splitter = splitter
+        self.flattener = flattener
         self.usageManager = usageManager
     }
     
@@ -206,6 +220,7 @@ final class ProcessingViewModel: ObservableObject {
         Task {
             await merger.cancel()
             await splitter.cancel()
+            await flattener.cancel()
         }
         state = .cancelled
     }
@@ -256,6 +271,22 @@ final class ProcessingViewModel: ObservableObject {
             )
             return outputURLs
             
+        case .flatten:
+            guard let firstFile = files.first else {
+                throw PDFEngineError.emptyInput
+            }
+            let flattenOptions = options.flattenOptions ?? PDFFlattener.FlattenOptions()
+            let outputURL = try await flattener.flatten(
+                file: firstFile,
+                options: flattenOptions,
+                progress: { [weak self] progress in
+                    Task { @MainActor in
+                        self?.updateProgress(progress, action: action)
+                    }
+                }
+            )
+            return [outputURL]
+            
         case .convert:
             // TODO: Implement in future phase
             throw PDFEngineError.emptyInput
@@ -289,6 +320,8 @@ final class ProcessingViewModel: ObservableObject {
             return L10n.Processing.splittingProgress(progress)
         case .editPages:
             return L10n.Processing.reorderingProgress(progress)
+        case .flatten:
+            return L10n.Processing.flatteningProgress(progress)
         case .convert:
             return L10n.Processing.convertingProgress(progress)
         }

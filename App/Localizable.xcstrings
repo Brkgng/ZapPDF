@@ -4734,6 +4734,9 @@
         }
       }
     },
+    "Flattening PDF... %@" : {
+      "comment" : "Flatten progress with percentage"
+    },
     "help.clearAll" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -4875,7 +4878,6 @@
         }
       }
     },
-
     "help.rotateLeft" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -6329,6 +6331,100 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "编辑页面"
+          }
+        }
+      }
+    },
+    "operation.flatten.description" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmerkungen und Formulare in Seiteninhalt einbetten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bake annotations and forms into page content"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Integrar anotaciones y formularios en el contenido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intégrer annotations et formulaires dans le contenu"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "注釈とフォームをページに埋め込む"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ek açıklamaları ve formları sayfaya sabitle"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将注释和表单合并到页面内容中"
+          }
+        }
+      }
+    },
+    "operation.flatten.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF reduzieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Flatten PDF"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplanar PDF"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplatir PDF"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFをフラット化"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF'i Düzleştir"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拼合PDF"
           }
         }
       }
@@ -9090,6 +9186,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你的PDF已成功保存。"
+          }
+        }
+      }
+    },
+    "processing.flattening" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF wird reduziert..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Flattening PDF..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplanando PDF..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplatissement du PDF..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFをフラット化中..."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF düzleştiriliyor..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在拼合PDF..."
           }
         }
       }
