@@ -107,30 +107,14 @@ struct UserActionTests {
     
     @Test("All cases are iterable")
     func allCasesAreIterable() {
-        #expect(UserAction.allCases.count == 4)
+        #expect(UserAction.allCases.count == 5)
         #expect(UserAction.allCases.contains(.merge))
         #expect(UserAction.allCases.contains(.split))
         #expect(UserAction.allCases.contains(.editPages))
         #expect(UserAction.allCases.contains(.convert))
+        #expect(UserAction.allCases.contains(.flatten))
     }
     
-    // MARK: - Free Tier
-    
-    @Test("Free tier actions are correct")
-    func freeTierActionsAreCorrect() {
-        #expect(UserAction.freeActions.count == 3)
-        #expect(UserAction.freeActions.contains(.merge))
-        #expect(UserAction.freeActions.contains(.split))
-        #expect(UserAction.freeActions.contains(.editPages))
-        #expect(!UserAction.freeActions.contains(.convert))
-    }
-    
-    @Test("isFreeTierAction returns correct value")
-    func isFreeTierActionReturnsCorrectValue() {
-        #expect(UserAction.merge.isFreeTierAction == true)
-        #expect(UserAction.split.isFreeTierAction == true)
-        #expect(UserAction.editPages.isFreeTierAction == true)
-        #expect(UserAction.convert.isFreeTierAction == false)
-    }
+
 }
 

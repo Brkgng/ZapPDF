@@ -100,27 +100,7 @@ final class ActionButtonTests: XCTestCase {
         XCTAssertFalse(button.isEnabled)
     }
     
-    // MARK: - Pro Badge Tests
-    
-    func testFreeTierActionsDoNotShowProBadge() {
-        // Given
-        let freeActions: [UserAction] = [.merge, .split]
-        
-        for action in freeActions {
-            // Then
-            XCTAssertTrue(action.isFreeTierAction, "\(action) should be a free tier action")
-        }
-    }
-    
-    func testProActionsShowProBadge() {
-        // Given
-        let proActions: [UserAction] = [.convert]
-        
-        for action in proActions {
-            // Then
-            XCTAssertFalse(action.isFreeTierAction, "\(action) should be a pro action")
-        }
-    }
+
     
     // MARK: - All Actions Tests
     
@@ -150,18 +130,6 @@ final class StyledActionButtonTests: XCTestCase {
         XCTAssertTrue(button.isEnabled)
         XCTAssertEqual(button.style, .primary)
         XCTAssertTrue(button.showLabel)
-        XCTAssertTrue(button.showProBadge)
-    }
-    
-    func testProBadgeCanBeHidden() {
-        let button = StyledActionButton(
-            action: .convert,
-            isEnabled: true,
-            showProBadge: false,
-            onTap: {}
-        )
-        
-        XCTAssertFalse(button.showProBadge)
     }
 }
 

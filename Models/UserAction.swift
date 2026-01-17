@@ -151,21 +151,4 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
     }
 }
 
-// MARK: - UserAction Groups
 
-extension UserAction {
-    /// Actions available in the free tier.
-    static var freeActions: [UserAction] {
-        [.merge, .split, .editPages, .flatten]
-    }
-    
-    /// Actions that require Pro subscription.
-    static var proActions: [UserAction] {
-        [.convert]
-    }
-    
-    /// Whether this action is available in the free tier.
-    var isFreeTierAction: Bool {
-        UserAction.freeActions.contains(self)
-    }
-}

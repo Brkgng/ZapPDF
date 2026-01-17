@@ -198,33 +198,6 @@ extension ActionButton {
     }
 }
 
-// MARK: - Pro Badge Modifier
-
-extension ActionButton {
-    /// Adds a "Pro" badge to the button if the action requires Pro subscription.
-    @ViewBuilder
-    func withProBadge() -> some View {
-        if !action.isFreeTierAction {
-            ZStack(alignment: .topTrailing) {
-                styledButton()
-                
-                Text(L10n.Common.proBadge)
-                    .font(.system(size: 8, weight: .bold))
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    .background(
-                        Capsule()
-                            .fill(Color.purple)
-                    )
-                    .offset(x: 4, y: -4)
-            }
-        } else {
-            styledButton()
-        }
-    }
-}
-
 // MARK: - Convenient Initializer View
 
 /// A convenient wrapper that applies the proper button style.
@@ -233,23 +206,16 @@ struct StyledActionButton: View {
     let isEnabled: Bool
     var style: ActionButtonStyle = .primary
     var showLabel: Bool = true
-    var showProBadge: Bool = true
     var onTap: () -> Void
     
     var body: some View {
-        let button = ActionButton(
+        ActionButton(
             action: action,
             isEnabled: isEnabled,
             style: style,
             showLabel: showLabel,
             onTap: onTap
         )
-        
-        if showProBadge {
-            button.withProBadge()
-        } else {
-            button.styledButton()
-        }
     }
 }
 
