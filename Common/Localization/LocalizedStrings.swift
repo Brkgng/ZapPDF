@@ -578,6 +578,7 @@ enum L10n {
         static let proAnnual = String(localized: "settings.subscription.proAnnual", defaultValue: "Pro Annual")
         static let proMonthly = String(localized: "settings.subscription.proMonthly", defaultValue: "Pro Monthly")
         static let freePlan = String(localized: "settings.subscription.freePlan", defaultValue: "Free Plan")
+        static let proPlan = String(localized: "settings.subscription.proPlan", defaultValue: "Pro")
         
         static func renewsOn(_ date: String) -> String {
             String(localized: "Renews \(date)", comment: "Subscription renewal date")

@@ -7,6 +7,11 @@
 
 import Foundation
 
+// MARK: - Legacy Cache Keys (for migration)
+
+/// Legacy UserDefaults key for Pro status (to be migrated to Keychain)
+private let kLegacyCachedIsProKey = "com.zappdf.cached.isPro"
+
 // MARK: - Usage Errors
 
 /// Errors that can occur during usage management.
@@ -88,6 +93,54 @@ actor UsageManager {
     private init() {
         self.freeActionLimit = 5
         self.inMemoryOnly = false
+        // Load cached Pro status from Keychain for offline support
+        // This ensures Pro users can use the app on cold start without waiting for RevenueCat
+        self.isPro = Self.loadCachedProStatus()
+    }
+    
+    /// Load cached Pro status from Keychain, with migration from legacy UserDefaults.
+    ///
+    /// This is a static method called during init before the actor is fully initialized.
+    /// It handles migration from the legacy UserDefaults key to secure Keychain storage.
+    ///
+    /// - Note: Thread Safety
+    /// This method is static and called synchronously during `init`. It accesses
+    /// `UserDefaults.standard` (thread-safe) and `KeychainHelper` (thread-safe).
+    /// It does not access any actor state, making it safe to call from any context
+    /// that initializes the actor.
+    static func loadCachedProStatus() -> Bool {
+        // Try Keychain first (secure storage)
+        do {
+            if let cached = try KeychainHelper.loadBool(for: .proStatus) {
+                return cached
+            }
+        } catch {
+            #if DEBUG
+            print("UsageManager: Failed to load pro status from Keychain: \(error)")
+            #endif
+        }
+        
+        // Migration: check UserDefaults for legacy cache
+        if UserDefaults.standard.bool(forKey: kLegacyCachedIsProKey) {
+            // Migrate to Keychain
+            do {
+                try KeychainHelper.saveBool(true, for: .proStatus)
+                UserDefaults.standard.removeObject(forKey: kLegacyCachedIsProKey)
+                #if DEBUG
+                print("UsageManager: Successfully migrated legacy Pro status to Keychain")
+                #endif
+                return true
+            } catch {
+                #if DEBUG
+                print("UsageManager: Failed to migrate legacy Pro status: \(error)")
+                #endif
+                // Return true anyway so user doesn't lose access this session,
+                // but migration failed so it will try again next launch
+                return true
+            }
+        }
+        
+        return false
     }
     
     /// Creates a test instance that uses in-memory storage only.
@@ -233,10 +286,24 @@ actor UsageManager {
     ///
     /// This method is called by RevenueCatManager when subscription
     /// status changes. Pro users have unlimited actions.
+    /// The status is persisted to Keychain for secure offline support.
     ///
     /// - Parameter isPro: Whether the user has an active Pro subscription
     func setProStatus(_ isPro: Bool) {
         self.isPro = isPro
+        
+        // Persist to Keychain for secure offline support on next cold start
+        // Skip persistence for test instances to avoid polluting Keychain
+        if !inMemoryOnly {
+            do {
+                try KeychainHelper.saveBool(isPro, for: .proStatus)
+            } catch {
+                #if DEBUG
+                print("UsageManager: Failed to save Pro status to Keychain: \(error)")
+                #endif
+            }
+        }
+        
         postStateChangeNotification()
     }
     

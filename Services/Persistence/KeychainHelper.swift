@@ -79,6 +79,9 @@ enum KeychainHelper {
         
         /// Last usage reset timestamp
         case lastUsageReset = "com.zappdf.lastReset"
+        
+        /// Pro subscription status (cached for offline support)
+        case proStatus = "com.zappdf.proStatus"
     }
     
     // MARK: - Private Constants
@@ -228,5 +231,28 @@ enum KeychainHelper {
         }
         
         return data.withUnsafeBytes { $0.load(as: Int.self) }
+    }
+    
+    /// Save a boolean value to Keychain.
+    ///
+    /// - Parameters:
+    ///   - value: The boolean to store
+    ///   - key: The key to store under
+    /// - Throws: `KeychainError` if the operation fails
+    static func saveBool(_ value: Bool, for key: Key) throws {
+        let data = Data([value ? 1 : 0])
+        try save(data, for: key)
+    }
+    
+    /// Load a boolean value from Keychain.
+    ///
+    /// - Parameter key: The key to load
+    /// - Returns: The stored boolean, or nil if not found
+    /// - Throws: `KeychainError` for errors other than "not found"
+    static func loadBool(for key: Key) throws -> Bool? {
+        guard let data = try load(for: key), data.count == 1 else {
+            return nil
+        }
+        return data[0] == 1
     }
 }

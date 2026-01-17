@@ -229,6 +229,7 @@ private extension Bundle {
 /// Displays current subscription status with type, expiration, and renewal info.
 private struct SubscriptionStatusRow: View {
     @State private var proStatus: ProStatus?
+    @State private var offlinePro: Bool = false
     
     var body: some View {
         HStack {
@@ -241,12 +242,27 @@ private struct SubscriptionStatusRow: View {
             }
         }
         .task {
-            proStatus = await RevenueCatManager.shared.proStatus
+            // Initial fetch
+            await refreshStatus()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .usageStateDidChange)) { _ in
+            Task {
+                await refreshStatus()
+            }
+        }
+    }
+    
+    private func refreshStatus() async {
+        proStatus = await RevenueCatManager.shared.proStatus
+        offlinePro = await UsageManager.shared.getProStatus()
     }
     
     private var statusText: String {
         guard let status = proStatus, status.isActive else {
+            // Check UsageManager for offline Pro access (via local state)
+            if offlinePro {
+                return L10n.Settings.proPlan
+            }
             return L10n.Settings.freePlan
         }
         
@@ -258,13 +274,16 @@ private struct SubscriptionStatusRow: View {
         case .monthly:
             return L10n.Settings.proMonthly
         case .none:
-            return L10n.Settings.freePlan
+            // Explicitly handle the "Pro but unknown type" state.
+            // This occurs when UsageManager confirms Pro status via Keychain (offline),
+            // but RevenueCat hasn't synced the specific entitlement details yet.
+            return L10n.Settings.proPlan
         }
     }
     
     private var statusIcon: String {
         guard let status = proStatus, status.isActive else {
-            return "person.fill"
+            return offlinePro ? "star.fill" : "person.fill"
         }
         return "star.fill"
     }

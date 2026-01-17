@@ -14,8 +14,8 @@ import RevenueCat
 // MARK: - Cache Keys
 
 /// Keys for persisting entitlement state to UserDefaults.
+/// Keys for persisting entitlement state to UserDefaults.
 private enum CacheKeys {
-    static let isPro = "com.zappdf.cached.isPro"
     static let lastSync = "com.zappdf.cached.lastSync"
 }
 
@@ -74,8 +74,8 @@ actor RevenueCatManager: SubscriptionManaging {
     // MARK: - Initialization
     
     private init() {
-        // Load cached state immediately for offline support
-        loadCachedState()
+        // Cached state is now managed by UsageManager (Keychain)
+        // We don't load anything here to avoid source-of-truth conflicts
     }
     
     // MARK: - Configuration
@@ -120,14 +120,8 @@ actor RevenueCatManager: SubscriptionManaging {
     
     // MARK: - Offline Caching
     
-    /// Load cached entitlement state from UserDefaults.
-    private func loadCachedState() {
-        isPro = UserDefaults.standard.bool(forKey: CacheKeys.isPro)
-    }
-    
     /// Cache entitlement state to UserDefaults for offline support.
     private func cacheState() {
-        UserDefaults.standard.set(isPro, forKey: CacheKeys.isPro)
         UserDefaults.standard.set(Date(), forKey: CacheKeys.lastSync)
     }
     
@@ -383,7 +377,7 @@ extension RevenueCatManager {
     /// Set Pro status for testing.
     func setTestProStatus(_ isPro: Bool) {
         self.isPro = isPro
-        cacheState()
+        // No caching needed for test
     }
 }
 #endif
