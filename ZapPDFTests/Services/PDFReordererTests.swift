@@ -22,9 +22,12 @@ struct PDFReordererTests {
         #expect(PDFReorderer.validateOrder([2, 0, 3, 1], pageCount: 4) == true)
     }
     
-    @Test("validateOrder returns false for wrong count")
-    func validateOrderReturnsFalseForWrongCount() {
-        #expect(PDFReorderer.validateOrder([0, 1, 2], pageCount: 4) == false)
+    @Test("validateOrder handles page deletion (fewer pages)")
+    func validateOrderHandlesPageDeletion() {
+        // Fewer pages than total is VALID (deletion)
+        #expect(PDFReorderer.validateOrder([0, 1, 2], pageCount: 4) == true)
+        
+        // More pages than total is INVALID
         #expect(PDFReorderer.validateOrder([0, 1, 2, 3, 4], pageCount: 4) == false)
     }
     
@@ -42,7 +45,8 @@ struct PDFReordererTests {
     
     @Test("validateOrder handles empty arrays")
     func validateOrderHandlesEmptyArrays() {
-        #expect(PDFReorderer.validateOrder([], pageCount: 0) == true)
+        // Empty order is always invalid, even for empty document
+        #expect(PDFReorderer.validateOrder([], pageCount: 0) == false)
         #expect(PDFReorderer.validateOrder([], pageCount: 5) == false)
     }
     
@@ -215,11 +219,29 @@ struct PDFReordererTests {
         
         let reorderer = PDFReorderer()
         
-        // Wrong number of indices
+        // Out of bounds index
         await #expect(throws: PDFEngineError.self) {
             _ = try await reorderer.reorder(
                 file: file,
-                newOrder: [0, 1],  // Only 2 for a 3-page document
+                newOrder: [0, 99], // 99 is invalid
+                progress: { _ in }
+            )
+        }
+        
+        // Duplicate indices
+        await #expect(throws: PDFEngineError.self) {
+            _ = try await reorderer.reorder(
+                file: file,
+                newOrder: [0, 0, 1], // Duplicate 0
+                progress: { _ in }
+            )
+        }
+        
+        // Too many pages
+        await #expect(throws: PDFEngineError.self) {
+            _ = try await reorderer.reorder(
+                file: file,
+                newOrder: [0, 1, 2, 0], // 4 pages for 3 page doc
                 progress: { _ in }
             )
         }

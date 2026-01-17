@@ -181,7 +181,12 @@ actor PDFRenderer {
         inFlightTasks[cacheKey] = task
         
         // Await result
-        let result = await task.value
+        // Await result with cancellation propagation
+        let result = await withTaskCancellationHandler {
+            await task.value
+        } onCancel: {
+            task.cancel()
+        }
         
         // Cleanup in-flight tracking
         inFlightTasks.removeValue(forKey: cacheKey)

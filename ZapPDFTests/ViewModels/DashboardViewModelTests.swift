@@ -361,9 +361,18 @@ struct DashboardViewModelTests {
         // that the DashboardViewModel's subscription will receive
         try await usageManager.recordAction()
         
-        // Wait briefly for the notification to be delivered and processed
-        // (the notification is posted on MainActor.run)
-        try await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
+        // Wait for notification delivery (polling)
+        // This is more robust than a fixed sleep
+        let timeout: UInt64 = 2_000_000_000 // 2 seconds
+        let startTime = DispatchTime.now().uptimeNanoseconds
+        
+        while viewModel.remainingFreeActions != 4 {
+            if DispatchTime.now().uptimeNanoseconds - startTime > timeout {
+                Issue.record("Timed out waiting for usage update")
+                return
+            }
+            try await Task.sleep(nanoseconds: 10_000_000) // 10ms poll
+        }
         
         // Verify that the ViewModel auto-updated without manual refresh call
         #expect(viewModel.remainingFreeActions == 4)
@@ -385,8 +394,18 @@ struct DashboardViewModelTests {
         // Change Pro status - this should post a notification
         await usageManager.setProStatus(true)
         
-        // Wait briefly for notification delivery
-        try await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
+        // Wait for notification delivery (polling)
+        // This is more robust than a fixed sleep
+        let timeout: UInt64 = 2_000_000_000 // 2 seconds
+        let startTime = DispatchTime.now().uptimeNanoseconds
+        
+        while !viewModel.isPro {
+            if DispatchTime.now().uptimeNanoseconds - startTime > timeout {
+                Issue.record("Timed out waiting for Pro status update")
+                return
+            }
+            try await Task.sleep(nanoseconds: 10_000_000) // 10ms poll
+        }
         
         // Verify that the ViewModel auto-updated
         #expect(viewModel.isPro == true)

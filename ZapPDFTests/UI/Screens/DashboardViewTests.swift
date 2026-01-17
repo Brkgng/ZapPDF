@@ -124,22 +124,26 @@ struct DashboardViewModelIntegrationTests {
         // With no files, can't split
         #expect(viewModel.canPerform(action: .split) == false)
         
-        // Add one file
-        let url = try PDFTestHelpers.createTestPDF(pageCount: 5)
+        // Add one file (use unique identifier to avoid parallel test collisions)
+        let identifier1 = "split_validation_\(UUID().uuidString)"
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 5, identifier: identifier1)
         defer { PDFTestHelpers.cleanup(url: url) }
         
         await viewModel.addFiles(urls: [url])
         
-        // With 1 file, can split
+        // With 1 file (auto-selected), can split
         #expect(viewModel.canPerform(action: .split) == true)
         
         // Add another file
-        let url2 = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "second")
+        let identifier2 = "split_validation_second_\(UUID().uuidString)"
+        let url2 = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: identifier2)
         defer { PDFTestHelpers.cleanup(url: url2) }
         
         await viewModel.addFiles(urls: [url2])
         
-        // With 2 files, can't split (only works with 1)
+        // With 2 files selected, can't split (only works with 1)
+        // Select all files to test "more than 1 file" case
+        viewModel.selectAll()
         #expect(viewModel.canPerform(action: .split) == false)
     }
     

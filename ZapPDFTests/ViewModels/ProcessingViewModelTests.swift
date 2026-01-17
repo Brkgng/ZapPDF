@@ -116,9 +116,11 @@ struct ProcessingViewModelTests {
     @MainActor
     func executeSplitWithValidOptions() async throws {
         let viewModel = createViewModel()
-        let url = try PDFTestHelpers.createTestPDF(pageCount: 6, identifier: "split_test")
+        let identifier = "split_test_\(UUID().uuidString)"
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 6, identifier: identifier)
         defer { PDFTestHelpers.cleanup(url: url) }
         
+        // Ensure file exists and is valid
         let file = try await PDFFile(url: url)
         
         await viewModel.execute(
