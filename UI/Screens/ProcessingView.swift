@@ -53,30 +53,37 @@ struct ProcessingView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 32) {
-                Spacer()
+            GeometryReader { geometry in
+                let availableHeight = geometry.size.height
+                let availableWidth = geometry.size.width
                 
-                // State-based content
-                stateContent
-                
-                Spacer()
-                
-                // Action buttons
-                actionButtons
+                VStack(spacing: 16) {
+                    // Fixed header (Icon + Title) - Non-scrollable
+                    stateHeader
+                    
+                    // Flexible content area (Preview, etc.)
+                    GeometryReader { innerGeometry in
+                        ScrollView {
+                            stateFlexibleContent(
+                                availableWidth: innerGeometry.size.width,
+                                availableHeight: innerGeometry.size.height
+                            )
+                            .frame(minHeight: innerGeometry.size.height)
+                        }
+                    }
+                    
+                    // Action buttons (always visible, pinned to bottom)
+                    actionButtons
+                        .layoutPriority(1)
+                }
             }
-            .padding(32)
+            .padding(24)
             .navigationTitle(action.displayName)
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    if canDismiss {
-                        Button(L10n.Action.close) {
-                            dismiss()
-                        }
-                    }
-                }
+                // No close button needed here as we rely on the NavigationStack's back button
             }
             .task {
                 await viewModel.execute(
@@ -142,8 +149,27 @@ struct ProcessingView: View {
     
     // MARK: - State Content
     
+    // MARK: - State Header
+    
     @ViewBuilder
-    private var stateContent: some View {
+    private var stateHeader: some View {
+        if case .completed = viewModel.state {
+            HStack(spacing: 12) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 40))
+                    .foregroundColor(.green)
+                Text(L10n.Processing.completed)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+            }
+            .padding(.top, 8)
+        }
+    }
+    
+    // MARK: - State Flexible Content
+    
+    @ViewBuilder
+    private func stateFlexibleContent(availableWidth: CGFloat, availableHeight: CGFloat) -> some View {
         switch viewModel.state {
         case .idle:
             idleContent
@@ -152,7 +178,11 @@ struct ProcessingView: View {
             processingContent(progress: progress, message: message)
             
         case .completed(let resultURLs):
-            completedContent(resultURLs: resultURLs)
+            completedFlexibleContent(
+                resultURLs: resultURLs,
+                availableWidth: availableWidth,
+                availableHeight: availableHeight
+            )
             
         case .failed(let errorMessage):
             failedContent(errorMessage: errorMessage)
@@ -208,37 +238,42 @@ struct ProcessingView: View {
     
     // MARK: - Completed Content
     
-    private func completedContent(resultURLs: [URL]) -> some View {
-        VStack(spacing: 24) {
-            // Success icon
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 64))
-                .foregroundColor(.green)
-            
-            // Title
-            Text(L10n.Processing.completed)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
-            // Summary
-            if resultURLs.count == 1 {
-                Text(L10n.Processing.readyToSave)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            } else {
-                Text(L10n.Processing.filesCreated(resultURLs.count))
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            
-            // File info
-            if let firstURL = resultURLs.first,
-               let fileSize = try? FileManager.default.attributesOfItem(atPath: firstURL.path)[.size] as? Int64 {
-                Text(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+    // MARK: - Completed Content
+    
+    private func completedFlexibleContent(
+        resultURLs: [URL],
+        availableWidth: CGFloat,
+        availableHeight: CGFloat
+    ) -> some View {
+        VStack {
+            // Preview thumbnail (only for single-file outputs like Merge, Flatten)
+            if resultURLs.count == 1, let firstURL = resultURLs.first {
+                // Calculate preview size: use available space with reasonable margins
+                let aspectRatio: CGFloat = 0.75  // 3:4 ratio (portrait)
+                
+                // Use up to 80% of width
+                let previewWidthFromContainer = availableWidth * 0.8
+                
+                // Use available height (minus a bit of padding)
+                // Note: availableHeight here comes from the flexible middle section
+                let previewHeightFromSpace = availableHeight - 32
+                
+                let previewWidthFromHeight = previewHeightFromSpace * aspectRatio
+                
+                // Take the smaller to fit both constraints
+                let finalWidth = min(previewWidthFromHeight, previewWidthFromContainer)
+                let finalHeight = finalWidth / aspectRatio
+                
+                // Center vertically in the scroll view
+                Spacer()
+                OutputPreviewView(
+                    url: firstURL,
+                    size: CGSize(width: finalWidth, height: finalHeight)
+                )
+                Spacer()
             }
         }
+        .frame(maxWidth: .infinity, minHeight: availableHeight)
     }
     
     // MARK: - Failed Content
@@ -331,6 +366,27 @@ struct ProcessingView: View {
     @ViewBuilder
     private func completedActionButtons(resultURLs: [URL]) -> some View {
         VStack(spacing: 12) {
+            // Summary and File Info (pinned to bottom with buttons)
+            VStack(spacing: 4) {
+                if resultURLs.count == 1 {
+                    Text(L10n.Processing.readyToSave)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                } else {
+                    Text(L10n.Processing.filesCreated(resultURLs.count))
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                
+                if let firstURL = resultURLs.first,
+                   let fileSize = try? FileManager.default.attributesOfItem(atPath: firstURL.path)[.size] as? Int64 {
+                    Text(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding(.bottom, 8)
+            
             #if os(macOS)
             // macOS: Save button using NSSavePanel
             Button {
@@ -368,14 +424,7 @@ struct ProcessingView: View {
     
     // MARK: - Helper Properties
     
-    private var canDismiss: Bool {
-        switch viewModel.state {
-        case .idle, .processing:
-            return false
-        case .completed, .failed, .cancelled:
-            return true
-        }
-    }
+    // canDismiss property removed as it was only used for the now-removed Close toolbar button
     
     // MARK: - macOS File Saving
     

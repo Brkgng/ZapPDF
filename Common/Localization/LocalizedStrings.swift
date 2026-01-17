@@ -284,6 +284,14 @@ enum L10n {
         static let readyToSave = String(localized: "processing.readyToSave", defaultValue: "Your PDF is ready to save")
         static let somethingWentWrong = String(localized: "processing.somethingWentWrong", defaultValue: "Something Went Wrong")
         
+        // Preview feature
+        static let previewLoading = String(localized: "processing.previewLoading", defaultValue: "Loading preview...")
+        static let previewNotAvailable = String(localized: "processing.previewNotAvailable", defaultValue: "Preview not available")
+        
+        static func outputPages(_ count: Int) -> String {
+            String(localized: "\(count) pages", comment: "Output PDF page count on preview")
+        }
+        
         static func progress(_ value: Double) -> String {
             value.formatted(.percent.precision(.fractionLength(0)))
         }

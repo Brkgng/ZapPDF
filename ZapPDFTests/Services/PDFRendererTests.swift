@@ -206,4 +206,34 @@ struct PDFRendererTests {
         let cacheCount = await renderer.cacheCount
         #expect(cacheCount == 1)
     }
+    @Test("pageCount returns correct number of pages")
+    func pageCountReturnsCorrectNumberOfPages() async throws {
+        let identifier = UUID().uuidString
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 5, identifier: "page_count_\(identifier)")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let renderer = PDFRenderer()
+        
+        let count = await renderer.pageCount(for: url)
+        #expect(count == 5)
+    }
+    
+    @Test("generatePreviewData returns both image and count")
+    func generatePreviewDataReturnsBothImageAndCount() async throws {
+        let identifier = UUID().uuidString
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "preview_data_\(identifier)")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let renderer = PDFRenderer()
+        let size = CGSize(width: 100, height: 140)
+        
+        let (image, count) = await renderer.generatePreviewData(for: url, size: size)
+        
+        #expect(count == 3)
+        #expect(image != nil)
+        
+        // Check if it was cached
+        let cacheCount = await renderer.cacheCount
+        #expect(cacheCount == 1)
+    }
 }

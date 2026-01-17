@@ -223,24 +223,88 @@ actor PDFRenderer {
         inFlightTasks.count
     }
     
+    /// Get the page count of a PDF file securely and asynchronously.
+    ///
+    /// - Parameter url: URL of the PDF file
+    /// - Returns: Number of pages, or 0 if failed
+    func pageCount(for url: URL) async -> Int {
+        // Activate security-scoped access
+        let didStart = url.startAccessingSecurityScopedResource()
+        defer {
+            if didStart {
+                url.stopAccessingSecurityScopedResource()
+            }
+        }
+        
+        guard let document = PDFDocument(url: url) else {
+            return 0
+        }
+        
+        return document.pageCount
+    }
+    
+    /// Generate both a thumbnail and get page count in a single pass.
+    ///
+    /// This is more efficient than calling `thumbnail` and `pageCount` separately
+    /// as it only opens the PDF file once.
+    func generatePreviewData(
+        for url: URL,
+        size: CGSize
+    ) async -> (image: CGImage?, pageCount: Int) {
+        // Activate security-scoped access
+        let didStart = url.startAccessingSecurityScopedResource()
+        defer {
+            if didStart {
+                url.stopAccessingSecurityScopedResource()
+            }
+        }
+        
+        guard let document = PDFDocument(url: url) else {
+            return (nil, 0)
+        }
+        
+        let pageCount = document.pageCount
+        
+        // Reuse the internal render logic but with the ALREADY LOADED document
+        // We need to refactor renderThumbnail to accept a document or extract the logic
+        // For now, to be safe and minimal, we'll implement the rendering inline here
+        // or extract a private helper that takes a PDFPage.
+        
+        // Let's implement inline to avoid touching existing private methods too much
+        // and ensure we use the 'document' we just opened.
+        
+        guard let page = document.page(at: 0) else {
+            return (nil, pageCount)
+        }
+        
+        let image = Self.renderPage(page, size: size)
+        
+        // Cache the result if successful
+        if let image = image {
+            let cacheKey = ThumbnailCacheKey(
+                url: url,
+                pageIndex: 0,
+                width: Int(size.width),
+                height: Int(size.height)
+            )
+            let wrapper = CGImageWrapper(image: image)
+            cache.setObject(wrapper, forKey: cacheKey, cost: wrapper.cost)
+            cachedKeys.insert(cacheKey)
+        }
+        
+        return (image, pageCount)
+    }
+    
     // MARK: - Private Methods
     
     /// Render a thumbnail for a PDF page.
     ///
     /// This method handles security-scoped resource access for sandboxed environments.
-    /// When files are selected via the file picker, the system grants security-scoped
-    /// access. We must call `startAccessingSecurityScopedResource()` before accessing
-    /// the file and `stopAccessingSecurityScopedResource()` when done.
-    ///
-    /// - Note: If the URL is not security-scoped (e.g., files in temp directory),
-    ///   `startAccessingSecurityScopedResource()` returns `false` but does not fail.
-    ///   The file access still succeeds because those directories don't require scope.
     private static func renderThumbnail(url: URL, pageIndex: Int, size: CGSize) -> CGImage? {
         // Check cancellation before expensive file I/O
         guard !Task.isCancelled else { return nil }
         
-        // Activate security-scoped access for user-selected files outside the sandbox.
-        // This is required because DashboardView stops access after file import.
+        // Activate security-scoped access
         let didStart = url.startAccessingSecurityScopedResource()
         defer {
             if didStart {
@@ -259,6 +323,11 @@ actor PDFRenderer {
             return nil
         }
         
+        return renderPage(page, size: size)
+    }
+    
+    /// Helper to render a specific PDF page.
+    private static func renderPage(_ page: PDFPage, size: CGSize) -> CGImage? {
         // Get page bounds
         let pageBounds = page.bounds(for: .mediaBox)
         
