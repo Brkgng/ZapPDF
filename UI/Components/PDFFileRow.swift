@@ -115,7 +115,10 @@ struct PDFFileRow: View {
                         .foregroundColor(.secondary)
                 }
                 .buttonStyle(.plain)
-                .opacity(isHovered ? 1 : 0.6)
+                #if os(macOS)
+                .opacity(isHovered ? 1 : 0)
+                .animation(.easeInOut(duration: 0.15), value: isHovered)
+                #endif
                 .help(L10n.Accessibility.deleteFile)
             }
         }
@@ -127,7 +130,7 @@ struct PDFFileRow: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
+                .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 1.5) // Thinner border
         )
         .contentShape(Rectangle())
         .simultaneousGesture(
@@ -172,6 +175,7 @@ struct PDFFileRow: View {
         } else if isHovered {
             return Color.gray.opacity(0.1)
         } else {
+            // Very subtle tint for unselected but not hovered (optional, can stay clear)
             return Color.clear
         }
     }

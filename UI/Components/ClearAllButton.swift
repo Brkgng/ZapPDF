@@ -90,21 +90,21 @@ struct ClearAllButton: View {
         if isDisabled {
             return .gray
         }
-        return isHovered ? .white : .red
+        return isHovered ? .primary : .secondary
     }
     
     private var buttonBackgroundColor: Color {
         if isDisabled {
             return .gray.opacity(0.1)
         }
-        return isHovered ? .red : .red.opacity(0.1)
+        return isHovered ? Color.secondary.opacity(0.2) : Color.secondary.opacity(0.08)
     }
     
     private var buttonBorderColor: Color {
         if isDisabled {
             return .gray.opacity(0.3)
         }
-        return isHovered ? .red : .red.opacity(0.4)
+        return Color.secondary.opacity(0.3)
     }
     
     // MARK: - Private Methods

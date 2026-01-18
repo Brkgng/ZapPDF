@@ -312,7 +312,7 @@ struct DashboardView: View {
     // MARK: - Bottom Bar
     
     private var bottomBar: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 16) {
             // Summary
             HStack {
                 // Selection count
@@ -363,54 +363,82 @@ struct DashboardView: View {
     
     // MARK: - Action Buttons Row
     
+    private let buttonSpacing: CGFloat = 12
+    
     private var actionButtonsRow: some View {
-        HStack(spacing: 12) {
-            // Merge button
-            StyledActionButton(
-                action: .merge,
-                isEnabled: viewModel.canPerform(action: .merge)
-            ) {
-                handleActionTap(.merge)
+        Group {
+            #if os(iOS)
+            // iOS: Adaptive Grid Layout
+            // Uses adaptive columns to fill width, handling 5 items gracefully
+            LazyVGrid(columns: [
+                GridItem(.adaptive(minimum: 140, maximum: 220), spacing: buttonSpacing)
+            ], spacing: buttonSpacing) {
+                actionButtons
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            // Split button
-            StyledActionButton(
-                action: .split,
-                isEnabled: viewModel.canPerform(action: .split)
-            ) {
-                handleActionTap(.split)
+            #else
+            // macOS: Horizontal Toolbar Style
+            // Uses equal-width buttons that don't compress vertically
+            HStack(spacing: buttonSpacing) {
+                actionButtons
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            // Edit Pages button
-            StyledActionButton(
-                action: .editPages,
-                isEnabled: viewModel.canPerform(action: .editPages)
-            ) {
-                handleActionTap(.editPages)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            // Flatten button
-            StyledActionButton(
-                action: .flatten,
-                isEnabled: viewModel.canPerform(action: .flatten)
-            ) {
-                handleActionTap(.flatten)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            // Convert button (Pro)
-            StyledActionButton(
-                action: .convert,
-                isEnabled: viewModel.canPerform(action: .convert)
-            ) {
-                handleActionTap(.convert)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxHeight: .infinity)
+            .fixedSize(horizontal: false, vertical: true)
+            #endif
         }
-        .fixedSize(horizontal: false, vertical: true)
+    }
+    
+    @ViewBuilder
+    private var actionButtons: some View {
+        // Shared modifier for button content sizing
+        let buttonModifier = { (view: StyledActionButton) -> AnyView in
+            #if os(iOS)
+            // iOS: Fill grid cell
+            return AnyView(view.frame(maxWidth: .infinity))
+            #else
+            // macOS: Intrinsic size with min-width for uniformity, but no infinite stretch
+            return AnyView(view.frame(minWidth: 100))
+            #endif
+        }
+        
+        // Merge button
+        buttonModifier(StyledActionButton(
+            action: .merge,
+            isEnabled: viewModel.canPerform(action: .merge)
+        ) {
+            handleActionTap(.merge)
+        })
+        
+        // Split button
+        buttonModifier(StyledActionButton(
+            action: .split,
+            isEnabled: viewModel.canPerform(action: .split)
+        ) {
+            handleActionTap(.split)
+        })
+        
+        // Edit Pages button
+        buttonModifier(StyledActionButton(
+            action: .editPages,
+            isEnabled: viewModel.canPerform(action: .editPages)
+        ) {
+            handleActionTap(.editPages)
+        })
+        
+        // Flatten button
+        buttonModifier(StyledActionButton(
+            action: .flatten,
+            isEnabled: viewModel.canPerform(action: .flatten)
+        ) {
+            handleActionTap(.flatten)
+        })
+        
+        // Convert button
+        buttonModifier(StyledActionButton(
+            action: .convert,
+            isEnabled: viewModel.canPerform(action: .convert)
+        ) {
+            handleActionTap(.convert)
+        })
     }
     
     // MARK: - Toolbar Content

@@ -135,19 +135,10 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
     // MARK: - Accent Color
     
     /// Accent color for the action's UI elements.
+    /// Uses unified accentColor for clean toolbar aesthetic.
+    /// Icons and labels provide sufficient differentiation between actions.
     var accentColor: Color {
-        switch self {
-        case .merge:
-            return .blue
-        case .split:
-            return .orange
-        case .editPages:
-            return .green
-        case .flatten:
-            return .teal
-        case .convert:
-            return .purple
-        }
+        .accentColor
     }
 }
 

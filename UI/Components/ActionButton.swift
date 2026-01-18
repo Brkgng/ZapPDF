@@ -15,6 +15,8 @@ enum ActionButtonStyle {
     case secondary
     /// Compact icon-only style with small label.
     case compact
+    /// Modern tinted style with subtle background and vibrant foreground.
+    case tinted
 }
 
 /// A styled button for PDF actions with icon and label.
@@ -44,7 +46,7 @@ struct ActionButton: View {
     let isEnabled: Bool
     
     /// The visual style of the button.
-    var style: ActionButtonStyle = .primary
+    var style: ActionButtonStyle = .tinted
     
     /// Whether to show the action label.
     var showLabel: Bool = true
@@ -63,10 +65,11 @@ struct ActionButton: View {
     @ViewBuilder
     var buttonContent: some View {
         switch style {
-        case .primary, .secondary:
+        case .primary, .secondary, .tinted:
             HStack(spacing: 8) {
                 Image(systemName: action.iconName)
                     .font(.body.weight(.medium))
+                    .foregroundColor(style == .tinted && isEnabled ? action.accentColor : nil)
                 if showLabel {
                     Text(action.displayName)
                         .font(.headline)
@@ -158,6 +161,64 @@ struct ActionCompactButtonStyle: ButtonStyle {
     }
 }
 
+/// Modern tinted button style (Apple native feel).
+struct ActionTintedButtonStyle: ButtonStyle {
+    let accentColor: Color
+    @Environment(\.isEnabled) private var isEnabled
+    
+    func makeBody(configuration: Configuration) -> some View {
+        TintedButtonContent(
+            configuration: configuration,
+            accentColor: accentColor,
+            isEnabled: isEnabled
+        )
+    }
+}
+
+/// Wrapper view that safely holds hover state for visual feedback.
+/// Note: @State must live in a View, not in ButtonStyle.makeBody.
+/// Cursor feedback for disabled state is handled externally (outside .disabled() modifier).
+private struct TintedButtonContent: View {
+    let configuration: ButtonStyleConfiguration
+    let accentColor: Color
+    let isEnabled: Bool
+    @State private var isHovering = false
+    
+    var body: some View {
+        configuration.label
+            // Improved disabled contrast: Use primary with opacity instead of secondary
+            .foregroundColor(isEnabled ? Color.primary : Color.primary.opacity(0.4))
+            .padding(.horizontal, 16)
+            // Reduced vertical padding from 14 to 10 for a tighter look
+            .padding(.vertical, 10)
+            .background(
+                RoundedRectangle(cornerRadius: 10) // Tighter radius
+                    .fill(
+                        isEnabled
+                        ? accentColor.opacity(isHovering ? 0.18 : 0.12)
+                        // More visible disabled background
+                        : Color.primary.opacity(0.05)
+                    )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(
+                        isEnabled 
+                        ? accentColor.opacity(0.2) 
+                        : Color.primary.opacity(0.1), 
+                        lineWidth: 1 // Increased slightly definition
+                    )
+            )
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isHovering = hovering
+                }
+            }
+    }
+}
+
 // MARK: - ActionButton with Proper Style Application
 
 extension ActionButton {
@@ -194,6 +255,17 @@ extension ActionButton {
             }
             .disabled(!isEnabled)
             .buttonStyle(ActionCompactButtonStyle(accentColor: action.accentColor))
+            
+        case .tinted:
+            Button {
+                triggerHaptic()
+                onTap()
+            } label: {
+                buttonContent
+            }
+            .disabled(!isEnabled)
+            .buttonStyle(ActionTintedButtonStyle(accentColor: action.accentColor))
+
         }
     }
 }
@@ -204,7 +276,7 @@ extension ActionButton {
 struct StyledActionButton: View {
     let action: UserAction
     let isEnabled: Bool
-    var style: ActionButtonStyle = .primary
+    var style: ActionButtonStyle = .tinted
     var showLabel: Bool = true
     var onTap: () -> Void
     
@@ -224,7 +296,7 @@ struct StyledActionButton: View {
 #Preview("Primary Style") {
     VStack(spacing: 20) {
         ForEach(UserAction.allCases) { action in
-            StyledActionButton(action: action, isEnabled: true) {
+            StyledActionButton(action: action, isEnabled: true, style: .primary) {
                 print("\(action.displayName) tapped")
             }
         }
@@ -236,6 +308,17 @@ struct StyledActionButton: View {
     VStack(spacing: 20) {
         ForEach(UserAction.allCases) { action in
             StyledActionButton(action: action, isEnabled: true, style: .secondary) {
+                print("\(action.displayName) tapped")
+            }
+        }
+    }
+    .padding()
+}
+
+#Preview("Tinted Style (New)") {
+    VStack(spacing: 20) {
+        ForEach(UserAction.allCases) { action in
+            StyledActionButton(action: action, isEnabled: true, style: .tinted) {
                 print("\(action.displayName) tapped")
             }
         }
@@ -258,6 +341,7 @@ struct StyledActionButton: View {
     VStack(spacing: 20) {
         StyledActionButton(action: .merge, isEnabled: false) {}
         StyledActionButton(action: .split, isEnabled: false, style: .secondary) {}
+        StyledActionButton(action: .flatten, isEnabled: false, style: .tinted) {}
         StyledActionButton(action: .convert, isEnabled: false, style: .compact) {}
     }
     .padding()

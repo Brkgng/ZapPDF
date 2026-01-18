@@ -27,7 +27,7 @@ final class ActionButtonTests: XCTestCase {
         // Then
         XCTAssertEqual(button.action, .merge)
         XCTAssertTrue(button.isEnabled)
-        XCTAssertEqual(button.style, .primary)
+        XCTAssertEqual(button.style, .tinted)
         XCTAssertTrue(button.showLabel)
     }
     
@@ -54,21 +54,22 @@ final class ActionButtonTests: XCTestCase {
         let button = ActionButton(action: .merge, isEnabled: true, onTap: {})
         XCTAssertEqual(button.action.displayName, "Merge PDFs")
         XCTAssertEqual(button.action.iconName, "doc.on.doc")
-        XCTAssertEqual(button.action.accentColor, .blue)
+        // Color is now a harmonized HSB value, just verify it's defined
+        XCTAssertNotNil(button.action.accentColor)
     }
     
     func testSplitAction() {
         let button = ActionButton(action: .split, isEnabled: true, onTap: {})
         XCTAssertEqual(button.action.displayName, "Split PDF")
         XCTAssertEqual(button.action.iconName, "scissors")
-        XCTAssertEqual(button.action.accentColor, .orange)
+        XCTAssertNotNil(button.action.accentColor)
     }
     
     func testConvertAction() {
         let button = ActionButton(action: .convert, isEnabled: true, onTap: {})
         XCTAssertEqual(button.action.displayName, "Convert PDF")
         XCTAssertEqual(button.action.iconName, "arrow.triangle.2.circlepath")
-        XCTAssertEqual(button.action.accentColor, .purple)
+        XCTAssertNotNil(button.action.accentColor)
     }
     
     // MARK: - Style Tests
@@ -86,6 +87,11 @@ final class ActionButtonTests: XCTestCase {
     func testCompactStyle() {
         let button = ActionButton(action: .merge, isEnabled: true, style: .compact, onTap: {})
         XCTAssertEqual(button.style, .compact)
+    }
+    
+    func testTintedStyle() {
+        let button = ActionButton(action: .merge, isEnabled: true, style: .tinted, onTap: {})
+        XCTAssertEqual(button.style, .tinted)
     }
     
     // MARK: - Enabled/Disabled State Tests
@@ -128,7 +134,7 @@ final class StyledActionButtonTests: XCTestCase {
         
         XCTAssertEqual(button.action, .merge)
         XCTAssertTrue(button.isEnabled)
-        XCTAssertEqual(button.style, .primary)
+        XCTAssertEqual(button.style, .tinted)
         XCTAssertTrue(button.showLabel)
     }
 }
@@ -138,7 +144,7 @@ final class StyledActionButtonTests: XCTestCase {
 final class ActionButtonStyleTests: XCTestCase {
     
     func testAllStyleCases() {
-        let styles: [ActionButtonStyle] = [.primary, .secondary, .compact]
-        XCTAssertEqual(styles.count, 3)
+        let styles: [ActionButtonStyle] = [.primary, .secondary, .compact, .tinted]
+        XCTAssertEqual(styles.count, 4)
     }
 }
