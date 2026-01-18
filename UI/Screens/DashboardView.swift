@@ -187,7 +187,6 @@ struct DashboardView: View {
             ) {
                 fileList
             }
-            .padding()
             
             Divider()
             
