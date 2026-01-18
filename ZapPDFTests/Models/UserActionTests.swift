@@ -18,7 +18,6 @@ struct UserActionTests {
         #expect(UserAction.merge.displayName == "Merge PDFs")
         #expect(UserAction.split.displayName == "Split PDF")
         #expect(UserAction.editPages.displayName == "Edit Pages")
-        #expect(UserAction.convert.displayName == "Convert PDF")
     }
     
     @Test("Icon names are valid SF Symbols")
@@ -26,7 +25,6 @@ struct UserActionTests {
         #expect(UserAction.merge.iconName == "doc.on.doc")
         #expect(UserAction.split.iconName == "scissors")
         #expect(UserAction.editPages.iconName == "square.and.pencil")
-        #expect(UserAction.convert.iconName == "arrow.triangle.2.circlepath")
     }
     
     @Test("Descriptions are not empty")
@@ -52,11 +50,11 @@ struct UserActionTests {
         #expect(UserAction.split.maximumFileCount == 1)
     }
     
-    @Test("Convert requires single file")
-    func convertRequiresSingleFile() {
-        #expect(UserAction.convert.requiresMultipleFiles == false)
-        #expect(UserAction.convert.minimumFileCount == 1)
-        #expect(UserAction.convert.maximumFileCount == 1)
+    @Test("Flatten requires single file")
+    func flattenRequiresSingleFile() {
+        #expect(UserAction.flatten.requiresMultipleFiles == false)
+        #expect(UserAction.flatten.minimumFileCount == 1)
+        #expect(UserAction.flatten.maximumFileCount == 1)
     }
     
     // MARK: - Validation
@@ -72,7 +70,7 @@ struct UserActionTests {
     
     @Test("isValidFileCount for single file actions")
     func isValidFileCountForSingleFileActions() {
-        let singleFileActions: [UserAction] = [.split, .editPages, .convert]
+        let singleFileActions: [UserAction] = [.split, .editPages, .flatten]
         
         for action in singleFileActions {
             #expect(action.isValidFileCount(0) == false)
@@ -107,11 +105,10 @@ struct UserActionTests {
     
     @Test("All cases are iterable")
     func allCasesAreIterable() {
-        #expect(UserAction.allCases.count == 5)
+        #expect(UserAction.allCases.count == 4)
         #expect(UserAction.allCases.contains(.merge))
         #expect(UserAction.allCases.contains(.split))
         #expect(UserAction.allCases.contains(.editPages))
-        #expect(UserAction.allCases.contains(.convert))
         #expect(UserAction.allCases.contains(.flatten))
     }
     

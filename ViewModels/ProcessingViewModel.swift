@@ -287,10 +287,6 @@ final class ProcessingViewModel: ObservableObject {
             )
             return [outputURL]
             
-        case .convert:
-            // TODO: Implement in future phase
-            throw PDFEngineError.emptyInput
-            
         case .editPages:
             // Edit Pages is handled by PageReorderView, not ProcessingView
             throw PDFEngineError.emptyInput
@@ -322,8 +318,6 @@ final class ProcessingViewModel: ObservableObject {
             return L10n.Processing.reorderingProgress(progress)
         case .flatten:
             return L10n.Processing.flatteningProgress(progress)
-        case .convert:
-            return L10n.Processing.convertingProgress(progress)
         }
     }
     

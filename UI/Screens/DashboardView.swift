@@ -430,14 +430,6 @@ struct DashboardView: View {
         ) {
             handleActionTap(.flatten)
         })
-        
-        // Convert button
-        buttonModifier(StyledActionButton(
-            action: .convert,
-            isEnabled: viewModel.canPerform(action: .convert)
-        ) {
-            handleActionTap(.convert)
-        })
     }
     
     // MARK: - Toolbar Content
@@ -583,10 +575,6 @@ struct DashboardView: View {
                     case .flatten:
                         // Show processing directly for flatten
                         startAction(.flatten, options: .flatten())
-                        
-                    case .convert:
-                        // TODO: Show convert options sheet in future
-                        viewModel.errorMessage = L10n.Common.comingSoon
                     }
                 }
             }

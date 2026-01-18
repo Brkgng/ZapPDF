@@ -125,11 +125,6 @@ enum L10n {
             static let saveReordered = String(localized: "operation.reorder.saveReordered", defaultValue: "Save Reordered")
         }
         
-        enum Convert {
-            static let title = String(localized: "operation.convert.title", defaultValue: "Convert PDF")
-            static let description = String(localized: "operation.convert.description", defaultValue: "Convert PDF to other formats")
-        }
-        
         enum Flatten {
             static let title = String(localized: "operation.flatten.title", defaultValue: "Flatten PDF")
             static let description = String(localized: "operation.flatten.description", defaultValue: "Bake annotations and forms into page content")
@@ -326,14 +321,6 @@ enum L10n {
                 return String(localized: "Reordering pages... \(formatted)", comment: "Reorder progress with percentage")
             }
             return String(localized: "processing.reordering", defaultValue: "Reordering pages...")
-        }
-        
-        static func convertingProgress(_ progress: Double) -> String {
-            if progress > 0 {
-                let formatted = progress.formatted(.percent.precision(.fractionLength(0)))
-                return String(localized: "Converting PDF... \(formatted)", comment: "Convert progress with percentage")
-            }
-            return String(localized: "processing.converting", defaultValue: "Converting PDF...")
         }
         
         static func flatteningProgress(_ progress: Double) -> String {

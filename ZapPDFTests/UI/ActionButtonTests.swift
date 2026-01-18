@@ -65,10 +65,10 @@ final class ActionButtonTests: XCTestCase {
         XCTAssertNotNil(button.action.accentColor)
     }
     
-    func testConvertAction() {
-        let button = ActionButton(action: .convert, isEnabled: true, onTap: {})
-        XCTAssertEqual(button.action.displayName, "Convert PDF")
-        XCTAssertEqual(button.action.iconName, "arrow.triangle.2.circlepath")
+    func testFlattenAction() {
+        let button = ActionButton(action: .flatten, isEnabled: true, onTap: {})
+        XCTAssertEqual(button.action.displayName, "Flatten PDF")
+        XCTAssertEqual(button.action.iconName, "square.on.square.dashed")
         XCTAssertNotNil(button.action.accentColor)
     }
     

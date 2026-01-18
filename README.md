@@ -8,7 +8,6 @@ A powerful, privacy-first PDF utility app for macOS, iOS, and iPadOS.
 - **Split PDFs** – Extract page ranges or split into individual pages
 - **Reorder Pages** – Drag-and-drop page reordering within a PDF
 - **Flatten PDFs** – Merge layers and annotations into page content
-- **Convert PDFs** – Transform PDFs to/from other formats
 - **Share Sheet Support** – Open PDFs from Files, Mail, and other apps directly in ZapPDF
 
 ## Requirements

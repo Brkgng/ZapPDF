@@ -194,7 +194,7 @@ struct DashboardActionButtonStateTests {
         // Single-file actions should be enabled
         #expect(viewModel.canPerform(action: .split) == true)
         #expect(viewModel.canPerform(action: .editPages) == true)
-        #expect(viewModel.canPerform(action: .convert) == true)
+        #expect(viewModel.canPerform(action: .flatten) == true)
         
         // Multi-file actions should be disabled
         #expect(viewModel.canPerform(action: .merge) == false)
@@ -216,6 +216,6 @@ struct DashboardActionButtonStateTests {
         // Single-file actions should be disabled
         #expect(viewModel.canPerform(action: .split) == false)
         #expect(viewModel.canPerform(action: .editPages) == false)
-        #expect(viewModel.canPerform(action: .convert) == false)
+        #expect(viewModel.canPerform(action: .flatten) == false)
     }
 }
