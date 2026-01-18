@@ -146,7 +146,7 @@ struct PDFThumbnailView: View {
         // Store the task so we can cancel it if needed
         let task = Task {
             let result = await Self.renderer.thumbnail(
-                for: pdfFile.url,
+                for: pdfFile,
                 pageIndex: 0,
                 size: size
             )

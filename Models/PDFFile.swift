@@ -139,6 +139,63 @@ struct PDFFile: Identifiable, Hashable, Sendable {
         bookmarkData != nil
     }
     
+    // MARK: - Security-Scoped Access
+    
+    /// Resolves the bookmark to get a fresh, valid security-scoped URL.
+    ///
+    /// External files (opened via Share Sheet or "Open In") have ephemeral URLs that
+    /// may become invalid after the app backgrounds. This method resolves the stored
+    /// bookmark to obtain a URL with a valid sandbox extension.
+    ///
+    /// - Returns: A resolved URL if bookmark exists, otherwise the original URL
+    func resolvedURL() throws -> URL {
+        // If no bookmark, return original URL (user-selected files work this way)
+        guard let bookmarkData = self.bookmarkData else {
+            return url
+        }
+        
+        do {
+            let (resolvedURL, isStale) = try URL.resolve(from: bookmarkData)
+            
+            if isStale {
+                #if DEBUG
+                print("⚠️ Bookmark is stale for: \(fileName)")
+                #endif
+            }
+            
+            return resolvedURL
+        } catch {
+            #if DEBUG
+            print("❌ Bookmark resolution failed for: \(fileName), error: \(error)")
+            #endif
+            // Fallback to original URL — may still work if accessed immediately
+            return url
+        }
+    }
+    
+    /// Executes a closure with guaranteed security-scoped access to the file.
+    ///
+    /// This is the **preferred way** to access file contents for external files.
+    /// It handles bookmark resolution and security scope management automatically.
+    ///
+    /// - Parameter operation: The operation to perform with file access
+    /// - Returns: The result of the operation
+    /// - Throws: Any error from bookmark resolution or the operation
+    func withResolvedAccess<T>(_ operation: (URL) throws -> T) throws -> T {
+        let accessURL = try resolvedURL()
+        return try accessURL.withSecurityScope {
+            try operation(accessURL)
+        }
+    }
+    
+    /// Async version of withResolvedAccess for async operations.
+    func withResolvedAccessAsync<T: Sendable>(_ operation: @Sendable (URL) async throws -> T) async throws -> T {
+        let accessURL = try resolvedURL()
+        return try await accessURL.withSecurityScopeAsync {
+            try await operation(accessURL)
+        }
+    }
+    
     // MARK: - Hashable & Equatable
     
     func hash(into hasher: inout Hasher) {

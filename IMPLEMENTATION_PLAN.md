@@ -63,6 +63,7 @@
 | 12    | In-App Language Switching                              |
 | 13    | Tier 1 Language Translations (DE, FR, ES, JA, ZH, TR)  |
 | 14    | Flatten PDF Feature                                    |
+| 15    | Share Sheet & Document Type Integration                |
 
 #### Phase 8: Testing & Polish
 

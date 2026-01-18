@@ -15,7 +15,7 @@ import SwiftUI
 /// Example:
 /// ```swift
 /// PageThumbnailView(
-///     url: pdfFile.url,
+///     pdfFile: pdfFile,
 ///     pageIndex: page.originalIndex,
 ///     displayNumber: page.displayPageNumber,
 ///     isSelected: selectedIndex == index
@@ -25,8 +25,8 @@ struct PageThumbnailView: View {
     
     // MARK: - Properties
     
-    /// URL of the PDF file.
-    let url: URL
+    /// The PDF file to display a page thumbnail for.
+    let pdfFile: PDFFile
     
     /// 0-based page index to render.
     let pageIndex: Int
@@ -82,7 +82,7 @@ struct PageThumbnailView: View {
         .accessibilityLabel(L10n.PageReorder.page(displayNumber))
         .accessibilityHint(isSelected ? L10n.Accessibility.selectedTapHint : L10n.Accessibility.tapToSelectHint)
         .accessibilityAddTraits(isSelected ? [.isSelected, .isButton] : .isButton)
-        .task(id: "\(url.absoluteString)_\(pageIndex)") {
+        .task(id: "\(pdfFile.id)_\(pageIndex)") {
             await loadThumbnail()
         }
         .onDisappear {
@@ -156,7 +156,7 @@ struct PageThumbnailView: View {
         
         let task = Task {
             let result = await Self.renderer.thumbnail(
-                for: url,
+                for: pdfFile,
                 pageIndex: pageIndex,
                 size: renderSize
             )
@@ -178,10 +178,11 @@ struct PageThumbnailView: View {
 
 #Preview("Page Thumbnails") {
     let mockURL = URL(fileURLWithPath: "/tmp/sample.pdf")
+    let mockFile = PDFFile(url: mockURL, fileName: "sample.pdf", pageCount: 5, fileSize: 1024)
     
     HStack(spacing: 12) {
         PageThumbnailView(
-            url: mockURL,
+            pdfFile: mockFile,
             pageIndex: 0,
             displayNumber: 1,
             isSelected: false,
@@ -189,14 +190,14 @@ struct PageThumbnailView: View {
         )
         
         PageThumbnailView(
-            url: mockURL,
+            pdfFile: mockFile,
             pageIndex: 1,
             displayNumber: 2,
             isSelected: true
         )
         
         PageThumbnailView(
-            url: mockURL,
+            pdfFile: mockFile,
             pageIndex: 2,
             displayNumber: 3,
             isSelected: false

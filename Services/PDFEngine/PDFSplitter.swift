@@ -64,10 +64,10 @@ actor PDFSplitter {
         // Reset cancellation state
         isCancelled = false
         
-        // Access file with security scope
-        return try await file.url.withSecurityScopeAsync { [self] in
-            guard let sourceDocument = PDFDocument(url: file.url) else {
-                throw PDFEngineError.invalidPDF(file.url)
+        // Access file with security scope and bookmark resolution
+        return try await file.withResolvedAccessAsync { resolvedURL in
+            guard let sourceDocument = PDFDocument(url: resolvedURL) else {
+                throw PDFEngineError.invalidPDF(resolvedURL)
             }
             
             if sourceDocument.isLocked {

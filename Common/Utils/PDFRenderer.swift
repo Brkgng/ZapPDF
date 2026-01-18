@@ -300,6 +300,47 @@ actor PDFRenderer {
         return (image, pageCount)
     }
     
+    // MARK: - PDFFile Overloads
+    
+    /// Generate a thumbnail for a PDF file with proper security scope handling.
+    ///
+    /// This method uses the file's bookmark to resolve a fresh URL, ensuring
+    /// thumbnails work correctly even after the app has been backgrounded.
+    ///
+    /// - Parameters:
+    ///   - file: The PDFFile to generate a thumbnail for
+    ///   - pageIndex: Zero-based page index
+    ///   - size: Desired size for the thumbnail
+    /// - Returns: CGImage of the thumbnail, or nil if generation failed
+    func thumbnail(
+        for file: PDFFile,
+        pageIndex: Int = 0,
+        size: CGSize
+    ) async -> CGImage? {
+        // Resolve the bookmark to get a valid URL
+        guard let accessURL = try? file.resolvedURL() else {
+            #if DEBUG
+            print("❌ Failed to resolve URL for: \(file.fileName)")
+            #endif
+            return nil
+        }
+        
+        // Use resolved URL for rendering
+        return await thumbnail(for: accessURL, pageIndex: pageIndex, size: size)
+    }
+    
+    /// Generate preview data using PDFFile for proper security scope handling.
+    func generatePreviewData(
+        for file: PDFFile,
+        size: CGSize
+    ) async -> (image: CGImage?, pageCount: Int) {
+        guard let accessURL = try? file.resolvedURL() else {
+            return (nil, 0)
+        }
+        
+        return await generatePreviewData(for: accessURL, size: size)
+    }
+    
     // MARK: - Private Methods
     
     /// Render a thumbnail for a PDF page.

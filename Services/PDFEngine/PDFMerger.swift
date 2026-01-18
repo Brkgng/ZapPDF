@@ -83,12 +83,12 @@ actor PDFMerger {
         for file in files {
             try checkCancellation()
             
-            // Access file with security scope
-            try await file.url.withSecurityScopeAsync { [self] in
-                try self.checkCancellationSync()
+            // Access file with security scope and bookmark resolution
+            try await file.withResolvedAccessAsync { resolvedURL in
+                try Task.checkCancellation()
                 
-                guard let sourceDocument = PDFDocument(url: file.url) else {
-                    throw PDFEngineError.invalidPDF(file.url)
+                guard let sourceDocument = PDFDocument(url: resolvedURL) else {
+                    throw PDFEngineError.invalidPDF(resolvedURL)
                 }
                 
                 // Check if password protected

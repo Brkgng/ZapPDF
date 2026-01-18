@@ -20,7 +20,7 @@ import UniformTypeIdentifiers
 /// ```swift
 /// DraggablePageGrid(
 ///     pages: viewModel.pages,
-///     pdfURL: viewModel.sourceFile.url,
+///     pdfFile: viewModel.sourceFile,
 ///     selectedIndex: $viewModel.selectedPageIndex,
 ///     onMove: { source, destination in
 ///         viewModel.movePages(from: source, to: destination)
@@ -40,8 +40,8 @@ struct DraggablePageGrid: View {
     /// The pages to display.
     let pages: [PageItem]
     
-    /// URL of the source PDF for thumbnail loading.
-    let pdfURL: URL
+    /// The source PDF file for thumbnail loading.
+    let pdfFile: PDFFile
     
     /// Currently selected page index (binding).
     @Binding var selectedIndex: Int?
@@ -157,7 +157,7 @@ struct DraggablePageGrid: View {
                         .draggable(page.id.uuidString) {
                             // Drag preview
                             PageThumbnailView(
-                                url: pdfURL,
+                                pdfFile: pdfFile,
                                 pageIndex: page.originalIndex,
                                 displayNumber: page.displayPageNumber,
                                 isSelected: true,
@@ -180,7 +180,7 @@ struct DraggablePageGrid: View {
     
     private func pageCell(page: PageItem, index: Int, size: CGSize) -> some View {
         PageThumbnailView(
-            url: pdfURL,
+            pdfFile: pdfFile,
             pageIndex: page.originalIndex,
             displayNumber: page.displayPageNumber,
             isSelected: selectedIndex == index,
@@ -258,7 +258,7 @@ struct PageDropDelegate: DropDelegate {
 /// Alternative iOS implementation using List for better native drag-and-drop.
 struct DraggablePageList: View {
     let pages: [PageItem]
-    let pdfURL: URL
+    let pdfFile: PDFFile
     @Binding var selectedIndex: Int?
     let onMove: (IndexSet, Int) -> Void
     
@@ -273,7 +273,7 @@ struct DraggablePageList: View {
             ForEach(Array(pages.enumerated()), id: \.element.id) { index, page in
                 HStack {
                     PageThumbnailView(
-                        url: pdfURL,
+                        pdfFile: pdfFile,
                         pageIndex: page.originalIndex,
                         displayNumber: page.displayPageNumber,
                         isSelected: selectedIndex == index,
@@ -341,11 +341,12 @@ struct DraggablePageList: View {
 
 #Preview("Draggable Grid - macOS") {
     let mockURL = URL(fileURLWithPath: "/tmp/sample.pdf")
+    let mockFile = PDFFile(url: mockURL, fileName: "sample.pdf", pageCount: 6, fileSize: 1024)
     let mockPages = [PageItem].create(pageCount: 6)
     
     DraggablePageGrid(
         pages: mockPages,
-        pdfURL: mockURL,
+        pdfFile: mockFile,
         selectedIndex: .constant(1),
         onMove: { _, _ in }
     )
@@ -354,11 +355,12 @@ struct DraggablePageList: View {
 
 #Preview("Draggable List - iOS") {
     let mockURL = URL(fileURLWithPath: "/tmp/sample.pdf")
+    let mockFile = PDFFile(url: mockURL, fileName: "sample.pdf", pageCount: 6, fileSize: 1024)
     let mockPages = [PageItem].create(pageCount: 6)
     
     DraggablePageList(
         pages: mockPages,
-        pdfURL: mockURL,
+        pdfFile: mockFile,
         selectedIndex: .constant(1),
         onMove: { _, _ in }
     )

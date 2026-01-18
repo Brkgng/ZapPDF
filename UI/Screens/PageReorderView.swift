@@ -99,7 +99,7 @@ struct PageReorderView: View {
                 } else {
                     DraggablePageGrid(
                         pages: viewModel.pages,
-                        pdfURL: viewModel.sourceFile.url,
+                        pdfFile: viewModel.sourceFile,
                         selectedIndex: $viewModel.selectedPageIndex,
                         onMove: viewModel.movePages,
                         onRotate: { index, clockwise in
@@ -211,7 +211,7 @@ struct PageReorderView: View {
                     // Use the list-based approach for better iOS drag experience
                     DraggablePageList(
                         pages: viewModel.pages,
-                        pdfURL: viewModel.sourceFile.url,
+                        pdfFile: viewModel.sourceFile,
                         selectedIndex: $viewModel.selectedPageIndex,
                         onMove: viewModel.movePages,
                         onRotate: { index, clockwise in
@@ -355,7 +355,7 @@ struct PageReorderView: View {
                             .font(.headline)
                         
                         PageThumbnailView(
-                            url: viewModel.sourceFile.url,
+                            pdfFile: viewModel.sourceFile,
                             pageIndex: page.originalIndex,
                             displayNumber: page.displayPageNumber,
                             isSelected: false,

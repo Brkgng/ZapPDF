@@ -34,7 +34,7 @@ struct DashboardView: View {
     
     // MARK: - Properties
     
-    @StateObject private var viewModel = DashboardViewModel()
+    @EnvironmentObject private var viewModel: DashboardViewModel
     
     @State private var showFilePicker = false
     @State private var isDropTargeted = false
