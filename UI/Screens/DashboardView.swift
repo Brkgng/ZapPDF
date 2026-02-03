@@ -11,6 +11,11 @@ import UniformTypeIdentifiers
 #if canImport(RevenueCatUI)
 import RevenueCatUI
 #endif
+
+#if os(iOS)
+import VisionKit
+#endif
+
 // MARK: - DashboardView
 
 /// Main dashboard view for file selection and PDF operations.
@@ -50,6 +55,13 @@ struct DashboardView: View {
     @State private var clearedFiles: [PDFFile] = []
     @State private var clearedSelection: Set<UUID> = []
     @State private var showSettings = false
+    
+    #if os(iOS)
+    @State private var showScanner = false
+    @State private var showPhotoImporter = false
+    @State private var isProcessingScan = false
+    @State private var scanProgress: Double? = nil
+    #endif
     
     // MARK: - Body
     
@@ -138,6 +150,28 @@ struct DashboardView: View {
                             .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
                 }
+                #if os(iOS)
+                .fullScreenCover(isPresented: $showScanner) {
+                    DocumentScannerView(
+                        isPresented: $showScanner,
+                        onScanCompleted: handleScanCompleted,
+                        onCancelled: { },
+                        onError: handleScanError
+                    )
+                    .ignoresSafeArea()
+                }
+                .sheet(isPresented: $showPhotoImporter) {
+                    PhotoImporterView(
+                        isPresented: $showPhotoImporter,
+                        onImagesSelected: handlePhotosSelected
+                    )
+                }
+                .overlay {
+                    if isProcessingScan {
+                        ScanProcessingOverlay(progress: scanProgress)
+                    }
+                }
+                #endif
         }
     }
     
@@ -461,6 +495,34 @@ struct DashboardView: View {
         }
         #endif
         
+        #if os(iOS)
+        ToolbarItem(placement: .primaryAction) {
+            Menu {
+                Button {
+                    showFilePicker = true
+                } label: {
+                    Label(L10n.Dashboard.addFiles, systemImage: "doc.badge.plus")
+                }
+                
+                if DocumentScanner.isSupported {
+                    Button {
+                        showScanner = true
+                    } label: {
+                        Label(L10n.Scanner.scanDocument, systemImage: "doc.viewfinder")
+                    }
+                }
+                
+                Button {
+                    showPhotoImporter = true
+                } label: {
+                    Label(L10n.Scanner.importFromPhotos, systemImage: "photo.on.rectangle")
+                }
+            } label: {
+                Label(L10n.Dashboard.addFiles, systemImage: "plus")
+            }
+            .disabled(isProcessingScan)
+        }
+        #else
         ToolbarItem(placement: .primaryAction) {
             Button {
                 showFilePicker = true
@@ -468,6 +530,7 @@ struct DashboardView: View {
                 Label(L10n.Dashboard.addFiles, systemImage: "plus")
             }
         }
+        #endif
         
         #if os(iOS)
         ToolbarItem(placement: .secondaryAction) {
@@ -667,6 +730,92 @@ struct DashboardView: View {
         generator.notificationOccurred(.success)
         #endif
     }
+    
+    // MARK: - Scanning (iOS)
+    
+    #if os(iOS)
+    private func handleScanCompleted(_ scan: VNDocumentCameraScan) {
+        isProcessingScan = true
+        scanProgress = nil  // Start with indeterminate progress
+
+        Task {
+            // Ensure state is always reset, even if an unexpected error occurs
+            defer {
+                isProcessingScan = false
+                scanProgress = nil
+            }
+
+            do {
+                let result = try await DocumentScanner.shared.convertScanToPDF(scan) { progress in
+                    // Update progress on main actor
+                    Task { @MainActor in
+                        scanProgress = progress
+                    }
+                }
+                await viewModel.addFiles(urls: [result.pdfURL])
+
+                // Show warning if some pages failed
+                if !result.isComplete {
+                    viewModel.errorMessage = L10n.Scanner.partialSuccess(
+                        result.successfulPages,
+                        result.successfulPages + result.failedPageIndices.count
+                    )
+                }
+            } catch {
+                if let scanError = error as? DocumentScannerError,
+                   scanError == .cancelled {
+                    // User cancelled, no error needed
+                } else {
+                    viewModel.errorMessage = error.localizedDescription
+                }
+            }
+        }
+    }
+    
+    private func handlePhotosSelected(_ images: [UIImage]) {
+        guard !images.isEmpty else { return }
+
+        isProcessingScan = true
+        scanProgress = nil  // Start with indeterminate progress
+
+        Task {
+            // Ensure state is always reset, even if an unexpected error occurs
+            defer {
+                isProcessingScan = false
+                scanProgress = nil
+            }
+
+            do {
+                let result = try await DocumentScanner.shared.convertImagesToPDF(images) { progress in
+                    // Update progress on main actor
+                    Task { @MainActor in
+                        scanProgress = progress
+                    }
+                }
+                await viewModel.addFiles(urls: [result.pdfURL])
+
+                if !result.isComplete {
+                    viewModel.errorMessage = L10n.Scanner.partialSuccess(
+                        result.successfulPages,
+                        result.successfulPages + result.failedPageIndices.count
+                    )
+                }
+            } catch {
+                // Match cancellation pattern from handleScanCompleted
+                if let scanError = error as? DocumentScannerError,
+                   scanError == .cancelled {
+                    // User cancelled, no error needed
+                } else {
+                    viewModel.errorMessage = error.localizedDescription
+                }
+            }
+        }
+    }
+    
+    private func handleScanError(_ error: Error) {
+        viewModel.errorMessage = L10n.Scanner.errorCamera(error.localizedDescription)
+    }
+    #endif
 }
 
 // MARK: - Split Options Sheet

@@ -22,5 +22,9 @@
     <!-- macOS: Support opening documents in place (required for sandboxed apps) -->
     <key>LSSupportsOpeningDocumentsInPlace</key>
     <true/>
+    
+    <!-- iOS: Camera access for document scanning -->
+    <key>NSCameraUsageDescription</key>
+    <string>ZapPDF uses the camera to scan physical documents and convert them to PDF.</string>
 </dict>
 </plist>

@@ -595,4 +595,31 @@ enum L10n {
         static let chineseSimplified = String(localized: "language.chineseSimplified", defaultValue: "Chinese (Simplified)")
         static let turkish = String(localized: "language.turkish", defaultValue: "Turkish")
     }
+    
+    // MARK: - Scanner (iOS only)
+    
+    enum Scanner {
+        static let scanDocument = String(localized: "scanner.scanDocument", defaultValue: "Scan Document")
+        static let importFromPhotos = String(localized: "scanner.importFromPhotos", defaultValue: "Import from Photos")
+        static let scannedDocument = String(localized: "scanner.scannedDocument", defaultValue: "Scanned Document")
+        static let processing = String(localized: "scanner.processing", defaultValue: "Creating PDF...")
+        
+        // Errors
+        static let errorNotSupported = String(localized: "scanner.error.notSupported", defaultValue: "Document scanning is not supported on this device")
+        static let errorNoImages = String(localized: "scanner.error.noImages", defaultValue: "No images were provided")
+        static let errorPDFWriteFailed = String(localized: "scanner.error.pdfWriteFailed", defaultValue: "Failed to create PDF from scanned images")
+        static let errorAllPagesFailed = String(localized: "scanner.error.allPagesFailed", defaultValue: "All pages failed to convert")
+        
+        static func errorCamera(_ detail: String) -> String {
+            String(localized: "Camera error: \(detail)", comment: "Camera error with detail")
+        }
+        
+        static func errorConversionFailed(_ pageNumber: Int) -> String {
+            String(localized: "Failed to convert page \(pageNumber) to PDF", comment: "Image conversion error")
+        }
+        
+        static func partialSuccess(_ saved: Int, _ total: Int) -> String {
+            String(localized: "Saved \(saved) of \(total) pages", comment: "Partial conversion success message")
+        }
+    }
 }
