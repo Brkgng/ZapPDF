@@ -82,6 +82,9 @@ enum KeychainHelper {
         
         /// Pro subscription status (cached for offline support)
         case proStatus = "com.zappdf.proStatus"
+        
+        /// Last app version that the review prompt was shown for
+        case lastReviewPromptVersion = "com.zappdf.review.lastPromptVersion"
     }
     
     // MARK: - Private Constants
@@ -254,5 +257,30 @@ enum KeychainHelper {
             return nil
         }
         return data[0] == 1
+    }
+    
+    /// Save a string value to Keychain.
+    ///
+    /// - Parameters:
+    ///   - value: The string to store
+    ///   - key: The key to store under
+    /// - Throws: `KeychainError` if the operation fails
+    static func saveString(_ value: String, for key: Key) throws {
+        guard let data = value.data(using: .utf8) else {
+            throw KeychainError.encodingFailed
+        }
+        try save(data, for: key)
+    }
+    
+    /// Load a string value from Keychain.
+    ///
+    /// - Parameter key: The key to load
+    /// - Returns: The stored string, or nil if not found
+    /// - Throws: `KeychainError` for errors other than "not found"
+    static func loadString(for key: Key) throws -> String? {
+        guard let data = try load(for: key) else {
+            return nil
+        }
+        return String(data: data, encoding: .utf8)
     }
 }

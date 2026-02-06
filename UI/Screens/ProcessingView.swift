@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import StoreKit
 #if os(macOS)
 import AppKit
 #else
@@ -43,6 +44,7 @@ struct ProcessingView: View {
     let options: ProcessingOptions
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.requestReview) private var requestReview
     @State private var showCancelConfirmation = false
     @State private var showShareSheet = false
     @State private var showFileSaveSuccess = false
@@ -416,7 +418,11 @@ struct ProcessingView: View {
             }
             .buttonStyle(.plain)
             .sheet(isPresented: $showShareSheet) {
-                ShareSheet(items: resultURLs)
+                ShareSheet(items: resultURLs) { completed in
+                    if completed {
+                        attemptReviewPrompt()
+                    }
+                }
             }
             #endif
         }
@@ -425,6 +431,17 @@ struct ProcessingView: View {
     // MARK: - Helper Properties
     
     // canDismiss property removed as it was only used for the now-removed Close toolbar button
+    
+    private func attemptReviewPrompt() {
+        Task {
+            // slight delay to ensure sheet/save panel interaction is fully finished
+            try? await Task.sleep(for: .seconds(0.5))
+            
+            if await AppStoreReviewManager.shared.shouldShowAndMarkReviewPrompt() {
+                requestReview()
+            }
+        }
+    }
     
     // MARK: - macOS File Saving
     
@@ -448,6 +465,9 @@ struct ProcessingView: View {
                     try FileManager.default.moveItem(at: firstURL, to: destinationURL)
                     savedFileURL = destinationURL
                     showFileSaveSuccess = true
+                    
+                    // Trigger review prompt on success
+                    attemptReviewPrompt()
                 } catch {
                     saveErrorMessage = L10n.Processing.couldNotSaveFile(error.localizedDescription)
                 }
@@ -462,9 +482,16 @@ struct ProcessingView: View {
 #if os(iOS)
 struct ShareSheet: UIViewControllerRepresentable {
     let items: [Any]
+    var onComplete: ((Bool) -> Void)? = nil
     
     func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        
+        controller.completionWithItemsHandler = { _, completed, _, _ in
+            onComplete?(completed)
+        }
+        
+        return controller
     }
     
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
