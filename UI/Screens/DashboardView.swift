@@ -85,7 +85,10 @@ struct DashboardView: View {
                 .sheet(isPresented: $viewModel.showPaywall) {
                     PaywallView()
                         #if os(macOS)
-                        .frame(minWidth: 400, minHeight: 600)
+                        .frame(
+                            minWidth: PaywallPresentationMetrics.minWidth,
+                            minHeight: PaywallPresentationMetrics.minHeight,
+                        )
                         #endif
                 }
                 #if os(iOS)

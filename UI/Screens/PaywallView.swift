@@ -15,6 +15,15 @@ import RevenueCat
 import RevenueCatUI
 #endif
 
+// MARK: - macOS Paywall Presentation Metrics
+
+#if os(macOS)
+enum PaywallPresentationMetrics {
+    static let minWidth: CGFloat = 520
+    static let minHeight: CGFloat = 620
+}
+#endif
+
 // MARK: - PaywallView
 
 /// Subscription paywall that uses RevenueCat's built-in PaywallView.
