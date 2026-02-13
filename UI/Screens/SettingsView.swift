@@ -43,7 +43,7 @@ struct SettingsView: View {
             aboutSection
         }
         .formStyle(.grouped)
-        .frame(width: 400, height: 350)
+        .frame(width: 400, height: 430)
         .alert(restoreSuccess ? L10n.Processing.completed : L10n.Error.title, isPresented: $showRestoreAlert) {
             Button(L10n.Action.ok, role: .cancel) { }
         } message: {
@@ -131,7 +131,10 @@ struct SettingsView: View {
             // Manage Subscription - opens App Store
             if let url = subscriptionURL {
                 Link(destination: url) {
-                    Label(L10n.Settings.manageSubscription, systemImage: "arrow.up.forward.app")
+                    subscriptionActionRow(
+                        title: L10n.Settings.manageSubscription,
+                        systemImage: "arrow.up.forward.app"
+                    )
                 }
             }
             
@@ -139,29 +142,49 @@ struct SettingsView: View {
             Button {
                 restorePurchases()
             } label: {
-                HStack {
-                    Label(L10n.Settings.restorePurchases, systemImage: "arrow.clockwise")
-                    Spacer()
-                    if isRestoring {
-                        ProgressView()
-                            .controlSize(.small)
-                    }
-                }
+                subscriptionActionRow(
+                    title: L10n.Settings.restorePurchases,
+                    systemImage: "arrow.clockwise",
+                    showsProgress: isRestoring
+                )
             }
+            .buttonStyle(.plain)
+            .foregroundStyle(Color.accentColor)
             .disabled(isRestoring)
             
             // Contact Support
             Button {
                 contactSupport()
             } label: {
-                HStack {
-                    Label(L10n.Settings.contactSupport, systemImage: "envelope")
-                    Spacer()
-                }
+                subscriptionActionRow(
+                    title: L10n.Settings.contactSupport,
+                    systemImage: "envelope"
+                )
             }
+            .buttonStyle(.plain)
+            .foregroundStyle(Color.accentColor)
         } header: {
             Text(L10n.Settings.subscription)
         }
+    }
+
+    @ViewBuilder
+    private func subscriptionActionRow(
+        title: String,
+        systemImage: String,
+        showsProgress: Bool = false
+    ) -> some View {
+        HStack {
+            Label(title, systemImage: systemImage)
+            Spacer()
+            if showsProgress {
+                ProgressView()
+                    .controlSize(.small)
+                    .accessibilityHidden(true)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
     }
     
     @ViewBuilder
