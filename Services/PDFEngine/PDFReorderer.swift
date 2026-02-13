@@ -117,12 +117,19 @@ actor PDFReorderer {
                     }
                 }
                 
-                let currentProgress = Double(newIndex + 1) / Double(totalPages)
+                let rawProgress = Double(newIndex + 1) / Double(totalPages)
+                let currentProgress = PDFProgressPolicy.processingProgress(from: rawProgress)
                 
                 // Report progress on main actor
                 await MainActor.run {
                     progress(currentProgress)
                 }
+            }
+            
+            try await self.checkCancellation()
+            
+            await MainActor.run {
+                progress(PDFProgressPolicy.finalizingStart)
             }
             
             try await self.checkCancellation()
@@ -150,6 +157,10 @@ actor PDFReorderer {
             // Write output file
             guard outputDocument.write(to: outputURL) else {
                 throw PDFEngineError.writeFailed(outputURL)
+            }
+            
+            await MainActor.run {
+                progress(1.0)
             }
             
             return outputURL

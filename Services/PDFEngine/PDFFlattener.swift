@@ -143,7 +143,8 @@ actor PDFFlattener {
                     pdfContext.endPDFPage()
                 }
                 
-                let currentProgress = Double(pageIndex + 1) / Double(pageCount)
+                let rawProgress = Double(pageIndex + 1) / Double(pageCount)
+                let currentProgress = PDFProgressPolicy.processingProgress(from: rawProgress)
                 
                 // Report progress on main actor
                 await MainActor.run {
@@ -153,8 +154,16 @@ actor PDFFlattener {
             
             try await self.checkCancellation()
             
+            await MainActor.run {
+                progress(PDFProgressPolicy.finalizingStart)
+            }
+            
             // Close the PDF context (finalizes file write)
             pdfContext.closePDF()
+            
+            await MainActor.run {
+                progress(1.0)
+            }
             
             return outputURL
         }

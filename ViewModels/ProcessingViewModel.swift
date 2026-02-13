@@ -300,7 +300,8 @@ final class ProcessingViewModel: ObservableObject {
         // SwiftUI's "onChange tried to update multiple times per frame" warning.
         // Always allow 100% progress through to ensure completion is displayed.
         let now = Date()
-        guard progress >= 1.0 || now.timeIntervalSince(lastProgressUpdate) >= progressThrottleInterval else {
+        let isFinalizing = shouldUseFinalizingMessage(for: action) && PDFProgressPolicy.isFinalizing(progress)
+        guard progress >= 1.0 || isFinalizing || now.timeIntervalSince(lastProgressUpdate) >= progressThrottleInterval else {
             return
         }
         lastProgressUpdate = now
@@ -308,7 +309,12 @@ final class ProcessingViewModel: ObservableObject {
         state = .processing(progress: progress, message: progressMessage(for: action, progress: progress))
     }
     
-    private func progressMessage(for action: UserAction, progress: Double = 0) -> String {
+    func progressMessage(for action: UserAction, progress: Double = 0) -> String {
+        if shouldUseFinalizingMessage(for: action),
+           PDFProgressPolicy.isFinalizing(progress) {
+            return L10n.Processing.finalizingFile
+        }
+        
         switch action {
         case .merge:
             return L10n.Processing.mergingProgress(progress)
@@ -318,6 +324,15 @@ final class ProcessingViewModel: ObservableObject {
             return L10n.Processing.reorderingProgress(progress)
         case .flatten:
             return L10n.Processing.flatteningProgress(progress)
+        }
+    }
+    
+    private func shouldUseFinalizingMessage(for action: UserAction) -> Bool {
+        switch action {
+        case .merge, .editPages, .flatten:
+            return true
+        case .split:
+            return false
         }
     }
     

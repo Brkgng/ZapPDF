@@ -228,6 +228,38 @@ struct ProcessingViewModelTests {
         let wasRecordCalled = await mockUsageManager.wasRecordActionCalled()
         #expect(wasRecordCalled == true)
     }
+    
+    // MARK: - Progress Message Tests
+    
+    @Test("Merge progress uses finalizing message near completion")
+    @MainActor
+    func mergeProgressUsesFinalizingMessageNearCompletion() {
+        let viewModel = createViewModel()
+        
+        let message = viewModel.progressMessage(for: .merge, progress: 0.95)
+        
+        #expect(message == L10n.Processing.finalizingFile)
+    }
+    
+    @Test("Flatten progress uses finalizing message near completion")
+    @MainActor
+    func flattenProgressUsesFinalizingMessageNearCompletion() {
+        let viewModel = createViewModel()
+        
+        let message = viewModel.progressMessage(for: .flatten, progress: 0.95)
+        
+        #expect(message == L10n.Processing.finalizingFile)
+    }
+    
+    @Test("Split progress keeps percentage near completion")
+    @MainActor
+    func splitProgressKeepsPercentageNearCompletion() {
+        let viewModel = createViewModel()
+        
+        let message = viewModel.progressMessage(for: .split, progress: 0.95)
+        
+        #expect(message != L10n.Processing.finalizingFile)
+    }
 }
 
 // MARK: - Array Extension for Async Map

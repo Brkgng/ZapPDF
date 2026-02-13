@@ -282,6 +282,25 @@ struct PageReorderViewModelTests {
         #expect(wasRecorded == true)
     }
     
+    @Test("save status message transitions between saving and finalizing")
+    @MainActor
+    func saveStatusMessageTransitionsBetweenSavingAndFinalizing() async throws {
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "save_status_message_test")
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 3, fileSize: 1000)
+        let viewModel = PageReorderViewModel(file: file, usageManager: MockUsageManager())
+        
+        viewModel.updateSaveProgress(0.5)
+        #expect(viewModel.saveStatusMessage == L10n.PageReorder.savingProgress(0.5))
+        
+        viewModel.updateSaveProgress(0.95)
+        #expect(viewModel.saveStatusMessage == L10n.PageReorder.finalizing)
+        
+        viewModel.updateSaveProgress(1.0)
+        #expect(viewModel.saveStatusMessage == L10n.PageReorder.savingProgress(1.0))
+    }
+    
     // MARK: - Delete Page Tests
     
     @Test("deletePage removes page at index")

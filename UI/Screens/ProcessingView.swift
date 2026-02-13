@@ -223,6 +223,14 @@ struct ProcessingView: View {
                 .font(.headline)
                 .multilineTextAlignment(.center)
             
+            if message == L10n.Processing.finalizingFile {
+                Text(L10n.Processing.largePDFWriteHint)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+            }
+            
             // Progress bar
             VStack(spacing: 8) {
                 ProgressView(value: progress)
