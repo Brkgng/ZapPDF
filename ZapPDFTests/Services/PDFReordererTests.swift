@@ -167,6 +167,9 @@ struct PDFReordererTests {
             #expect(progressValues[i] >= progressValues[i-1])
         }
         
+        // Should include a finalizing-stage progress update before completion.
+        #expect(progressValues.contains { $0 >= PDFProgressPolicy.finalizingStart && $0 < 1.0 })
+        
         // Final should be 1.0
         #expect(progressValues.last == 1.0)
     }

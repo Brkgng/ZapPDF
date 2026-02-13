@@ -50,6 +50,9 @@ final class PageReorderViewModel: ObservableObject {
     /// Save progress (0.0 to 1.0).
     @Published private(set) var saveProgress: Double = 0.0
     
+    /// Save status text shown in the overlay.
+    @Published private(set) var saveStatusMessage: String = L10n.PageReorder.savingProgress(0.0)
+    
     /// Error message if any.
     @Published var errorMessage: String?
     
@@ -334,7 +337,7 @@ final class PageReorderViewModel: ObservableObject {
         }
         
         isSaving = true
-        saveProgress = 0.0
+        updateSaveProgress(0.0)
         errorMessage = nil
         
         do {
@@ -353,7 +356,7 @@ final class PageReorderViewModel: ObservableObject {
                 outputFileName: outputFileName,
                 progress: { [weak self] progress in
                     Task { @MainActor in
-                        self?.saveProgress = progress
+                        self?.updateSaveProgress(progress)
                     }
                 }
             )
@@ -371,14 +374,14 @@ final class PageReorderViewModel: ObservableObject {
             // Record usage
             try await usageManager.recordAction()
             
+            updateSaveProgress(1.0)
             isSaving = false
-            saveProgress = 1.0
             
             return destinationURL
             
         } catch {
             isSaving = false
-            saveProgress = 0.0
+            updateSaveProgress(0.0)
             errorMessage = error.localizedDescription
             throw error
         }
@@ -396,7 +399,7 @@ final class PageReorderViewModel: ObservableObject {
         }
         
         isSaving = true
-        saveProgress = 0.0
+        updateSaveProgress(0.0)
         errorMessage = nil
         
         do {
@@ -409,7 +412,7 @@ final class PageReorderViewModel: ObservableObject {
                 rotations: rotations,
                 progress: { [weak self] progress in
                     Task { @MainActor in
-                        self?.saveProgress = progress
+                        self?.updateSaveProgress(progress)
                     }
                 }
             )
@@ -417,14 +420,14 @@ final class PageReorderViewModel: ObservableObject {
             // Record usage
             try await usageManager.recordAction()
             
+            updateSaveProgress(1.0)
             isSaving = false
-            saveProgress = 1.0
             
             return tempURL
             
         } catch {
             isSaving = false
-            saveProgress = 0.0
+            updateSaveProgress(0.0)
             errorMessage = error.localizedDescription
             throw error
         }
@@ -438,10 +441,20 @@ final class PageReorderViewModel: ObservableObject {
             await reorderer.cancel()
         }
         isSaving = false
-        saveProgress = 0.0
+        updateSaveProgress(0.0)
     }
     
     // MARK: - Private Methods
+    
+    func updateSaveProgress(_ progress: Double) {
+        saveProgress = progress
+        
+        if PDFProgressPolicy.isFinalizing(progress) {
+            saveStatusMessage = L10n.PageReorder.finalizing
+        } else {
+            saveStatusMessage = L10n.PageReorder.savingProgress(progress)
+        }
+    }
     
     /// Push current state to undo stack.
     private func pushUndoState() {

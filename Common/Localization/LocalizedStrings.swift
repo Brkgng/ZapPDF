@@ -222,6 +222,8 @@ enum L10n {
             return String(localized: "Saving... \(formatted)", comment: "Save progress indicator")
         }
         
+        static let finalizing = String(localized: "pageReorder.finalizing", defaultValue: "Finalizing file...")
+        
         static func pageOf(_ current: Int, _ total: Int) -> String {
             String(localized: "Page \(current) of \(total)", comment: "Page navigation indicator")
         }
@@ -267,6 +269,8 @@ enum L10n {
     
     enum Processing {
         static let preparing = String(localized: "processing.preparing", defaultValue: "Preparing...")
+        static let finalizingFile = String(localized: "processing.finalizingFile", defaultValue: "Finalizing file...")
+        static let largePDFWriteHint = String(localized: "processing.largePDFWriteHint", defaultValue: "Large PDFs may take a while to write.")
         static let cancelOperation = String(localized: "processing.cancelOperation", defaultValue: "Cancel Operation")
         static let cancelConfirmTitle = String(localized: "processing.cancelConfirmTitle", defaultValue: "Cancel Operation?")
         static let cancelConfirmMessage = String(localized: "processing.cancelConfirmMessage", defaultValue: "The current operation will be stopped and any progress will be lost.")

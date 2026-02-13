@@ -107,7 +107,8 @@ actor PDFMerger {
                     }
                     
                     processedPages += 1
-                    let currentProgress = Double(processedPages) / Double(totalPages)
+                    let rawProgress = Double(processedPages) / Double(totalPages)
+                    let currentProgress = PDFProgressPolicy.processingProgress(from: rawProgress)
                     
                     // Report progress on main actor
                     await MainActor.run {
@@ -115,6 +116,13 @@ actor PDFMerger {
                     }
                 }
             }
+        }
+        
+        try checkCancellation()
+
+        // Enter finalization stage before the final disk write.
+        await MainActor.run {
+            progress(PDFProgressPolicy.finalizingStart)
         }
         
         try checkCancellation()
@@ -131,6 +139,10 @@ actor PDFMerger {
         // Write output file
         guard outputDocument.write(to: outputURL) else {
             throw PDFEngineError.writeFailed(outputURL)
+        }
+        
+        await MainActor.run {
+            progress(1.0)
         }
         
         return outputURL

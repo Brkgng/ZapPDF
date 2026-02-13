@@ -404,9 +404,17 @@ struct PageReorderView: View {
                     .progressViewStyle(.circular)
                     .scaleEffect(1.5)
                 
-                Text(L10n.PageReorder.savingProgress(viewModel.saveProgress))
+                Text(viewModel.saveStatusMessage)
                     .font(.headline)
                     .foregroundColor(.white)
+                
+                if viewModel.saveStatusMessage == L10n.PageReorder.finalizing {
+                    Text(L10n.Processing.largePDFWriteHint)
+                        .font(.subheadline)
+                        .foregroundColor(.white.opacity(0.9))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
                 
                 Button(L10n.Action.cancel) {
                     viewModel.cancel()

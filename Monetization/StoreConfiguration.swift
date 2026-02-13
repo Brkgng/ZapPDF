@@ -25,7 +25,15 @@ enum StoreConfiguration {
     
     /// RevenueCat API key.
     static var revenueCatAPIKey: String {
+        #if DEBUG
+        // Local/test fallback so CI and developer builds can run without private config.
+        if let envKey = ProcessInfo.processInfo.environment["REVENUECAT_API_KEY"], !envKey.isEmpty {
+            return envKey
+        }
+        return ""
+        #else
         return Secrets.revenueCatAPIKey
+        #endif
     }
     
     /// Whether RevenueCat is properly configured.
