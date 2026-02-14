@@ -138,12 +138,39 @@ struct ProcessingOptionsTests {
         #expect(options.mergeOptions == nil)
     }
     
+    @Test("ProcessingOptions edit pages creates correctly")
+    func editPagesOptionsCreation() {
+        let file = PDFFile(
+            url: URL(fileURLWithPath: "/tmp/test.pdf"),
+            fileName: "test.pdf",
+            pageCount: 4,
+            fileSize: 1024
+        )
+        
+        let options = ProcessingOptions.editPages(
+            file: file,
+            newOrder: [1, 0, 2, 3],
+            rotations: [1: .clockwise90],
+            outputFileName: "edited_output"
+        )
+        
+        #expect(options.editPagesOptions?.file.fileName == "test.pdf")
+        #expect(options.editPagesOptions?.newOrder == [1, 0, 2, 3])
+        #expect(options.editPagesOptions?.rotations[1] == .clockwise90)
+        #expect(options.editPagesOptions?.outputFileName == "edited_output")
+        #expect(options.mergeOptions == nil)
+        #expect(options.splitMode == nil)
+        #expect(options.flattenOptions == nil)
+    }
+    
     @Test("ProcessingOptions default initializer works")
     func defaultInitializer() {
         let options = ProcessingOptions()
         
         #expect(options.mergeOptions == nil)
         #expect(options.splitMode == nil)
+        #expect(options.flattenOptions == nil)
+        #expect(options.editPagesOptions == nil)
     }
 }
 

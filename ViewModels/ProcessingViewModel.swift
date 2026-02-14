@@ -12,6 +12,33 @@ import Combine
 
 /// Options for PDF processing operations.
 struct ProcessingOptions: Sendable {
+    /// Options for edit pages operations.
+    struct EditPagesOptions: Sendable {
+        /// Source PDF to edit.
+        var file: PDFFile
+        
+        /// Desired output order by original page index.
+        var newOrder: [Int]
+        
+        /// Page rotations keyed by original page index.
+        var rotations: [Int: PageRotation]
+        
+        /// Optional output filename override (without extension).
+        var outputFileName: String?
+        
+        init(
+            file: PDFFile,
+            newOrder: [Int],
+            rotations: [Int: PageRotation] = [:],
+            outputFileName: String? = nil
+        ) {
+            self.file = file
+            self.newOrder = newOrder
+            self.rotations = rotations
+            self.outputFileName = outputFileName
+        }
+    }
+    
     /// Options for merge operations.
     var mergeOptions: PDFMerger.MergeOptions?
     
@@ -21,15 +48,20 @@ struct ProcessingOptions: Sendable {
     /// Options for flatten operations.
     var flattenOptions: PDFFlattener.FlattenOptions?
     
+    /// Options for edit pages operations.
+    var editPagesOptions: EditPagesOptions?
+    
     /// Creates default processing options.
     init(
         mergeOptions: PDFMerger.MergeOptions? = nil,
         splitMode: PDFSplitter.SplitMode? = nil,
-        flattenOptions: PDFFlattener.FlattenOptions? = nil
+        flattenOptions: PDFFlattener.FlattenOptions? = nil,
+        editPagesOptions: EditPagesOptions? = nil
     ) {
         self.mergeOptions = mergeOptions
         self.splitMode = splitMode
         self.flattenOptions = flattenOptions
+        self.editPagesOptions = editPagesOptions
     }
     
     /// Creates options for a merge operation.
@@ -45,6 +77,23 @@ struct ProcessingOptions: Sendable {
     /// Creates options for a flatten operation.
     static func flatten(outputFileName: String = "flattened") -> ProcessingOptions {
         ProcessingOptions(flattenOptions: .init(outputFileName: outputFileName))
+    }
+    
+    /// Creates options for an edit pages operation.
+    static func editPages(
+        file: PDFFile,
+        newOrder: [Int],
+        rotations: [Int: PageRotation] = [:],
+        outputFileName: String? = nil
+    ) -> ProcessingOptions {
+        ProcessingOptions(
+            editPagesOptions: .init(
+                file: file,
+                newOrder: newOrder,
+                rotations: rotations,
+                outputFileName: outputFileName
+            )
+        )
     }
 }
 
@@ -91,7 +140,7 @@ enum ProcessingState: Equatable {
 
 /// ViewModel managing PDF operation execution with progress tracking.
 ///
-/// `ProcessingViewModel` executes PDF operations (merge, split) and
+/// `ProcessingViewModel` executes PDF operations (merge, split, edit, flatten) and
 /// reports progress through a state machine. It supports cancellation
 /// and records successful actions for usage tracking.
 ///
@@ -126,6 +175,7 @@ final class ProcessingViewModel: ObservableObject {
     private let merger: PDFMerger
     private let splitter: PDFSplitter
     private let flattener: PDFFlattener
+    private let reorderer: PDFReorderer
     private let usageManager: any UsageManaging
     
     /// Last time progress was updated (for throttling)
@@ -141,6 +191,7 @@ final class ProcessingViewModel: ObservableObject {
         self.merger = PDFMerger()
         self.splitter = PDFSplitter()
         self.flattener = PDFFlattener()
+        self.reorderer = PDFReorderer()
         self.usageManager = UsageManager.shared
     }
     
@@ -149,11 +200,13 @@ final class ProcessingViewModel: ObservableObject {
         merger: PDFMerger = PDFMerger(),
         splitter: PDFSplitter = PDFSplitter(),
         flattener: PDFFlattener = PDFFlattener(),
+        reorderer: PDFReorderer = PDFReorderer(),
         usageManager: any UsageManaging
     ) {
         self.merger = merger
         self.splitter = splitter
         self.flattener = flattener
+        self.reorderer = reorderer
         self.usageManager = usageManager
     }
     
@@ -221,6 +274,7 @@ final class ProcessingViewModel: ObservableObject {
             await merger.cancel()
             await splitter.cancel()
             await flattener.cancel()
+            await reorderer.cancel()
         }
         state = .cancelled
     }
@@ -288,8 +342,21 @@ final class ProcessingViewModel: ObservableObject {
             return [outputURL]
             
         case .editPages:
-            // Edit Pages is handled by PageReorderView, not ProcessingView
-            throw PDFEngineError.emptyInput
+            guard let editOptions = options.editPagesOptions else {
+                throw PDFEngineError.emptyInput
+            }
+            let outputURL = try await reorderer.reorder(
+                file: editOptions.file,
+                newOrder: editOptions.newOrder,
+                rotations: editOptions.rotations,
+                outputFileName: editOptions.outputFileName,
+                progress: { [weak self] progress in
+                    Task { @MainActor in
+                        self?.updateProgress(progress, action: action)
+                    }
+                }
+            )
+            return [outputURL]
         }
     }
     

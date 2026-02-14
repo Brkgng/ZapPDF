@@ -137,6 +137,61 @@ struct ProcessingViewModelTests {
         }
     }
     
+    // MARK: - Edit Pages Operation Tests
+    
+    @Test("Execute edit pages transitions to completed")
+    @MainActor
+    func executeEditPagesTransitionsToCompleted() async throws {
+        let viewModel = createViewModel()
+        let identifier = "edit_pages_test_\(UUID().uuidString)"
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 5, identifier: identifier)
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = try await PDFFile(url: url)
+        let options = ProcessingOptions.editPages(
+            file: file,
+            newOrder: [1, 0, 2, 3, 4],
+            rotations: [0: .clockwise90]
+        )
+        
+        await viewModel.execute(
+            action: .editPages,
+            files: [file],
+            options: options
+        )
+        
+        if case .completed(let resultURLs) = viewModel.state {
+            #expect(resultURLs.count == 1)
+            #expect(FileManager.default.fileExists(atPath: resultURLs[0].path))
+            PDFTestHelpers.cleanup(urls: resultURLs)
+        } else {
+            Issue.record("Expected completed state but got \(viewModel.state)")
+        }
+    }
+    
+    @Test("Execute edit pages without options transitions to failed")
+    @MainActor
+    func executeEditPagesWithoutOptionsTransitionsToFailed() async throws {
+        let viewModel = createViewModel()
+        let identifier = "edit_pages_no_options_\(UUID().uuidString)"
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: identifier)
+        defer { PDFTestHelpers.cleanup(url: url) }
+        
+        let file = try await PDFFile(url: url)
+        
+        await viewModel.execute(
+            action: .editPages,
+            files: [file],
+            options: ProcessingOptions()
+        )
+        
+        if case .failed = viewModel.state {
+            // Expected
+        } else {
+            Issue.record("Expected failed state but got \(viewModel.state)")
+        }
+    }
+    
     // MARK: - Cancel Tests
     
     @Test("Cancel transitions to cancelled")
@@ -247,6 +302,16 @@ struct ProcessingViewModelTests {
         let viewModel = createViewModel()
         
         let message = viewModel.progressMessage(for: .flatten, progress: 0.95)
+        
+        #expect(message == L10n.Processing.finalizingFile)
+    }
+    
+    @Test("Edit pages progress uses finalizing message near completion")
+    @MainActor
+    func editPagesProgressUsesFinalizingMessageNearCompletion() {
+        let viewModel = createViewModel()
+        
+        let message = viewModel.progressMessage(for: .editPages, progress: 0.95)
         
         #expect(message == L10n.Processing.finalizingFile)
     }

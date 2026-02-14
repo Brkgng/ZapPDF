@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import UniformTypeIdentifiers
 
 /// Main view for reordering pages in a PDF document.
 ///
@@ -25,14 +24,14 @@ struct PageReorderView: View {
     @StateObject private var viewModel: PageReorderViewModel
     @Environment(\.dismiss) private var dismiss
     
-    /// Whether the save panel/sheet is showing.
-    @State private var showingSaveConfirmation = false
+    /// Whether to show processing flow for saving edits.
+    @State private var showProcessingView = false
+    
+    /// Processing options for edit pages operation.
+    @State private var processingOptions: ProcessingOptions?
     
     /// Whether discard confirmation is showing.
     @State private var showingDiscardConfirmation = false
-    
-    /// Result URL after successful save.
-    @State private var savedURL: URL?
     
     // MARK: - Initialization
     
@@ -53,9 +52,13 @@ struct PageReorderView: View {
         .task {
             await viewModel.loadPages()
         }
-        .overlay {
-            if viewModel.isSaving {
-                savingOverlay
+        .navigationDestination(isPresented: $showProcessingView) {
+            if let options = processingOptions {
+                ProcessingView(
+                    action: .editPages,
+                    files: [viewModel.sourceFile],
+                    options: options
+                )
             }
         }
         .alert(L10n.PageReorder.discardChangesTitle, isPresented: $showingDiscardConfirmation) {
@@ -169,32 +172,10 @@ struct PageReorderView: View {
             
             // Save button
             Button(L10n.Operation.EditPages.save) {
-                showSavePanel()
+                startEditProcessing()
             }
             .buttonStyle(.borderedProminent)
-            .disabled(!viewModel.hasChanges || viewModel.isSaving)
-        }
-    }
-    
-    private func showSavePanel() {
-        let panel = NSSavePanel()
-        panel.allowedContentTypes = [.pdf]
-        panel.nameFieldStringValue = "\(viewModel.sourceFile.url.deletingPathExtension().lastPathComponent)_reordered.pdf"
-        panel.title = L10n.SavePanel.reorderTitle
-        panel.message = L10n.SavePanel.reorderMessage
-        
-        panel.begin { response in
-            if response == .OK, let url = panel.url {
-                Task {
-                    do {
-                        let result = try await viewModel.save(to: url)
-                        savedURL = result
-                        dismiss()
-                    } catch {
-                        // Error is already set in viewModel.errorMessage
-                    }
-                }
-            }
+            .disabled(!viewModel.hasChanges)
         }
     }
     #endif
@@ -298,35 +279,13 @@ struct PageReorderView: View {
                 Spacer()
                 
                 Button(L10n.Action.done) {
-                    Task {
-                        await saveForSharing()
-                    }
+                    startEditProcessing()
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(viewModel.isSaving)
+                .disabled(!viewModel.hasChanges)
             }
             .padding()
             .background(Color(UIColor.systemBackground))
-        }
-    }
-    
-    private func saveForSharing() async {
-        do {
-            let url = try await viewModel.saveToTemporary()
-            // Present share sheet
-            let activityVC = UIActivityViewController(
-                activityItems: [url],
-                applicationActivities: nil
-            )
-            
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let rootVC = windowScene.windows.first?.rootViewController {
-                rootVC.present(activityVC, animated: true) {
-                    dismiss()
-                }
-            }
-        } catch {
-            // Error shown via viewModel.errorMessage
         }
     }
     #endif
@@ -394,44 +353,19 @@ struct PageReorderView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    private var savingOverlay: some View {
-        ZStack {
-            Color.black.opacity(0.4)
-                .ignoresSafeArea()
-            
-            VStack(spacing: 16) {
-                ProgressView(value: viewModel.saveProgress)
-                    .progressViewStyle(.circular)
-                    .scaleEffect(1.5)
-                
-                Text(viewModel.saveStatusMessage)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                
-                if viewModel.saveStatusMessage == L10n.PageReorder.finalizing {
-                    Text(L10n.Processing.largePDFWriteHint)
-                        .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.9))
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                }
-                
-                Button(L10n.Action.cancel) {
-                    viewModel.cancel()
-                }
-                .buttonStyle(.bordered)
-                .tint(.white)
-            }
-            .padding(32)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(.ultraThinMaterial)
-            )
-        }
-        .transition(.opacity)
-    }
-    
     // MARK: - Helpers
+    
+    private func startEditProcessing() {
+        guard viewModel.hasChanges else { return }
+        
+        processingOptions = .editPages(
+            file: viewModel.sourceFile,
+            newOrder: viewModel.pages.reorderedIndices,
+            rotations: viewModel.pages.rotationsMap,
+            outputFileName: nil
+        )
+        showProcessingView = true
+    }
     
     private var hasError: Binding<Bool> {
         Binding(
