@@ -85,6 +85,8 @@ actor PDFSplitter {
             
             var outputURLs: [URL] = []
             let baseName = file.url.deletingPathExtension().lastPathComponent
+            let operationTimestamp = includeTimestamp ? Date.filenameTimestamp() : nil
+            var stemOccurrences: [String: Int] = [:]
             
             for (index, segment) in segments.enumerated() {
                 try Task.checkCancellation()
@@ -105,14 +107,22 @@ actor PDFSplitter {
                     }
                 }
                 
-                // Generate output filename with optional timestamp
-                let timestamp = includeTimestamp ? "_\(Date.filenameTimestamp())" : ""
-                let outputName: String
-                if segments.count == 1 {
-                    outputName = "\(baseName)_extracted\(timestamp)"
-                } else {
-                    outputName = "\(baseName)_part\(index + 1)\(timestamp)"
-                }
+                // Generate output filename from page token with collision-safe suffixes.
+                let pageToken = SplitOutputNaming.pageToken(from: segment)
+                let canonicalStem = SplitOutputNaming.makeStem(
+                    baseName: baseName,
+                    pageToken: pageToken,
+                    timestamp: operationTimestamp,
+                    duplicateIndex: nil
+                )
+                let occurrence = (stemOccurrences[canonicalStem] ?? 0) + 1
+                stemOccurrences[canonicalStem] = occurrence
+                let outputName = SplitOutputNaming.makeStem(
+                    baseName: baseName,
+                    pageToken: pageToken,
+                    timestamp: operationTimestamp,
+                    duplicateIndex: occurrence
+                )
                 
                 let outputURL = FileManager.default.temporaryDirectory
                     .appendingPathComponent(outputName)

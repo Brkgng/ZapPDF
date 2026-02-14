@@ -1284,41 +1284,79 @@ struct SplitOptionsSheet: View {
         let name: String
         let pageDescription: String
     }
+
+    private var sourceBaseName: String {
+        let baseName = URL(fileURLWithPath: fileName)
+            .deletingPathExtension()
+            .lastPathComponent
+        return baseName.isEmpty ? fileName : baseName
+    }
+
+    private func previewNames(for segments: [[Int]]) -> [String] {
+        var stemOccurrences: [String: Int] = [:]
+        return segments.map { segment in
+            let pageToken = SplitOutputNaming.pageToken(from: segment)
+            let canonicalStem = SplitOutputNaming.makeStem(
+                baseName: sourceBaseName,
+                pageToken: pageToken,
+                timestamp: nil,
+                duplicateIndex: nil
+            )
+            let occurrence = (stemOccurrences[canonicalStem] ?? 0) + 1
+            stemOccurrences[canonicalStem] = occurrence
+
+            let finalStem = SplitOutputNaming.makeStem(
+                baseName: sourceBaseName,
+                pageToken: pageToken,
+                timestamp: nil,
+                duplicateIndex: occurrence
+            )
+            return "\(finalStem).pdf"
+        }
+    }
     
     private var outputFiles: [OutputFile] {
         switch selectedModeIndex {
         case 0:
             guard splitEveryN > 0 else { return [] }
-            var files: [OutputFile] = []
+            var segments: [[Int]] = []
             var start = 1
-            var partNum = 1
             while start <= pageCount {
                 let end = min(start + splitEveryN - 1, pageCount)
-                let desc = start == end ? L10n.SplitOptions.pageRange(start) : L10n.SplitOptions.pagesRange(start, end)
-                files.append(OutputFile(name: "part\(partNum).pdf", pageDescription: desc))
+                segments.append(Array(start...end))
                 start = end + 1
-                partNum += 1
             }
-            return files
+            let names = previewNames(for: segments)
+            return segments.enumerated().map { index, segment in
+                let rangeStart = segment.first ?? 1
+                let rangeEnd = segment.last ?? rangeStart
+                let desc = rangeStart == rangeEnd
+                    ? L10n.SplitOptions.pageRange(rangeStart)
+                    : L10n.SplitOptions.pagesRange(rangeStart, rangeEnd)
+                return OutputFile(name: names[index], pageDescription: desc)
+            }
             
         case 1:
             guard let ranges = try? PageRangeParser.parse(pageRangeText, maxPage: pageCount) else {
                 return []
             }
+            let segments = ranges.map { Array($0) }
+            let names = previewNames(for: segments)
             return ranges.enumerated().map { index, range in
                 let desc = range.lowerBound == range.upperBound
                     ? L10n.SplitOptions.pageRange(range.lowerBound)
                     : L10n.SplitOptions.pagesRange(range.lowerBound, range.upperBound)
-                return OutputFile(name: "range\(index + 1).pdf", pageDescription: desc)
+                return OutputFile(name: names[index], pageDescription: desc)
             }
             
         case 2:
             guard !selectedPages.isEmpty else { return [] }
             let sortedPages = selectedPages.sorted()
+            let name = previewNames(for: [sortedPages]).first ?? "\(sourceBaseName).pdf"
             let pageList = sortedPages.count <= 5
                 ? sortedPages.map(String.init).joined(separator: ", ")
                 : "\(sortedPages.prefix(3).map(String.init).joined(separator: ", "))..."
-            return [OutputFile(name: "extracted.pdf", pageDescription: L10n.SplitOptions.pagesLabel(pageList))]
+            return [OutputFile(name: name, pageDescription: L10n.SplitOptions.pagesLabel(pageList))]
             
         default:
             return []
