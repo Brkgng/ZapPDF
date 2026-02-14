@@ -159,7 +159,7 @@ struct DraggablePageGrid: View {
                             PageThumbnailView(
                                 pdfFile: pdfFile,
                                 pageIndex: page.originalIndex,
-                                displayNumber: page.displayPageNumber,
+                                displayNumber: index + 1,
                                 isSelected: true,
                                 size: size,
                                 rotation: page.rotation
@@ -182,7 +182,7 @@ struct DraggablePageGrid: View {
         PageThumbnailView(
             pdfFile: pdfFile,
             pageIndex: page.originalIndex,
-            displayNumber: page.displayPageNumber,
+            displayNumber: index + 1,
             isSelected: selectedIndex == index,
             size: size,
             rotation: page.rotation
@@ -275,14 +275,14 @@ struct DraggablePageList: View {
                     PageThumbnailView(
                         pdfFile: pdfFile,
                         pageIndex: page.originalIndex,
-                        displayNumber: page.displayPageNumber,
+                        displayNumber: index + 1,
                         isSelected: selectedIndex == index,
                         size: CGSize(width: 60, height: 85),
                         rotation: page.rotation
                     )
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(L10n.PageReorder.page(page.displayPageNumber))
+                        Text(L10n.PageReorder.page(index + 1))
                             .font(.headline)
                         Text(L10n.PageReorder.originalPosition(page.originalIndex + 1))
                             .font(.caption)

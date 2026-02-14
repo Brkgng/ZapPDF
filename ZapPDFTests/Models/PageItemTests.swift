@@ -108,6 +108,58 @@ struct PageItemTests {
         
         #expect(pages.reorderedIndices == [0, 2, 1, 3])
     }
+
+    // MARK: - Manual Reorder Detection Tests
+
+    @Test("isManuallyReordered returns false for original order")
+    func isManuallyReorderedReturnsFalseForOriginalOrder() {
+        let pages = [PageItem].create(pageCount: 5)
+
+        for index in pages.indices {
+            #expect(pages.isManuallyReordered(at: index) == false)
+        }
+    }
+
+    @Test("isManuallyReordered returns false for deletion-only shifts")
+    func isManuallyReorderedReturnsFalseForDeletionOnlyShift() {
+        var pages = [PageItem].create(pageCount: 4)
+        pages.remove(at: 1)  // [0,2,3]
+
+        for index in pages.indices {
+            #expect(pages.isManuallyReordered(at: index) == false)
+        }
+    }
+
+    @Test("isManuallyReordered returns true for pages that were manually moved")
+    func isManuallyReorderedReturnsTrueForManualMove() {
+        var pages = [PageItem].create(pageCount: 4)
+        pages.swapAt(1, 2)  // [0,2,1,3]
+
+        #expect(pages.isManuallyReordered(at: 0) == false)
+        #expect(pages.isManuallyReordered(at: 1) == true)
+        #expect(pages.isManuallyReordered(at: 2) == true)
+        #expect(pages.isManuallyReordered(at: 3) == false)
+    }
+
+    @Test("isManuallyReordered handles reorder plus deletion")
+    func isManuallyReorderedHandlesReorderPlusDeletion() {
+        var pages = [PageItem].create(pageCount: 5)
+        pages.swapAt(1, 2)  // [0,2,1,3,4]
+        pages.remove(at: 0) // [2,1,3,4]
+
+        #expect(pages.isManuallyReordered(at: 0) == true)
+        #expect(pages.isManuallyReordered(at: 1) == true)
+        #expect(pages.isManuallyReordered(at: 2) == false)
+        #expect(pages.isManuallyReordered(at: 3) == false)
+    }
+
+    @Test("isManuallyReordered returns false for invalid indices")
+    func isManuallyReorderedReturnsFalseForInvalidIndices() {
+        let pages = [PageItem].create(pageCount: 3)
+
+        #expect(pages.isManuallyReordered(at: -1) == false)
+        #expect(pages.isManuallyReordered(at: pages.count) == false)
+    }
     
     @Test("hasChanges returns false for original order")
     func hasChangesReturnsFalseForOriginalOrder() {

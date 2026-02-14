@@ -165,6 +165,33 @@ extension Array where Element == PageItem {
         }
         return map
     }
+
+    /// Returns whether the page at `currentIndex` has been manually reordered.
+    ///
+    /// This detects relative-order inversions between the page and other
+    /// remaining pages. Pure deletion shifts do not create inversions and
+    /// therefore return `false`.
+    ///
+    /// - Parameter currentIndex: Current position in this array.
+    /// - Returns: `true` if relative order indicates manual reordering.
+    func isManuallyReordered(at currentIndex: Int) -> Bool {
+        guard indices.contains(currentIndex) else { return false }
+
+        let page = self[currentIndex]
+        let originalIndex = page.originalIndex
+
+        // Any earlier page that originally came after this one means reorder.
+        if self[..<currentIndex].contains(where: { $0.originalIndex > originalIndex }) {
+            return true
+        }
+
+        // Any later page that originally came before this one means reorder.
+        if self[(currentIndex + 1)...].contains(where: { $0.originalIndex < originalIndex }) {
+            return true
+        }
+
+        return false
+    }
     
     /// Check if any changes have been made (position or rotation).
     ///
@@ -202,4 +229,3 @@ extension Array where Element == PageItem {
         return (0..<pageCount).map { PageItem(originalIndex: $0) }
     }
 }
-

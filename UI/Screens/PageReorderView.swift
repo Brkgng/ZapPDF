@@ -351,19 +351,19 @@ struct PageReorderView: View {
                     let previewHeight = previewWidth / aspectRatio
                     
                     VStack(spacing: 16) {
-                        Text(L10n.PageReorder.page(page.displayPageNumber))
+                        Text(L10n.PageReorder.pageOf(selectedIndex + 1, viewModel.pages.count))
                             .font(.headline)
                         
                         PageThumbnailView(
                             pdfFile: viewModel.sourceFile,
                             pageIndex: page.originalIndex,
-                            displayNumber: page.displayPageNumber,
+                            displayNumber: selectedIndex + 1,
                             isSelected: false,
                             size: CGSize(width: previewWidth, height: previewHeight),
                             rotation: page.rotation
                         )
                         
-                        if page.originalIndex != selectedIndex {
+                        if viewModel.pages.isManuallyReordered(at: selectedIndex) {
                             Label(L10n.PageReorder.movedFrom(page.originalIndex + 1), systemImage: "arrow.triangle.swap")
                                 .font(.caption)
                                 .foregroundColor(.orange)
