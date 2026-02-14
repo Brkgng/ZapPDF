@@ -81,6 +81,26 @@ struct SplitOptionsSheetTests {
         
         #expect(sheet.pageCount == 1000)
     }
+
+    @Test("SplitOptionsSheet mode description mapping covers all modes")
+    func modeDescriptionMappingCoversAllModes() {
+        #expect(SplitOptionsSheet.modeDescription(for: 0) == L10n.SplitOptions.modeDescSplitEvery)
+        #expect(SplitOptionsSheet.modeDescription(for: 1) == L10n.SplitOptions.modeDescPageRange)
+        #expect(SplitOptionsSheet.modeDescription(for: 2) == L10n.SplitOptions.modeDescSelectPages)
+    }
+
+    @Test("SplitOptionsSheet mode accessibility identifiers are stable")
+    func modeAccessibilityIdentifiersAreStable() {
+        #expect(SplitOptionsSheet.modeOptionAccessibilityIdentifier(for: 0) == "splitMode.option.splitEvery")
+        #expect(SplitOptionsSheet.modeOptionAccessibilityIdentifier(for: 1) == "splitMode.option.extractRanges")
+        #expect(SplitOptionsSheet.modeOptionAccessibilityIdentifier(for: 2) == "splitMode.option.selectPages")
+    }
+
+    @Test("SplitOptionsSheet mode accessibility values reflect selection state")
+    func modeAccessibilityValuesReflectSelectionState() {
+        #expect(SplitOptionsSheet.modeOptionAccessibilityValue(isSelected: true) == "selected")
+        #expect(SplitOptionsSheet.modeOptionAccessibilityValue(isSelected: false) == "unselected")
+    }
 }
 
 // MARK: - DashboardViewModel Integration Tests

@@ -1021,6 +1021,7 @@ struct SplitOptionsSheet: View {
                             .frame(width: 12, height: 12)
                     }
                 }
+                .allowsHitTesting(false)
                 
                 // Icon
                 Image(systemName: icon)
@@ -1046,17 +1047,47 @@ struct SplitOptionsSheet: View {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(selectedModeIndex == index ? Color.accentColor.opacity(0.1) : Color.clear)
             )
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(RoundedRectangle(cornerRadius: 8))
         }
         .buttonStyle(.plain)
+        #if os(macOS)
+        .focusable(false)
+        #endif
+        .accessibilityIdentifier(Self.modeOptionAccessibilityIdentifier(for: index))
+        .accessibilityValue(
+            Self.modeOptionAccessibilityValue(isSelected: selectedModeIndex == index)
+        )
     }
     
     private var modeDescription: String {
-        switch selectedModeIndex {
+        Self.modeDescription(for: selectedModeIndex)
+    }
+
+    static func modeDescription(for index: Int) -> String {
+        switch index {
         case 0: return L10n.SplitOptions.modeDescSplitEvery
         case 1: return L10n.SplitOptions.modeDescPageRange
         case 2: return L10n.SplitOptions.modeDescSelectPages
         default: return ""
         }
+    }
+
+    static func modeOptionAccessibilityIdentifier(for index: Int) -> String {
+        switch index {
+        case 0:
+            return "splitMode.option.splitEvery"
+        case 1:
+            return "splitMode.option.extractRanges"
+        case 2:
+            return "splitMode.option.selectPages"
+        default:
+            return "splitMode.option.unknown.\(index)"
+        }
+    }
+
+    static func modeOptionAccessibilityValue(isSelected: Bool) -> String {
+        isSelected ? "selected" : "unselected"
     }
     
     // MARK: - Mode Options Section
