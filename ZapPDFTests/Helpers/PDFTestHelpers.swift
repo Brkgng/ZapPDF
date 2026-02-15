@@ -7,6 +7,11 @@
 
 import Foundation
 import PDFKit
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
 
 /// Utility functions for creating test PDFs in unit tests.
 enum PDFTestHelpers {
@@ -104,6 +109,127 @@ enum PDFTestHelpers {
         
         return url
     }
+
+    /// Create a PDF with a simple outline tree targeting the first page.
+    static func createTestPDFWithOutline(pageCount: Int, identifier: String) throws -> URL {
+        let url = try createTestPDF(pageCount: pageCount, identifier: identifier)
+        guard let document = PDFDocument(url: url), document.pageCount > 0 else {
+            throw TestHelperError.pdfCreationFailed
+        }
+
+        let root = PDFOutline()
+        let child = PDFOutline()
+        child.label = "Chapter 1"
+        child.isOpen = true
+
+        guard let firstPage = document.page(at: 0) else {
+            throw TestHelperError.pdfCreationFailed
+        }
+
+        child.destination = PDFDestination(page: firstPage, at: CGPoint(x: 20, y: 20))
+        root.insertChild(child, at: 0)
+        document.outlineRoot = root
+
+        guard document.write(to: url) else {
+            throw TestHelperError.pdfCreationFailed
+        }
+
+        return url
+    }
+
+    /// Create a PDF with an internal GoTo link from page 1 to page 2.
+    static func createTestPDFWithInternalLink(identifier: String) throws -> URL {
+        let url = try createTestPDF(pageCount: 2, identifier: identifier)
+        guard let document = PDFDocument(url: url),
+              let page1 = document.page(at: 0),
+              let page2 = document.page(at: 1) else {
+            throw TestHelperError.pdfCreationFailed
+        }
+
+        let link = PDFAnnotation(
+            bounds: CGRect(x: 100, y: 100, width: 200, height: 60),
+            forType: .link,
+            withProperties: nil
+        )
+        let destination = PDFDestination(page: page2, at: CGPoint(x: 40, y: 40))
+        link.action = PDFActionGoTo(destination: destination)
+        page1.addAnnotation(link)
+
+        guard document.write(to: url) else {
+            throw TestHelperError.pdfCreationFailed
+        }
+
+        return url
+    }
+
+    /// Create a PDF with an external URL link on page 1.
+    static func createTestPDFWithExternalLink(identifier: String, url externalURL: URL) throws -> URL {
+        let url = try createTestPDF(pageCount: 1, identifier: identifier)
+        guard let document = PDFDocument(url: url),
+              let page = document.page(at: 0) else {
+            throw TestHelperError.pdfCreationFailed
+        }
+
+        let link = PDFAnnotation(
+            bounds: CGRect(x: 80, y: 80, width: 260, height: 50),
+            forType: .link,
+            withProperties: nil
+        )
+        link.action = PDFActionURL(url: externalURL)
+        page.addAnnotation(link)
+
+        guard document.write(to: url) else {
+            throw TestHelperError.pdfCreationFailed
+        }
+
+        return url
+    }
+
+    /// Create an image-heavy PDF for size and compression behavior tests.
+    static func createImageHeavyPDF(
+        pageCount: Int,
+        identifier: String,
+        imageWidth: Int = 1400,
+        imageHeight: Int = 1800
+    ) throws -> URL {
+        guard let cgImage = noisyImage(width: imageWidth, height: imageHeight) else {
+            throw TestHelperError.pdfCreationFailed
+        }
+
+        #if os(macOS)
+        let platformImage = NSImage(cgImage: cgImage, size: NSSize(width: imageWidth, height: imageHeight))
+        #else
+        let platformImage = UIImage(cgImage: cgImage)
+        #endif
+
+        let document = PDFDocument()
+        for pageIndex in 0..<pageCount {
+            guard let page = PDFPage(image: platformImage) else {
+                throw TestHelperError.pdfCreationFailed
+            }
+
+            // Add a small annotation so pages are not byte-identical.
+            let note = PDFAnnotation(
+                bounds: CGRect(x: 30, y: 30, width: 200, height: 40),
+                forType: .freeText,
+                withProperties: nil
+            )
+            note.contents = "Image page \(pageIndex + 1)"
+            page.addAnnotation(note)
+
+            document.insert(page, at: document.pageCount)
+        }
+
+        let outputURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("image_heavy_\(identifier)")
+            .appendingPathExtension("pdf")
+
+        guard document.write(to: outputURL) else {
+            throw TestHelperError.pdfCreationFailed
+        }
+
+        return outputURL
+    }
     
     private static func createPage(number: Int) -> PDFPage? {
         // Create a simple page with text
@@ -169,6 +295,40 @@ enum PDFTestHelpers {
         }
         
         return page
+    }
+
+    private static func noisyImage(width: Int, height: Int) -> CGImage? {
+        let bytesPerPixel = 4
+        let bytesPerRow = width * bytesPerPixel
+        let byteCount = height * bytesPerRow
+
+        var data = [UInt8](repeating: 0, count: byteCount)
+        for y in 0..<height {
+            for x in 0..<width {
+                let index = (y * bytesPerRow) + (x * bytesPerPixel)
+                let value = UInt8((x &* 37 &+ y &* 17) & 0xFF)
+                data[index] = value
+                data[index + 1] = UInt8((Int(value) &+ x) & 0xFF)
+                data[index + 2] = UInt8((Int(value) &+ y) & 0xFF)
+                data[index + 3] = 255
+            }
+        }
+
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        guard let provider = CGDataProvider(data: Data(data) as CFData) else { return nil }
+        return CGImage(
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bitsPerPixel: 32,
+            bytesPerRow: bytesPerRow,
+            space: colorSpace,
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue),
+            provider: provider,
+            decode: nil,
+            shouldInterpolate: true,
+            intent: .defaultIntent
+        )
     }
     
     enum TestHelperError: Error {

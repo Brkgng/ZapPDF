@@ -3016,6 +3016,20 @@
         }
       }
     },
+    "Could not load page %lld from '%@'." : {
+      "comment" : "Error when a page cannot be read from a PDF",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Could not load page %1$lld from '%2$@'."
+          }
+        }
+      }
+    },
+    "Could not preserve bookmarks from '%@'." : {
+      "comment" : "Error when outline/bookmark merge fails"
+    },
     "Could not save file: %@" : {
       "comment" : "File save error message",
       "localizations" : {
@@ -4245,6 +4259,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "请重试。"
+          }
+        }
+      }
+    },
+    "error.recovery.tryAnotherPDF" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Try a different PDF file."
+          }
+        }
+      }
+    },
+    "error.recovery.tryDisablingBookmarks" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Try merging again with bookmark preservation turned off."
           }
         }
       }
@@ -9150,100 +9186,6 @@
         }
       }
     },
-    "processing.finalizingFile" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Datei wird finalisiert..."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Finalizing file..."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizando archivo..."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalisation du fichier..."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ファイルを最終処理中..."
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dosya sonlandırılıyor..."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在完成文件..."
-          }
-        }
-      }
-    },
-    "processing.largePDFWriteHint" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Große PDFs können beim Schreiben etwas dauern."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Large PDFs may take a while to write."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Los PDF grandes pueden tardar un poco en guardarse."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "L'écriture des PDF volumineux peut prendre un peu de temps."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "大きなPDFは書き込みに時間がかかる場合があります。"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Büyük PDF'lerin yazılması biraz zaman alabilir."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "大型 PDF 写入可能需要一些时间。"
-          }
-        }
-      }
-    },
     "processing.fileSaved" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -9338,6 +9280,53 @@
         }
       }
     },
+    "processing.finalizingFile" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datei wird finalisiert..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Finalizing file..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalizando archivo..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalisation du fichier..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルを最終処理中..."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dosya sonlandırılıyor..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在完成文件..."
+          }
+        }
+      }
+    },
     "processing.flattening" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -9381,6 +9370,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在拼合PDF..."
+          }
+        }
+      }
+    },
+    "processing.largePDFWriteHint" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Große PDFs können beim Schreiben etwas dauern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Large PDFs may take a while to write."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los PDF grandes pueden tardar un poco en guardarse."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'écriture des PDF volumineux peut prendre un peu de temps."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大きなPDFは書き込みに時間がかかる場合があります。"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Büyük PDF'lerin yazılması biraz zaman alabilir."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大型 PDF 写入可能需要一些时间。"
           }
         }
       }

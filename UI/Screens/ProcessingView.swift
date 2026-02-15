@@ -56,9 +56,6 @@ struct ProcessingView: View {
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
-                let availableHeight = geometry.size.height
-                let availableWidth = geometry.size.width
-                
                 VStack(spacing: 16) {
                     // Fixed header (Icon + Title) - Non-scrollable
                     stateHeader
@@ -70,7 +67,7 @@ struct ProcessingView: View {
                                 availableWidth: innerGeometry.size.width,
                                 availableHeight: innerGeometry.size.height
                             )
-                            .frame(minHeight: innerGeometry.size.height)
+                            .frame(minHeight: innerGeometry.size.height, alignment: .top)
                         }
                     }
                     
@@ -255,18 +252,17 @@ struct ProcessingView: View {
         availableWidth: CGFloat,
         availableHeight: CGFloat
     ) -> some View {
-        VStack {
+        VStack(spacing: 12) {
             // Preview thumbnail (only for single-file outputs like Merge, Flatten)
             if resultURLs.count == 1, let firstURL = resultURLs.first {
                 // Calculate preview size: use available space with reasonable margins
-                let aspectRatio: CGFloat = 0.75  // 3:4 ratio (portrait)
+                let aspectRatio: CGFloat = 0.75  // 3:4 ratio (portrait).
                 
                 // Use up to 80% of width
                 let previewWidthFromContainer = availableWidth * 0.8
                 
-                // Use available height (minus a bit of padding)
-                // Note: availableHeight here comes from the flexible middle section
-                let previewHeightFromSpace = availableHeight - 32
+                // Keep some breathing room so preview fits without scrolling.
+                let previewHeightFromSpace = max(180, availableHeight - 32)
                 
                 let previewWidthFromHeight = previewHeightFromSpace * aspectRatio
                 
@@ -274,16 +270,13 @@ struct ProcessingView: View {
                 let finalWidth = min(previewWidthFromHeight, previewWidthFromContainer)
                 let finalHeight = finalWidth / aspectRatio
                 
-                // Center vertically in the scroll view
-                Spacer()
                 OutputPreviewView(
                     url: firstURL,
                     size: CGSize(width: finalWidth, height: finalHeight)
                 )
-                Spacer()
             }
         }
-        .frame(maxWidth: .infinity, minHeight: availableHeight)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
     
     // MARK: - Failed Content
@@ -465,12 +458,19 @@ struct ProcessingView: View {
         savePanel.begin { response in
             if response == .OK, let destinationURL = savePanel.url {
                 do {
-                    // Remove existing file if needed
-                    if FileManager.default.fileExists(atPath: destinationURL.path) {
-                        try FileManager.default.removeItem(at: destinationURL)
+                    let fileManager = FileManager.default
+
+                    if fileManager.fileExists(atPath: destinationURL.path) {
+                        _ = try fileManager.replaceItemAt(
+                            destinationURL,
+                            withItemAt: firstURL,
+                            backupItemName: nil,
+                            options: []
+                        )
+                    } else {
+                        try fileManager.moveItem(at: firstURL, to: destinationURL)
                     }
-                    
-                    try FileManager.default.moveItem(at: firstURL, to: destinationURL)
+
                     savedFileURL = destinationURL
                     showFileSaveSuccess = true
                     

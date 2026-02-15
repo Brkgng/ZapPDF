@@ -189,7 +189,7 @@ struct PDFFile: Identifiable, Hashable, Sendable {
     }
     
     /// Async version of withResolvedAccess for async operations.
-    func withResolvedAccessAsync<T: Sendable>(_ operation: @Sendable (URL) async throws -> T) async throws -> T {
+    func withResolvedAccessAsync<T>(_ operation: (URL) async throws -> T) async throws -> T {
         let accessURL = try resolvedURL()
         return try await accessURL.withSecurityScopeAsync {
             try await operation(accessURL)

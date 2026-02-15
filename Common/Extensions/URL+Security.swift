@@ -85,7 +85,7 @@ extension URL {
     ///     PDFDocument(url: url)
     /// }
     /// ```
-    func withSecurityScopeAsync<T: Sendable>(_ body: @Sendable () async throws -> T) async rethrows -> T {
+    func withSecurityScopeAsync<T>(_ body: () async throws -> T) async rethrows -> T {
         let didStartAccessing = self.startAccessingSecurityScopedResource()
         defer {
             if didStartAccessing {

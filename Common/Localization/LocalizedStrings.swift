@@ -286,7 +286,6 @@ enum L10n {
         // Preview feature
         static let previewLoading = String(localized: "processing.previewLoading", defaultValue: "Loading preview...")
         static let previewNotAvailable = String(localized: "processing.previewNotAvailable", defaultValue: "Preview not available")
-        
         static func outputPages(_ count: Int) -> String {
             String(localized: "\(count) pages", comment: "Output PDF page count on preview")
         }
@@ -409,6 +408,20 @@ enum L10n {
         static func fileNotFound(filename: String) -> String {
             String(localized: "File not found: '\(filename)'.", comment: "Error when file doesn't exist")
         }
+
+        static func pageLoadFailed(filename: String, pageIndex: Int) -> String {
+            String(
+                localized: "Could not load page \(pageIndex) from '\(filename)'.",
+                comment: "Error when a page cannot be read from a PDF"
+            )
+        }
+
+        static func outlineMergeFailed(filename: String) -> String {
+            String(
+                localized: "Could not preserve bookmarks from '\(filename)'.",
+                comment: "Error when outline/bookmark merge fails"
+            )
+        }
         
         static func accessDenied(filename: String) -> String {
             String(localized: "Cannot access '\(filename)'.", comment: "Error when file access is denied")
@@ -428,6 +441,8 @@ enum L10n {
         static let tryReorderingAgain = String(localized: "error.recovery.tryReorderingAgain", defaultValue: "Please try reordering again.")
         static let trySavingElsewhere = String(localized: "error.recovery.trySavingElsewhere", defaultValue: "Try saving to a different location.")
         static let tryAgain = String(localized: "error.recovery.tryAgain", defaultValue: "Please try again.")
+        static let tryAnotherPDF = String(localized: "error.recovery.tryAnotherPDF", defaultValue: "Try a different PDF file.")
+        static let tryDisablingBookmarks = String(localized: "error.recovery.tryDisablingBookmarks", defaultValue: "Try merging again with bookmark preservation turned off.")
         static let upgradeForUnlimited = String(localized: "error.recovery.upgradeForUnlimited", defaultValue: "Upgrade to Pro for unlimited PDF operations.")
         
         // Purchase/Restore errors

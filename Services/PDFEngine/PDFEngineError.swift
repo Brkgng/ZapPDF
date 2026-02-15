@@ -38,6 +38,12 @@ enum PDFEngineError: Error, LocalizedError, Sendable {
     
     /// File not found at the specified URL
     case fileNotFound(URL)
+
+    /// A page could not be loaded from the source document
+    case pageLoadFailed(URL, pageIndex: Int)
+
+    /// Failed to merge document outlines/bookmarks
+    case outlineMergeFailed(URL)
     
     // MARK: - LocalizedError
     
@@ -61,6 +67,10 @@ enum PDFEngineError: Error, LocalizedError, Sendable {
             return L10n.Error.emptyInput
         case .fileNotFound(let url):
             return L10n.Error.fileNotFound(filename: url.lastPathComponent)
+        case .pageLoadFailed(let url, let pageIndex):
+            return L10n.Error.pageLoadFailed(filename: url.lastPathComponent, pageIndex: pageIndex + 1)
+        case .outlineMergeFailed(let url):
+            return L10n.Error.outlineMergeFailed(filename: url.lastPathComponent)
         }
     }
     
@@ -84,6 +94,10 @@ enum PDFEngineError: Error, LocalizedError, Sendable {
             return L10n.Error.selectAtLeastOne
         case .fileNotFound:
             return L10n.Error.fileMovedOrDeleted
+        case .pageLoadFailed:
+            return L10n.Error.tryAnotherPDF
+        case .outlineMergeFailed:
+            return L10n.Error.tryDisablingBookmarks
         }
     }
 }
