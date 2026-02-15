@@ -1348,49 +1348,8 @@ struct SplitOptionsSheet: View {
                 Text(L10n.SplitOptions.outputPreview)
                     .font(.headline)
             }
-            
-            if outputFiles.isEmpty {
-                HStack {
-                    Image(systemName: "exclamationmark.circle")
-                        .foregroundColor(.orange)
-                    Text(L10n.SplitOptions.noOutput)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-            } else {
-                VStack(alignment: .leading, spacing: 6) {
-                    ForEach(Array(outputFiles.prefix(5).enumerated()), id: \.offset) { index, file in
-                        HStack(spacing: 8) {
-                            Image(systemName: "doc.fill")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            
-                            Text(file.name)
-                                .font(.caption.monospaced())
-                            
-                            Spacer()
-                            
-                            Text(file.pageDescription)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    
-                    if outputFiles.count > 5 {
-                        Text(L10n.Dashboard.moreFiles(outputFiles.count - 5))
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .italic()
-                    }
-                }
-                .padding()
-                .background(Color.gray.opacity(0.05))
-                .cornerRadius(8)
-                
-                Text(L10n.SplitOptions.totalFiles(outputFiles.count))
-                    .font(.subheadline.weight(.medium))
-                    .foregroundColor(.accentColor)
-            }
+
+            SplitOutputListView(items: outputFiles, showsTotalCount: true)
         }
     }
     
@@ -1409,11 +1368,6 @@ struct SplitOptionsSheet: View {
         }
     }
     
-    private struct OutputFile {
-        let name: String
-        let pageDescription: String
-    }
-
     private var sourceBaseName: String {
         let baseName = URL(fileURLWithPath: fileName)
             .deletingPathExtension()
@@ -1444,7 +1398,7 @@ struct SplitOptionsSheet: View {
         }
     }
     
-    private var outputFiles: [OutputFile] {
+    private var outputFiles: [SplitOutputListView.Item] {
         switch selectedModeIndex {
         case 0:
             guard splitEveryN > 0 else { return [] }
@@ -1462,7 +1416,7 @@ struct SplitOptionsSheet: View {
                 let desc = rangeStart == rangeEnd
                     ? L10n.SplitOptions.pageRange(rangeStart)
                     : L10n.SplitOptions.pagesRange(rangeStart, rangeEnd)
-                return OutputFile(name: names[index], pageDescription: desc)
+                return .init(name: names[index], detail: desc)
             }
             
         case 1:
@@ -1475,7 +1429,7 @@ struct SplitOptionsSheet: View {
                 let desc = range.lowerBound == range.upperBound
                     ? L10n.SplitOptions.pageRange(range.lowerBound)
                     : L10n.SplitOptions.pagesRange(range.lowerBound, range.upperBound)
-                return OutputFile(name: names[index], pageDescription: desc)
+                return .init(name: names[index], detail: desc)
             }
             
         case 2:
@@ -1485,7 +1439,7 @@ struct SplitOptionsSheet: View {
             let pageList = sortedPages.count <= 5
                 ? sortedPages.map(String.init).joined(separator: ", ")
                 : "\(sortedPages.prefix(3).map(String.init).joined(separator: ", "))..."
-            return [OutputFile(name: name, pageDescription: L10n.SplitOptions.pagesLabel(pageList))]
+            return [.init(name: name, detail: L10n.SplitOptions.pagesLabel(pageList))]
             
         default:
             return []

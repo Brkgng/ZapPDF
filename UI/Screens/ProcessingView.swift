@@ -8,6 +8,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 import StoreKit
+import PDFKit
 #if os(macOS)
 import AppKit
 #else
@@ -48,7 +49,7 @@ struct ProcessingView: View {
     @State private var showCancelConfirmation = false
     @State private var showShareSheet = false
     @State private var showFileSaveSuccess = false
-    @State private var savedFileURL: URL?
+    @State private var savedOutputURLs: [URL] = []
     @State private var saveErrorMessage: String?
     
     // MARK: - Body
@@ -103,20 +104,20 @@ struct ProcessingView: View {
             } message: {
                 Text(L10n.Processing.cancelConfirmMessage)
             }
-            .alert(L10n.Processing.fileSaved, isPresented: $showFileSaveSuccess) {
+            .alert(saveSuccessTitle, isPresented: $showFileSaveSuccess) {
                 Button(L10n.Action.ok) {
                     dismiss()
                 }
                 #if os(macOS)
-                if let savedURL = savedFileURL {
+                if !savedOutputURLs.isEmpty {
                     Button(L10n.Processing.revealInFinder) {
-                        NSWorkspace.shared.activateFileViewerSelecting([savedURL])
+                        NSWorkspace.shared.activateFileViewerSelecting(savedOutputURLs)
                         dismiss()
                     }
                 }
                 #endif
             } message: {
-                Text(L10n.Processing.fileSavedMessage)
+                Text(saveSuccessMessage)
             }
             #if os(macOS)
             .alert(
@@ -253,8 +254,16 @@ struct ProcessingView: View {
         availableHeight: CGFloat
     ) -> some View {
         VStack(spacing: 12) {
-            // Preview thumbnail (only for single-file outputs like Merge, Flatten)
-            if resultURLs.count == 1, let firstURL = resultURLs.first {
+            if resultURLs.isEmpty {
+                SplitOutputListView(items: [], showsTotalCount: false)
+            } else if action == .split {
+                SplitOutputListView(
+                    items: Self.splitOutputItems(from: resultURLs),
+                    showsTotalCount: true
+                )
+                .frame(maxWidth: min(availableWidth * 0.9, 760), alignment: .leading)
+            } else if resultURLs.count == 1, let firstURL = resultURLs.first {
+                // Preview thumbnail for single-file outputs (Merge, Flatten, Edit Pages)
                 // Calculate preview size: use available space with reasonable margins
                 let aspectRatio: CGFloat = 0.75  // 3:4 ratio (portrait).
                 
@@ -274,6 +283,12 @@ struct ProcessingView: View {
                     url: firstURL,
                     size: CGSize(width: finalWidth, height: finalHeight)
                 )
+            } else {
+                SplitOutputListView(
+                    items: Self.splitOutputItems(from: resultURLs),
+                    showsTotalCount: true
+                )
+                .frame(maxWidth: min(availableWidth * 0.9, 760), alignment: .leading)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -395,7 +410,7 @@ struct ProcessingView: View {
             Button {
                 saveFileOnMacOS(urls: resultURLs)
             } label: {
-                Label(L10n.Action.saveFile, systemImage: "square.and.arrow.down")
+                Label(Self.saveButtonTitle(for: resultURLs.count), systemImage: "square.and.arrow.down")
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -431,7 +446,46 @@ struct ProcessingView: View {
     
     // MARK: - Helper Properties
     
-    // canDismiss property removed as it was only used for the now-removed Close toolbar button
+    private var saveSuccessTitle: String {
+        Self.saveSuccessTitle(for: savedOutputURLs.count)
+    }
+
+    private var saveSuccessMessage: String {
+        Self.saveSuccessMessage(for: savedOutputURLs.count)
+    }
+
+    static func saveButtonTitle(for outputCount: Int) -> String {
+        outputCount > 1 ? L10n.Action.saveFiles : L10n.Action.saveFile
+    }
+
+    static func saveSuccessTitle(for savedCount: Int) -> String {
+        savedCount > 1 ? L10n.Processing.filesSaved : L10n.Processing.fileSaved
+    }
+
+    static func saveSuccessMessage(for savedCount: Int) -> String {
+        savedCount > 1
+            ? L10n.Processing.filesSavedMessage(savedCount)
+            : L10n.Processing.fileSavedMessage
+    }
+
+    static func splitOutputItems(from resultURLs: [URL]) -> [SplitOutputListView.Item] {
+        resultURLs.map { url in
+            .init(name: url.lastPathComponent, detail: splitOutputDetail(for: url))
+        }
+    }
+
+    private static func splitOutputDetail(for url: URL) -> String {
+        if let document = PDFDocument(url: url) {
+            return L10n.Plural.pages(document.pageCount)
+        }
+
+        if let attributes = try? FileManager.default.attributesOfItem(atPath: url.path),
+           let fileSize = attributes[.size] as? Int64 {
+            return ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file)
+        }
+
+        return L10n.Processing.previewNotAvailable
+    }
     
     private func attemptReviewPrompt() {
         Task {
@@ -448,13 +502,22 @@ struct ProcessingView: View {
     
     #if os(macOS)
     private func saveFileOnMacOS(urls: [URL]) {
-        guard let firstURL = urls.first else { return }
-        
+        guard !urls.isEmpty else { return }
+
+        if urls.count == 1, let singleURL = urls.first {
+            saveSingleFileOnMacOS(url: singleURL)
+            return
+        }
+
+        saveMultipleFilesOnMacOS(urls: urls)
+    }
+
+    private func saveSingleFileOnMacOS(url: URL) {
         let savePanel = NSSavePanel()
         savePanel.allowedContentTypes = [.pdf]
-        savePanel.nameFieldStringValue = firstURL.lastPathComponent
+        savePanel.nameFieldStringValue = url.lastPathComponent
         savePanel.canCreateDirectories = true
-        
+
         savePanel.begin { response in
             if response == .OK, let destinationURL = savePanel.url {
                 do {
@@ -463,22 +526,54 @@ struct ProcessingView: View {
                     if fileManager.fileExists(atPath: destinationURL.path) {
                         _ = try fileManager.replaceItemAt(
                             destinationURL,
-                            withItemAt: firstURL,
+                            withItemAt: url,
                             backupItemName: nil,
                             options: []
                         )
                     } else {
-                        try fileManager.moveItem(at: firstURL, to: destinationURL)
+                        try fileManager.moveItem(at: url, to: destinationURL)
                     }
 
-                    savedFileURL = destinationURL
+                    savedOutputURLs = [destinationURL]
                     showFileSaveSuccess = true
-                    
+
                     // Trigger review prompt on success
                     attemptReviewPrompt()
                 } catch {
                     saveErrorMessage = L10n.Processing.couldNotSaveFile(error.localizedDescription)
                 }
+            }
+        }
+    }
+
+    private func saveMultipleFilesOnMacOS(urls: [URL]) {
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = true
+        panel.canChooseFiles = false
+        panel.allowsMultipleSelection = false
+        panel.canCreateDirectories = true
+        panel.message = L10n.Processing.selectDestinationFolder
+        panel.prompt = L10n.Action.saveFiles
+
+        panel.begin { response in
+            guard response == .OK, let destinationDirectory = panel.url else { return }
+
+            do {
+                let saved = try destinationDirectory.withSecurityScope {
+                    try OutputFileSaver().saveAll(
+                        urls,
+                        to: destinationDirectory,
+                        conflictPolicy: .autoRename
+                    )
+                }
+
+                savedOutputURLs = saved
+                showFileSaveSuccess = true
+
+                // Trigger review prompt on success
+                attemptReviewPrompt()
+            } catch {
+                saveErrorMessage = L10n.Processing.couldNotSaveFile(error.localizedDescription)
             }
         }
     }

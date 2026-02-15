@@ -33,6 +33,7 @@ enum L10n {
         static let delete = String(localized: "action.delete", defaultValue: "Delete")
         static let remove = String(localized: "action.remove", defaultValue: "Remove")
         static let saveFile = String(localized: "action.saveFile", defaultValue: "Save File")
+        static let saveFiles = String(localized: "action.saveFiles", defaultValue: "Save Files")
         static let close = String(localized: "action.close", defaultValue: "Close")
         static let retry = String(localized: "action.retry", defaultValue: "Try Again")
         static let `continue` = String(localized: "action.continue", defaultValue: "Continue")
@@ -278,6 +279,18 @@ enum L10n {
         static let failed = String(localized: "processing.failed", defaultValue: "Operation Failed")
         static let fileSaved = String(localized: "processing.fileSaved", defaultValue: "File Saved")
         static let fileSavedMessage = String(localized: "processing.fileSavedMessage", defaultValue: "Your PDF has been saved successfully.")
+        static let filesSaved = String(localized: "processing.filesSaved", defaultValue: "Files Saved")
+        private static let filesSavedMessageFormat = String(
+            localized: "processing.filesSavedMessage",
+            defaultValue: "Successfully saved %lld PDF files."
+        )
+        static func filesSavedMessage(_ count: Int) -> String {
+            String(format: filesSavedMessageFormat, locale: Locale.current, count)
+        }
+        static let selectDestinationFolder = String(
+            localized: "processing.selectDestinationFolder",
+            defaultValue: "Choose a destination folder for split output files."
+        )
         static let revealInFinder = String(localized: "processing.revealInFinder", defaultValue: "Reveal in Finder")
         static let share = String(localized: "processing.share", defaultValue: "Share")
         static let readyToSave = String(localized: "processing.readyToSave", defaultValue: "Your PDF is ready to save")

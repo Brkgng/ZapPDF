@@ -40,6 +40,26 @@ struct ProcessingViewTests {
             #expect(view.action == action)
         }
     }
+
+    @Test("Split output preview items derive names and page details")
+    func splitOutputPreviewItemsDeriveNamesAndPageDetails() throws {
+        let urls = try PDFTestHelpers.createTestPDFs(counts: [1, 3])
+        defer { PDFTestHelpers.cleanup(urls: urls) }
+
+        let items = ProcessingView.splitOutputItems(from: urls)
+
+        #expect(items.count == 2)
+        #expect(items[0].name == urls[0].lastPathComponent)
+        #expect(items[1].name == urls[1].lastPathComponent)
+        #expect(items[0].detail == L10n.Plural.pages(1))
+        #expect(items[1].detail == L10n.Plural.pages(3))
+    }
+
+    @Test("Save button title switches between single and multiple outputs")
+    func saveButtonTitleSwitchesByOutputCount() {
+        #expect(ProcessingView.saveButtonTitle(for: 1) == L10n.Action.saveFile)
+        #expect(ProcessingView.saveButtonTitle(for: 2) == L10n.Action.saveFiles)
+    }
 }
 
 // MARK: - ProcessingState Tests
