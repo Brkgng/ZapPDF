@@ -107,6 +107,7 @@ struct DashboardView: View {
                 }
                 .sheet(isPresented: $showSplitOptions) {
                     if let file = viewModel.filesForAction(.split).first {
+                        #if os(iOS)
                         SplitOptionsSheet(
                             pageCount: file.pageCount,
                             fileURL: file.url,
@@ -115,6 +116,18 @@ struct DashboardView: View {
                         ) {
                             startAction(.split, options: .split(mode: splitMode))
                         }
+                        .presentationDetents([.large])
+                        .presentationDragIndicator(.visible)
+                        #else
+                        SplitOptionsSheet(
+                            pageCount: file.pageCount,
+                            fileURL: file.url,
+                            fileName: file.fileName,
+                            splitMode: $splitMode
+                        ) {
+                            startAction(.split, options: .split(mode: splitMode))
+                        }
+                        #endif
                     }
                 }
                 .navigationDestination(isPresented: $showReorderView) {
@@ -863,6 +876,13 @@ struct SplitOptionsSheet: View {
         self.fileName = fileName
         self._splitMode = splitMode
         self.onConfirm = onConfirm
+
+        let initialState = Self.makeInitialState(from: splitMode.wrappedValue, pageCount: pageCount)
+        self._selectedModeIndex = State(initialValue: initialState.modeIndex)
+        self._splitEveryN = State(initialValue: initialState.splitEveryN)
+        self._pageRangeText = State(initialValue: initialState.pageRangeText)
+        self._rangeError = State(initialValue: nil)
+        self._selectedPages = State(initialValue: initialState.selectedPages)
     }
     
     // Full initializer with URL for visual page selector
@@ -878,6 +898,13 @@ struct SplitOptionsSheet: View {
         self.fileName = fileName
         self._splitMode = splitMode
         self.onConfirm = onConfirm
+
+        let initialState = Self.makeInitialState(from: splitMode.wrappedValue, pageCount: pageCount)
+        self._selectedModeIndex = State(initialValue: initialState.modeIndex)
+        self._splitEveryN = State(initialValue: initialState.splitEveryN)
+        self._pageRangeText = State(initialValue: initialState.pageRangeText)
+        self._rangeError = State(initialValue: nil)
+        self._selectedPages = State(initialValue: initialState.selectedPages)
     }
     
     var body: some View {
@@ -923,8 +950,15 @@ struct SplitOptionsSheet: View {
                 }
             }
         }
+        .onAppear {
+            syncFromSplitMode()
+            splitEveryN = Self.clampedSplitEveryN(splitEveryN, pageCount: pageCount)
+        }
+        .onChange(of: splitEveryN) { _, newValue in
+            splitEveryN = Self.clampedSplitEveryN(newValue, pageCount: pageCount)
+        }
         #if os(macOS)
-        .frame(minWidth: 500, minHeight: 500)
+        .frame(minWidth: 500, minHeight: 700)
         #endif
     }
     
@@ -1089,6 +1123,59 @@ struct SplitOptionsSheet: View {
     static func modeOptionAccessibilityValue(isSelected: Bool) -> String {
         isSelected ? "selected" : "unselected"
     }
+
+    static func clampedSplitEveryN(_ value: Int, pageCount: Int) -> Int {
+        let maxValue = max(1, pageCount)
+        return min(max(value, 1), maxValue)
+    }
+
+    static func rangesText(from ranges: [ClosedRange<Int>]) -> String {
+        ranges.map { range in
+            if range.lowerBound == range.upperBound {
+                return "\(range.lowerBound)"
+            }
+            return "\(range.lowerBound)-\(range.upperBound)"
+        }
+        .joined(separator: ", ")
+    }
+
+    static func sanitizedSelectedPages(_ indices: [Int], pageCount: Int) -> Set<Int> {
+        guard pageCount > 0 else { return [] }
+        return Set(indices.filter { 1...pageCount ~= $0 })
+    }
+
+    struct InitialState: Equatable {
+        let modeIndex: Int
+        let splitEveryN: Int
+        let pageRangeText: String
+        let selectedPages: Set<Int>
+    }
+
+    static func makeInitialState(from mode: PDFSplitter.SplitMode, pageCount: Int) -> InitialState {
+        switch mode {
+        case .splitEvery(let n):
+            return InitialState(
+                modeIndex: 0,
+                splitEveryN: clampedSplitEveryN(n, pageCount: pageCount),
+                pageRangeText: "",
+                selectedPages: []
+            )
+        case .byPageRange(let ranges):
+            return InitialState(
+                modeIndex: 1,
+                splitEveryN: clampedSplitEveryN(1, pageCount: pageCount),
+                pageRangeText: rangesText(from: ranges),
+                selectedPages: []
+            )
+        case .extractPages(let indices):
+            return InitialState(
+                modeIndex: 2,
+                splitEveryN: clampedSplitEveryN(1, pageCount: pageCount),
+                pageRangeText: "",
+                selectedPages: sanitizedSelectedPages(indices, pageCount: pageCount)
+            )
+        }
+    }
     
     // MARK: - Mode Options Section
     
@@ -1119,6 +1206,17 @@ struct SplitOptionsSheet: View {
                     .foregroundColor(.secondary)
                 
                 Spacer()
+
+                TextField(
+                    L10n.SplitOptions.pageCount(splitEveryN),
+                    value: $splitEveryN,
+                    format: .number
+                )
+                .textFieldStyle(.roundedBorder)
+                #if os(iOS)
+                .keyboardType(.numberPad)
+                #endif
+                .frame(width: 70)
                 
                 Stepper("\(splitEveryN)", value: $splitEveryN, in: 1...max(1, pageCount))
                     .labelsHidden()
@@ -1395,6 +1493,15 @@ struct SplitOptionsSheet: View {
     }
     
     // MARK: - Actions
+
+    private func syncFromSplitMode() {
+        let initialState = Self.makeInitialState(from: splitMode, pageCount: pageCount)
+        selectedModeIndex = initialState.modeIndex
+        splitEveryN = initialState.splitEveryN
+        pageRangeText = initialState.pageRangeText
+        selectedPages = initialState.selectedPages
+        validateRanges(pageRangeText)
+    }
     
     private func validateRanges(_ text: String) {
         guard !text.isEmpty else {

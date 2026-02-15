@@ -101,6 +101,55 @@ struct SplitOptionsSheetTests {
         #expect(SplitOptionsSheet.modeOptionAccessibilityValue(isSelected: true) == "selected")
         #expect(SplitOptionsSheet.modeOptionAccessibilityValue(isSelected: false) == "unselected")
     }
+
+    @Test("SplitOptionsSheet clamps split every N below lower bound")
+    func clampsSplitEveryNBelowLowerBound() {
+        #expect(SplitOptionsSheet.clampedSplitEveryN(0, pageCount: 10) == 1)
+    }
+
+    @Test("SplitOptionsSheet clamps split every N above page count")
+    func clampsSplitEveryNAbovePageCount() {
+        #expect(SplitOptionsSheet.clampedSplitEveryN(999, pageCount: 10) == 10)
+    }
+
+    @Test("SplitOptionsSheet keeps valid split every N unchanged")
+    func keepsValidSplitEveryNUnchanged() {
+        #expect(SplitOptionsSheet.clampedSplitEveryN(7, pageCount: 10) == 7)
+    }
+
+    @Test("SplitOptionsSheet derives initial state for split every mode")
+    func derivesInitialStateForSplitEveryMode() {
+        let state = SplitOptionsSheet.makeInitialState(from: .splitEvery(n: 12), pageCount: 10)
+
+        #expect(state.modeIndex == 0)
+        #expect(state.splitEveryN == 10)
+        #expect(state.pageRangeText.isEmpty)
+        #expect(state.selectedPages.isEmpty)
+    }
+
+    @Test("SplitOptionsSheet derives initial state for page range mode")
+    func derivesInitialStateForPageRangeMode() {
+        let state = SplitOptionsSheet.makeInitialState(
+            from: .byPageRange(ranges: [1...3, 5...5, 9...10]),
+            pageCount: 20
+        )
+
+        #expect(state.modeIndex == 1)
+        #expect(state.pageRangeText == "1-3, 5, 9-10")
+        #expect(state.selectedPages.isEmpty)
+    }
+
+    @Test("SplitOptionsSheet derives initial state for extract pages mode")
+    func derivesInitialStateForExtractPagesMode() {
+        let state = SplitOptionsSheet.makeInitialState(
+            from: .extractPages(indices: [0, 1, 3, 3, 12]),
+            pageCount: 10
+        )
+
+        #expect(state.modeIndex == 2)
+        #expect(state.selectedPages == Set([1, 3]))
+        #expect(state.pageRangeText.isEmpty)
+    }
 }
 
 // MARK: - DashboardViewModel Integration Tests
