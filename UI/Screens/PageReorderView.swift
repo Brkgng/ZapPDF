@@ -205,10 +205,8 @@ struct PageReorderView: View {
                     .environment(\.editMode, .constant(.active))
                 }
                 
-                // Bottom toolbar
-                if viewModel.hasChanges {
-                    iOSBottomToolbar
-                }
+                // Bottom toolbar stays visible so rotate/delete are discoverable.
+                iOSBottomToolbar
             }
             .navigationTitle(L10n.Operation.EditPages.title)
             .navigationBarTitleDisplayMode(.inline)
@@ -245,25 +243,25 @@ struct PageReorderView: View {
             Divider()
             
             HStack {
-                // Rotation controls (only visible when page is selected)
-                if viewModel.canRotateSelectedPage {
-                    HStack(spacing: 20) {
-                        Button(action: viewModel.rotateSelectedPageCounterClockwise) {
-                            Image(systemName: "rotate.left")
-                                .font(.title3)
-                        }
-                        
-                        Button(action: viewModel.rotateSelectedPageClockwise) {
-                            Image(systemName: "rotate.right")
-                                .font(.title3)
-                        }
-                        
-                        Button(action: viewModel.deleteSelectedPage) {
-                            Image(systemName: "trash")
-                                .font(.title3)
-                                .foregroundColor(.red)
-                        }
+                HStack(spacing: 20) {
+                    Button(action: viewModel.rotateSelectedPageCounterClockwise) {
+                        Image(systemName: "rotate.left")
+                            .font(.title3)
                     }
+                    .disabled(!viewModel.canRotateSelectedPage)
+                    
+                    Button(action: viewModel.rotateSelectedPageClockwise) {
+                        Image(systemName: "rotate.right")
+                            .font(.title3)
+                    }
+                    .disabled(!viewModel.canRotateSelectedPage)
+                    
+                    Button(action: viewModel.deleteSelectedPage) {
+                        Image(systemName: "trash")
+                            .font(.title3)
+                            .foregroundColor(.red)
+                    }
+                    .disabled(!viewModel.canDeleteSelectedPage)
                 }
                 
                 Spacer()

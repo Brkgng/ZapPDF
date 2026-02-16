@@ -334,6 +334,11 @@ struct DraggablePageList: View {
             .onMove(perform: onMove)
         }
         .listStyle(.plain)
+        .onAppear {
+            if selectedIndex == nil, !pages.isEmpty {
+                selectedIndex = 0
+            }
+        }
     }
 }
 
