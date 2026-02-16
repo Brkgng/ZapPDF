@@ -179,7 +179,7 @@ struct DashboardView: View {
                 .sheet(isPresented: $showPhotoImporter) {
                     PhotoImporterView(
                         isPresented: $showPhotoImporter,
-                        onImagesSelected: handlePhotosSelected
+                        onItemProvidersSelected: handlePhotoProvidersSelected
                     )
                 }
                 .overlay {
@@ -768,7 +768,7 @@ struct DashboardView: View {
                         scanProgress = progress
                     }
                 }
-                await viewModel.addFiles(urls: [result.pdfURL])
+                await viewModel.addFiles(urls: [result.pdfURL], origin: .internalScan)
 
                 // Show warning if some pages failed
                 if !result.isComplete {
@@ -788,8 +788,8 @@ struct DashboardView: View {
         }
     }
     
-    private func handlePhotosSelected(_ images: [UIImage]) {
-        guard !images.isEmpty else { return }
+    private func handlePhotoProvidersSelected(_ providers: [NSItemProvider]) {
+        guard !providers.isEmpty else { return }
 
         isProcessingScan = true
         scanProgress = nil  // Start with indeterminate progress
@@ -802,13 +802,13 @@ struct DashboardView: View {
             }
 
             do {
-                let result = try await DocumentScanner.shared.convertImagesToPDF(images) { progress in
+                let result = try await DocumentScanner.shared.convertImageProvidersToPDF(providers) { progress in
                     // Update progress on main actor
                     Task { @MainActor in
                         scanProgress = progress
                     }
                 }
-                await viewModel.addFiles(urls: [result.pdfURL])
+                await viewModel.addFiles(urls: [result.pdfURL], origin: .internalScan)
 
                 if !result.isComplete {
                     viewModel.errorMessage = L10n.Scanner.partialSuccess(

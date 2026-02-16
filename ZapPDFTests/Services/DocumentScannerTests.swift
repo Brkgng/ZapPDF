@@ -29,6 +29,7 @@ final class DocumentScannerTests {
             }
         }
 
+        @MainActor
         func imageOfPage(at index: Int) -> UIImage {
             guard index < pageCount else {
                 fatalError("Index \(index) out of bounds for scan with \(pageCount) pages")
@@ -236,6 +237,17 @@ final class DocumentScannerTests {
         _ = DocumentScanner.cleanupScannedFile(at: result.pdfURL)
     }
 
+    @Test("Creates unique output file names for rapid conversions")
+    func createsUniqueOutputNamesForRapidConversions() async throws {
+        let firstResult = try await DocumentScanner.shared.convertScanToPDF(MockScan(pageCount: 1))
+        let secondResult = try await DocumentScanner.shared.convertScanToPDF(MockScan(pageCount: 1))
+
+        #expect(firstResult.pdfURL != secondResult.pdfURL, "Rapid conversions should not overwrite the same file")
+
+        _ = DocumentScanner.cleanupScannedFile(at: firstResult.pdfURL)
+        _ = DocumentScanner.cleanupScannedFile(at: secondResult.pdfURL)
+    }
+
     // MARK: - Cleanup Tests
 
     @Test("Cleanup removes scanned file from disk")
@@ -289,6 +301,26 @@ final class DocumentScannerTests {
 
         // Cleanup
         try? FileManager.default.removeItem(at: testFile)
+    }
+
+    @Test("Cleanup rejects paths that only partially match scans directory name")
+    func cleanupRejectsPathPrefixTricks() async throws {
+        let mockScan = MockScan(pageCount: 1)
+        let result = try await DocumentScanner.shared.convertScanToPDF(mockScan)
+        defer { _ = DocumentScanner.cleanupScannedFile(at: result.pdfURL) }
+
+        let scansDir = result.pdfURL.deletingLastPathComponent()
+        let parent = scansDir.deletingLastPathComponent()
+        let fakeDir = parent.appendingPathComponent(scansDir.lastPathComponent + "_evil")
+        try FileManager.default.createDirectory(at: fakeDir, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: fakeDir) }
+
+        let fakeFile = fakeDir.appendingPathComponent("fake.pdf")
+        FileManager.default.createFile(atPath: fakeFile.path, contents: Data())
+
+        let deleted = DocumentScanner.cleanupScannedFile(at: fakeFile)
+        #expect(deleted == false, "Cleanup should reject lookalike directory prefixes")
+        #expect(FileManager.default.fileExists(atPath: fakeFile.path), "Fake file should remain untouched")
     }
     #endif
 }

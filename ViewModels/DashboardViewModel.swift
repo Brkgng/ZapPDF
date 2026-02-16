@@ -79,20 +79,41 @@ final class DashboardViewModel: ObservableObject {
     
     /// Cancellables for Combine subscriptions.
     private var cancellables = Set<AnyCancellable>()
+
+    #if os(iOS)
+    /// Delayed cleanup tasks for internally generated scan files (undo support).
+    private var pendingScannedFileCleanupTasks: [UUID: Task<Void, Never>] = [:]
+    private let scannedFileCleanupDelay: Duration
+    #endif
     
     // MARK: - Initialization
     
     /// Creates a DashboardViewModel with the default UsageManager.
     init() {
         self.usageManager = UsageManager.shared
+        #if os(iOS)
+        self.scannedFileCleanupDelay = .seconds(6)
+        #endif
         setupNotificationObserver()
     }
     
     /// Creates a DashboardViewModel with a custom UsageManager (for testing).
     init(usageManager: any UsageManaging) {
         self.usageManager = usageManager
+        #if os(iOS)
+        self.scannedFileCleanupDelay = .seconds(6)
+        #endif
         setupNotificationObserver()
     }
+
+    #if os(iOS)
+    /// Creates a DashboardViewModel with custom scan cleanup delay (for iOS tests).
+    init(usageManager: any UsageManaging, scannedFileCleanupDelay: Duration) {
+        self.usageManager = usageManager
+        self.scannedFileCleanupDelay = scannedFileCleanupDelay
+        setupNotificationObserver()
+    }
+    #endif
     
     // MARK: - Private Setup
     
@@ -117,8 +138,10 @@ final class DashboardViewModel: ObservableObject {
     /// Note: Files are auto-selected only when adding exactly 1 file to an empty dashboard.
     /// In all other cases, files are not selected by default.
     ///
-    /// - Parameter urls: Array of file URLs to add
-    func addFiles(urls: [URL]) async {
+    /// - Parameters:
+    ///   - urls: Array of file URLs to add
+    ///   - origin: Origin category for lifecycle policy decisions
+    func addFiles(urls: [URL], origin: PDFFileOrigin = .external) async {
         guard !urls.isEmpty else { return }
         
         isLoading = true
@@ -132,7 +155,7 @@ final class DashboardViewModel: ObservableObject {
         
         for url in urls {
             do {
-                let pdfFile = try await PDFFile(url: url)
+                let pdfFile = try await PDFFile(url: url, origin: origin)
                 addedFiles.append(pdfFile)
             } catch {
                 errorURLs.append(url)
@@ -165,20 +188,34 @@ final class DashboardViewModel: ObservableObject {
     ///
     /// - Parameter file: The PDFFile to remove
     func removeFile(_ file: PDFFile) {
+        let removedFile = files.first { $0.id == file.id }
+
         files.removeAll { $0.id == file.id }
         // Also remove from selection if selected
         selectedFileIDs.remove(file.id)
+
+        if let removedFile {
+            cancelPendingScannedFileCleanup(for: removedFile)
+            cleanupScannedFileIfNeeded(removedFile)
+        }
     }
     
     /// Remove files at specified indices.
     ///
     /// - Parameter indexSet: Indices of files to remove
     func removeFiles(at indexSet: IndexSet) {
+        let removedFiles = indexSet.map { files[$0] }
+
         // Remove from selection first
         let removedIDs = indexSet.map { files[$0].id }
         removedIDs.forEach { selectedFileIDs.remove($0) }
         // Then remove from files
         files.remove(atOffsets: indexSet)
+
+        for file in removedFiles {
+            cancelPendingScannedFileCleanup(for: file)
+            cleanupScannedFileIfNeeded(file)
+        }
     }
     
     /// Reorder files (for drag and drop in merge operations).
@@ -198,6 +235,8 @@ final class DashboardViewModel: ObservableObject {
         // Store previous state for undo
         let previousFiles = files
         let previousSelection = selectedFileIDs
+
+        scheduleDeferredScannedFileCleanup(for: previousFiles)
         
         // Clear everything
         files.removeAll()
@@ -221,9 +260,45 @@ final class DashboardViewModel: ObservableObject {
     ///   - restoredFiles: The files to restore
     ///   - restoredSelection: The selection state to restore
     func restoreFiles(_ restoredFiles: [PDFFile], selection restoredSelection: Set<UUID>) {
+        for file in restoredFiles {
+            cancelPendingScannedFileCleanup(for: file)
+        }
+
         files = restoredFiles
         selectedFileIDs = restoredSelection
     }
+
+    #if os(iOS)
+    private func cleanupScannedFileIfNeeded(_ file: PDFFile) {
+        guard file.origin == .internalScan else { return }
+        _ = DocumentScanner.cleanupScannedFile(at: file.url)
+    }
+
+    private func scheduleDeferredScannedFileCleanup(for files: [PDFFile]) {
+        let cleanupDelay = scannedFileCleanupDelay
+
+        for file in files where file.origin == .internalScan {
+            pendingScannedFileCleanupTasks[file.id]?.cancel()
+
+            pendingScannedFileCleanupTasks[file.id] = Task { [weak self] in
+                try? await Task.sleep(for: cleanupDelay)
+                guard !Task.isCancelled else { return }
+
+                _ = DocumentScanner.cleanupScannedFile(at: file.url)
+                self?.pendingScannedFileCleanupTasks[file.id] = nil
+            }
+        }
+    }
+
+    private func cancelPendingScannedFileCleanup(for file: PDFFile) {
+        pendingScannedFileCleanupTasks[file.id]?.cancel()
+        pendingScannedFileCleanupTasks[file.id] = nil
+    }
+    #else
+    private func cleanupScannedFileIfNeeded(_ file: PDFFile) {}
+    private func scheduleDeferredScannedFileCleanup(for files: [PDFFile]) {}
+    private func cancelPendingScannedFileCleanup(for file: PDFFile) {}
+    #endif
     
     // MARK: - Selection Management
     

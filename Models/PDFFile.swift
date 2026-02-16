@@ -8,6 +8,12 @@
 import Foundation
 import PDFKit
 
+/// Source category for how a PDF entered the app.
+enum PDFFileOrigin: String, Sendable {
+    case external
+    case internalScan
+}
+
 /// Represents a PDF file with its metadata for use throughout the app.
 ///
 /// `PDFFile` is an immutable struct that wraps a PDF URL along with extracted
@@ -44,6 +50,9 @@ struct PDFFile: Identifiable, Hashable, Sendable {
     
     /// Date when the file was last modified.
     let modificationDate: Date?
+
+    /// Origin category used for lifecycle policies (for example, internal cleanup).
+    let origin: PDFFileOrigin
     
     // MARK: - Initialization
     
@@ -54,10 +63,11 @@ struct PDFFile: Identifiable, Hashable, Sendable {
     ///
     /// - Parameter url: The URL of the PDF file to load
     /// - Throws: `PDFFileError` if the file cannot be loaded or is invalid
-    init(url: URL) async throws {
+    init(url: URL, origin: PDFFileOrigin = .external) async throws {
         self.id = UUID()
         self.url = url
         self.fileName = url.lastPathComponent
+        self.origin = origin
         
         // Extract metadata within security scope
         let metadata = try await url.withSecurityScopeAsync {
@@ -80,7 +90,8 @@ struct PDFFile: Identifiable, Hashable, Sendable {
         pageCount: Int,
         fileSize: Int64,
         bookmarkData: Data? = nil,
-        modificationDate: Date? = nil
+        modificationDate: Date? = nil,
+        origin: PDFFileOrigin = .external
     ) {
         self.id = id
         self.url = url
@@ -89,6 +100,7 @@ struct PDFFile: Identifiable, Hashable, Sendable {
         self.fileSize = fileSize
         self.bookmarkData = bookmarkData
         self.modificationDate = modificationDate
+        self.origin = origin
     }
     
     // MARK: - Metadata Extraction

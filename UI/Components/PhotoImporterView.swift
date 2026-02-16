@@ -12,14 +12,14 @@ import PhotosUI
 /// SwiftUI wrapper for PHPickerViewController.
 ///
 /// Allows importing images from Photo Library to convert to PDF.
-/// Loads images one at a time to minimize memory pressure.
+/// Returns item providers so conversion can stream image loading.
 ///
 /// Example:
 /// ```swift
 /// .sheet(isPresented: $showPhotoImporter) {
 ///     PhotoImporterView(
 ///         isPresented: $showPhotoImporter,
-///         onImagesSelected: { images in ... }
+///         onItemProvidersSelected: { providers in ... }
 ///     )
 /// }
 /// ```
@@ -27,7 +27,7 @@ import PhotosUI
 struct PhotoImporterView: UIViewControllerRepresentable {
     
     @Binding var isPresented: Bool
-    let onImagesSelected: ([UIImage]) -> Void
+    let onItemProvidersSelected: ([NSItemProvider]) -> Void
     
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var config = PHPickerConfiguration()
@@ -73,32 +73,9 @@ struct PhotoImporterView: UIViewControllerRepresentable {
             parent.isPresented = false
             
             guard !results.isEmpty else { return }
-            
-            // Load images asynchronously, one at a time to control memory
-            Task {
-                var images: [UIImage] = []
-                images.reserveCapacity(results.count)
-                
-                for result in results {
-                    if let image = await loadImage(from: result.itemProvider) {
-                        images.append(image)
-                    }
-                }
-                
-                await MainActor.run {
-                    parent.onImagesSelected(images)
-                }
-            }
-        }
-        
-        private func loadImage(from provider: NSItemProvider) async -> UIImage? {
-            guard provider.canLoadObject(ofClass: UIImage.self) else { return nil }
-            
-            return await withCheckedContinuation { continuation in
-                provider.loadObject(ofClass: UIImage.self) { object, error in
-                    continuation.resume(returning: object as? UIImage)
-                }
-            }
+
+            let providers = results.map(\.itemProvider)
+            parent.onItemProvidersSelected(providers)
         }
     }
 }
