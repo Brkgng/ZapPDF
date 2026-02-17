@@ -313,9 +313,11 @@ struct DashboardView: View {
     private var fileList: some View {
         List {
             ForEach(viewModel.files) { file in
+                // Hide inline delete on iOS to avoid duplicate affordances with swipe-to-delete.
                 PDFFileRow(
                     pdfFile: file,
                     isSelected: viewModel.isSelected(file),
+                    showDeleteButton: false,
                     showSelectionCheckbox: true,
                     onSelectionChanged: { isSelected in
                         if isSelected {

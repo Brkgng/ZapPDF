@@ -150,6 +150,26 @@ final class PDFFileRowTests: XCTestCase {
         row.onDelete?()
         XCTAssertTrue(wasDeleted)
     }
+
+    func testDeleteButtonCanBeHiddenWhileDeleteCallbackExists() {
+        // Given
+        let pdfFile = createMockPDFFile()
+        var wasDeleted = false
+
+        // When
+        let row = PDFFileRow(
+            pdfFile: pdfFile,
+            showDeleteButton: false,
+            onDelete: { wasDeleted = true }
+        )
+
+        // Then
+        XCTAssertFalse(row.showDeleteButton)
+        XCTAssertNotNil(row.onDelete)
+
+        row.onDelete?()
+        XCTAssertTrue(wasDeleted)
+    }
     
     // MARK: - Formatted File Size Tests
     
