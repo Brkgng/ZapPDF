@@ -61,6 +61,8 @@ struct DashboardView: View {
     @State private var showPhotoImporter = false
     @State private var isProcessingScan = false
     @State private var scanProgress: Double? = nil
+    @State private var showScanShareSheet = false
+    @State private var scanShareItems: [Any] = []
     #endif
     
     // MARK: - Body
@@ -181,6 +183,9 @@ struct DashboardView: View {
                         isPresented: $showPhotoImporter,
                         onItemProvidersSelected: handlePhotoProvidersSelected
                     )
+                }
+                .sheet(isPresented: $showScanShareSheet) {
+                    ShareSheet(items: scanShareItems)
                 }
                 .overlay {
                     if isProcessingScan {
@@ -757,10 +762,17 @@ struct DashboardView: View {
         scanProgress = nil  // Start with indeterminate progress
 
         Task {
+            var scanURLToShare: URL?
+
             // Ensure state is always reset, even if an unexpected error occurs
             defer {
                 isProcessingScan = false
                 scanProgress = nil
+
+                if let scanURLToShare {
+                    scanShareItems = [scanURLToShare]
+                    showScanShareSheet = true
+                }
             }
 
             do {
@@ -771,6 +783,7 @@ struct DashboardView: View {
                     }
                 }
                 await viewModel.addFiles(urls: [result.pdfURL], origin: .internalScan)
+                scanURLToShare = result.pdfURL
 
                 // Show warning if some pages failed
                 if !result.isComplete {
