@@ -50,6 +50,15 @@ private func debugLog(_ message: String) {
 /// ```
 actor RevenueCatManager: SubscriptionManaging {
     
+    enum RefreshReason: String, Sendable {
+        case appBecameActive
+        case settingsOpened
+        case paywallPresented
+        case purchaseCompleted
+        case restoreCompleted
+        case manual
+    }
+    
     // MARK: - Singleton
     
     /// Shared singleton instance.
@@ -65,6 +74,15 @@ actor RevenueCatManager: SubscriptionManaging {
     
     /// Whether the SDK has been configured.
     private(set) var isConfigured: Bool = false
+    
+    /// Whether a status refresh is already running.
+    private var isRefreshingStatus: Bool = false
+    
+    /// Whether offerings are currently being fetched.
+    private var isWarmingOfferings: Bool = false
+    
+    /// Last successful status refresh timestamp.
+    private var lastStatusRefreshAt: Date?
     
     #if canImport(RevenueCat)
     /// Cached offerings from RevenueCat.
@@ -82,40 +100,10 @@ actor RevenueCatManager: SubscriptionManaging {
     
     /// Called by AppDelegate after SDK is configured synchronously.
     ///
-    /// This method sets up the delegate and refreshes status.
+    /// This method only marks the SDK as ready and registers the delegate.
+    /// It intentionally avoids network calls to keep app launch fast.
     func onSDKConfigured() async {
-        // Prevent duplicate configuration
-        guard !isConfigured else {
-            debugLog("⚠️ RevenueCatManager already configured, skipping")
-            return
-        }
-        
-        #if canImport(RevenueCat)
-        isConfigured = true
-        
-        // Set up delegate for real-time updates
-        await MainActor.run {
-            Purchases.shared.delegate = RevenueCatDelegateHandler.shared
-        }
-        
-        // Pre-fetch offerings to cache them during initialization
-        do {
-            offerings = try await Purchases.shared.offerings()
-            
-            if let current = offerings?.current {
-                debugLog("✅ RevenueCatManager ready - Current Offering: '\(current.identifier)' with \(current.availablePackages.count) packages")
-            } else {
-                debugLog("⚠️ RevenueCatManager: No 'current' offering configured")
-            }
-        } catch {
-            debugLog("❌ RevenueCatManager: Failed to fetch offerings: \(error.localizedDescription)")
-        }
-        
-        // Refresh subscription status from server
-        await refreshStatus()
-        
-        debugLog("✅ RevenueCatManager fully initialized")
-        #endif
+        _ = await ensureSDKReady()
     }
     
     // MARK: - Offline Caching
@@ -129,14 +117,38 @@ actor RevenueCatManager: SubscriptionManaging {
     
     /// Refresh subscription status from RevenueCat.
     func refreshStatus() async {
+        await refreshStatusIfNeeded(reason: .manual, force: true)
+    }
+    
+    /// Refresh status when needed, with throttling to avoid launch/update storms.
+    func refreshStatusIfNeeded(reason: RefreshReason, force: Bool = false) async {
         #if canImport(RevenueCat)
-        guard isConfigured else {
-            // Use cached value when not configured
+        guard await ensureSDKReady() else {
             return
+        }
+        
+        guard !isRefreshingStatus else {
+            debugLog("⚠️ RevenueCatManager: refresh skipped (\(reason.rawValue)) - already in progress")
+            return
+        }
+        
+        let now = Date()
+        if !force,
+           let lastRefresh = lastStatusRefreshAt,
+           now.timeIntervalSince(lastRefresh) < minimumRefreshInterval(for: reason) {
+            debugLog("⚠️ RevenueCatManager: refresh skipped (\(reason.rawValue)) - throttled")
+            return
+        }
+        
+        isRefreshingStatus = true
+        
+        defer {
+            isRefreshingStatus = false
         }
         
         do {
             let customerInfo = try await Purchases.shared.customerInfo()
+            lastStatusRefreshAt = Date()
             await handleCustomerInfoUpdate(customerInfo)
         } catch {
             debugLog("RevenueCatManager: Failed to refresh status: \(error.localizedDescription)")
@@ -149,6 +161,8 @@ actor RevenueCatManager: SubscriptionManaging {
     func handleCustomerInfoUpdate(_ customerInfo: Any) async {
         #if canImport(RevenueCat)
         guard let info = customerInfo as? CustomerInfo else { return }
+        
+        lastStatusRefreshAt = Date()
         
         let entitlement = info.entitlements[StoreConfiguration.EntitlementID.pro]
         let hasProEntitlement = entitlement?.isActive == true
@@ -183,6 +197,41 @@ actor RevenueCatManager: SubscriptionManaging {
         #endif
     }
     
+    /// Pre-fetch offerings only when paywall/subscription data is needed.
+    func warmOfferingsIfNeeded() async {
+        #if canImport(RevenueCat)
+        guard await ensureSDKReady() else {
+            return
+        }
+        
+        guard offerings == nil else {
+            return
+        }
+        
+        guard !isWarmingOfferings else {
+            return
+        }
+        
+        isWarmingOfferings = true
+        
+        defer {
+            isWarmingOfferings = false
+        }
+        
+        do {
+            offerings = try await Purchases.shared.offerings()
+            
+            if let current = offerings?.current {
+                debugLog("✅ RevenueCatManager: warmed offerings '\(current.identifier)' with \(current.availablePackages.count) packages")
+            } else {
+                debugLog("⚠️ RevenueCatManager: warmed offerings but no 'current' offering configured")
+            }
+        } catch {
+            debugLog("❌ RevenueCatManager: Failed to warm offerings: \(error.localizedDescription)")
+        }
+        #endif
+    }
+    
     #if canImport(RevenueCat)
     /// Determine ProType from product identifier.
     private func determineProType(from productId: String) -> ProType {
@@ -203,21 +252,12 @@ actor RevenueCatManager: SubscriptionManaging {
     var availablePackages: [SubscriptionPackage] {
         get async {
             #if canImport(RevenueCat)
-            guard isConfigured else {
+            guard await ensureSDKReady() else {
                 debugLog("⚠️ availablePackages: SDK not configured yet")
                 return []
             }
             
-            // Fetch offerings if not cached
-            if offerings == nil {
-                debugLog("📡 availablePackages: Fetching offerings from server...")
-                do {
-                    offerings = try await Purchases.shared.offerings()
-                } catch {
-                    debugLog("❌ availablePackages: Failed to fetch offerings: \(error.localizedDescription)")
-                    return []
-                }
-            }
+            await warmOfferingsIfNeeded()
             
             // Convert RevenueCat packages to our abstraction
             guard let currentOffering = offerings?.current else {
@@ -252,7 +292,7 @@ actor RevenueCatManager: SubscriptionManaging {
     /// - Throws: Purchase errors from RevenueCat
     func purchase(_ package: SubscriptionPackage) async throws -> Bool {
         #if canImport(RevenueCat)
-        guard isConfigured else {
+        guard await ensureSDKReady() else {
             throw PurchaseError.notConfigured
         }
         
@@ -267,7 +307,7 @@ actor RevenueCatManager: SubscriptionManaging {
         }
         
         // Update status after purchase (delegate will also be called)
-        await refreshStatus()
+        await refreshStatusIfNeeded(reason: .purchaseCompleted, force: true)
         return true
         #else
         throw PurchaseError.notConfigured
@@ -282,12 +322,13 @@ actor RevenueCatManager: SubscriptionManaging {
     /// - Throws: Restore errors from RevenueCat
     func restorePurchases() async throws -> Bool {
         #if canImport(RevenueCat)
-        guard isConfigured else {
+        guard await ensureSDKReady() else {
             throw PurchaseError.notConfigured
         }
         
         let customerInfo = try await Purchases.shared.restorePurchases()
         await handleCustomerInfoUpdate(customerInfo)
+        lastStatusRefreshAt = Date()
         
         return isPro
         #else
@@ -298,6 +339,37 @@ actor RevenueCatManager: SubscriptionManaging {
     // MARK: - Helpers
     
     #if canImport(RevenueCat)
+    private func ensureSDKReady() async -> Bool {
+        guard StoreConfiguration.isConfigured else {
+            return false
+        }
+        
+        guard !isConfigured else {
+            return true
+        }
+        
+        isConfigured = true
+        
+        await MainActor.run {
+            Purchases.shared.delegate = RevenueCatDelegateHandler.shared
+        }
+        
+        debugLog("✅ RevenueCatManager ready (lazy fetch mode)")
+        
+        return true
+    }
+    
+    private func minimumRefreshInterval(for reason: RefreshReason) -> TimeInterval {
+        switch reason {
+        case .purchaseCompleted, .restoreCompleted, .manual:
+            return 0
+        case .appBecameActive:
+            return 30
+        case .settingsOpened, .paywallPresented:
+            return 10
+        }
+    }
+    
     private func mapPackageType(_ rcType: PackageType) -> SubscriptionPackageType {
         switch rcType {
         case .monthly:

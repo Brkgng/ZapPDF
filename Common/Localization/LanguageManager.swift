@@ -68,7 +68,6 @@ final class LanguageManager {
     
     private func persist() {
         UserDefaults.standard.set(currentLanguage.rawValue, forKey: StorageKey.selectedLanguage)
-        UserDefaults.standard.synchronize()
     }
     
     /// Apply language override via AppleLanguages.
@@ -82,7 +81,6 @@ final class LanguageManager {
             let languageCode = currentLanguage.languageCode
             UserDefaults.standard.set([languageCode], forKey: StorageKey.appleLanguages)
         }
-        UserDefaults.standard.synchronize()
     }
     
     // MARK: - Testing Support
@@ -93,8 +91,6 @@ final class LanguageManager {
         currentLanguage = .system
         UserDefaults.standard.removeObject(forKey: StorageKey.selectedLanguage)
         UserDefaults.standard.removeObject(forKey: StorageKey.appleLanguages)
-        UserDefaults.standard.synchronize()
     }
     #endif
 }
-

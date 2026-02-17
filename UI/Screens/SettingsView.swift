@@ -276,6 +276,7 @@ private struct SubscriptionStatusRow: View {
     }
     
     private func refreshStatus() async {
+        await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .settingsOpened)
         proStatus = await RevenueCatManager.shared.proStatus
         offlinePro = await UsageManager.shared.getProStatus()
     }

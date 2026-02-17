@@ -40,17 +40,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         Purchases.logLevel = .warn
         Purchases.configure(withAPIKey: apiKey)
         
-        // Set delegate for real-time updates
-        // Note: Delegate is set on RevenueCatManager after it loads cached state
+        // Register delegate immediately, but defer all non-essential fetches.
+        Purchases.shared.delegate = RevenueCatDelegateHandler.shared
         
         #if DEBUG
         print("✅ RevenueCat configured in AppDelegate")
         #endif
-        
-        // Notify manager that SDK is ready
-        Task {
-            await RevenueCatManager.shared.onSDKConfigured()
-        }
         #endif
     }
 }

@@ -13,6 +13,7 @@ import RevenueCat
 
 @main
 struct ZapPDFApp: App {
+    @Environment(\.scenePhase) private var scenePhase
     
     /// iOS App Delegate for synchronous SDK configuration.
     #if os(iOS)
@@ -47,6 +48,14 @@ struct ZapPDFApp: App {
                 #endif
                 .onOpenURL { url in
                     handleIncomingURL(url)
+                }
+                .onChange(of: scenePhase) { _, newPhase in
+                    guard newPhase == .active else { return }
+                    Task(priority: .utility) {
+                        // Defer post-activation sync so first frame is not contending.
+                        try? await Task.sleep(for: .seconds(1))
+                        await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .appBecameActive)
+                    }
                 }
         }
         
@@ -93,14 +102,11 @@ struct ZapPDFApp: App {
         
         Purchases.logLevel = .warn
         Purchases.configure(withAPIKey: apiKey)
+        Purchases.shared.delegate = RevenueCatDelegateHandler.shared
         
         #if DEBUG
         print("✅ RevenueCat configured for macOS")
         #endif
-        
-        Task {
-            await RevenueCatManager.shared.onSDKConfigured()
-        }
         #endif
     }
     #endif

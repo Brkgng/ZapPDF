@@ -45,6 +45,10 @@ struct PaywallView: View {
     var body: some View {
         #if canImport(RevenueCatUI)
         RevenueCatUI.PaywallView(displayCloseButton: true)
+            .task {
+                await RevenueCatManager.shared.warmOfferingsIfNeeded()
+                await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .paywallPresented)
+            }
             .onPurchaseCompleted { customerInfo in
                 #if DEBUG
                 print("✅ Purchase completed!")
@@ -88,7 +92,7 @@ struct PaywallView: View {
     #if canImport(RevenueCat)
     private func handlePurchaseSuccess(_ customerInfo: CustomerInfo) {
         Task {
-            await RevenueCatManager.shared.refreshStatus()
+            await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .purchaseCompleted, force: true)
         }
         dismiss()
     }
@@ -96,7 +100,7 @@ struct PaywallView: View {
     private func handleRestoreSuccess(_ customerInfo: CustomerInfo) {
         if customerInfo.entitlements[StoreConfiguration.EntitlementID.pro]?.isActive == true {
             Task {
-                await RevenueCatManager.shared.refreshStatus()
+                await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .restoreCompleted, force: true)
             }
             dismiss()
         }
@@ -124,7 +128,7 @@ struct ProPaywallModifier: ViewModifier {
                     print("✅ Purchase completed via modifier")
                     #endif
                     Task {
-                        await RevenueCatManager.shared.refreshStatus()
+                        await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .purchaseCompleted, force: true)
                     }
                 },
                 restoreCompleted: { customerInfo in
@@ -132,7 +136,7 @@ struct ProPaywallModifier: ViewModifier {
                     print("✅ Restore completed via modifier")
                     #endif
                     Task {
-                        await RevenueCatManager.shared.refreshStatus()
+                        await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .restoreCompleted, force: true)
                     }
                 }
             )

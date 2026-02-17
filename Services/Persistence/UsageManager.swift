@@ -80,6 +80,9 @@ actor UsageManager {
     /// Whether this is a Pro user (placeholder for RevenueCat integration)
     private var isPro: Bool = false
     
+    /// Whether cached Pro status has been loaded from storage.
+    private var hasLoadedCachedProStatus: Bool = false
+    
     /// Whether to use in-memory storage only (for testing)
     private let inMemoryOnly: Bool
     
@@ -93,9 +96,9 @@ actor UsageManager {
     private init() {
         self.freeActionLimit = 5
         self.inMemoryOnly = false
-        // Load cached Pro status from Keychain for offline support
-        // This ensures Pro users can use the app on cold start without waiting for RevenueCat
-        self.isPro = Self.loadCachedProStatus()
+        // Intentionally defer Keychain reads until first usage query to keep
+        // app construction path lightweight.
+        self.isPro = false
     }
     
     /// Load cached Pro status from Keychain, with migration from legacy UserDefaults.
@@ -166,6 +169,8 @@ actor UsageManager {
     ///
     /// - Returns: Number of actions remaining (0 if exhausted)
     func remainingActions() async -> Int {
+        loadCachedProStatusIfNeeded()
+        
         // Pro users have unlimited actions
         if isPro {
             return Int.max
@@ -216,6 +221,8 @@ actor UsageManager {
     ///
     /// - Returns: true if user can perform an action
     func canPerformAction() async -> Bool {
+        loadCachedProStatusIfNeeded()
+        
         // Pro users always can
         if isPro {
             return true
@@ -290,7 +297,14 @@ actor UsageManager {
     ///
     /// - Parameter isPro: Whether the user has an active Pro subscription
     func setProStatus(_ isPro: Bool) {
+        loadCachedProStatusIfNeeded()
+        
+        guard self.isPro != isPro else {
+            return
+        }
+        
         self.isPro = isPro
+        hasLoadedCachedProStatus = true
         
         // Persist to Keychain for secure offline support on next cold start
         // Skip persistence for test instances to avoid polluting Keychain
@@ -311,6 +325,7 @@ actor UsageManager {
     ///
     /// - Returns: Whether the user has an active Pro subscription
     func getProStatus() -> Bool {
+        loadCachedProStatusIfNeeded()
         return isPro
     }
     
@@ -322,6 +337,22 @@ actor UsageManager {
         Task { @MainActor in
             NotificationCenter.default.post(name: .usageStateDidChange, object: nil)
         }
+    }
+    
+    /// Load cached Pro status once, lazily.
+    private func loadCachedProStatusIfNeeded() {
+        guard !hasLoadedCachedProStatus else {
+            return
+        }
+        
+        hasLoadedCachedProStatus = true
+        
+        // Test instances should not touch persistent storage.
+        guard !inMemoryOnly else {
+            return
+        }
+        
+        isPro = Self.loadCachedProStatus()
     }
     
     // MARK: - Testing Support
