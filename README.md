@@ -61,4 +61,4 @@ ZapPDF is designed with privacy as a core principle:
 
 ## License
 
-Proprietary – All rights reserved.
+[MIT](./LICENSE)
