@@ -28,14 +28,7 @@ struct RevenueCatManagerTests {
     @Test("StoreConfiguration configuration check")
     func storeConfigurationCheck() {
         let key = StoreConfiguration.revenueCatAPIKey
-        // It's acceptable for the key to be empty (mock) or valid (configured)
-        // logic: pass if handled correctly.
-        // If we are running with a valid key, isConfigured should be true.
-        if !key.isEmpty && key != "your_revenuecat_api_key_here" {
-           #expect(StoreConfiguration.isConfigured)
-        } else {
-           #expect(!StoreConfiguration.isConfigured || key == "your_revenuecat_api_key_here")
-        }
+        #expect(StoreConfiguration.isConfigured == !key.isEmpty)
     }
     
     @Test("Product IDs are correctly defined")

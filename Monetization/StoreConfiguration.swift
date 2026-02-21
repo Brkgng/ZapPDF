@@ -11,34 +11,48 @@ import Foundation
 
 /// Configuration for RevenueCat SDK and subscription products.
 ///
-/// API keys are read from Info.plist at runtime, populated via
-/// `Secrets.xcconfig` at build time. This keeps secrets out of
-/// version control for this open-source project.
-///
-/// Setup:
-/// 1. Copy `Config/Secrets.xcconfig.example` to `Config/Secrets.xcconfig`
-/// 2. Fill in your RevenueCat API key
-/// 3. Build the project
+/// API key lookup order:
+/// 1. `REVENUECAT_API_KEY` environment variable
+/// 2. `REVENUECAT_API_KEY` in Info.plist
+/// 3. Empty string fallback (monetization disabled)
 enum StoreConfiguration {
+
+    private static let revenueCatAPIKeyName = "REVENUECAT_API_KEY"
     
     // MARK: - API Key
     
     /// RevenueCat API key.
     static var revenueCatAPIKey: String {
-        #if DEBUG
-        // Local/test fallback so CI and developer builds can run without private config.
-        if let envKey = ProcessInfo.processInfo.environment["REVENUECAT_API_KEY"], !envKey.isEmpty {
+        if let envKey = normalizedAPIKey(ProcessInfo.processInfo.environment[revenueCatAPIKeyName]) {
             return envKey
         }
+
+        let plistKey = Bundle.main.object(forInfoDictionaryKey: revenueCatAPIKeyName) as? String
+        if let plistKey = normalizedAPIKey(plistKey) {
+            return plistKey
+        }
+
         return ""
-        #else
-        return Secrets.revenueCatAPIKey
-        #endif
     }
     
     /// Whether RevenueCat is properly configured.
     static var isConfigured: Bool {
         !revenueCatAPIKey.isEmpty
+    }
+
+    private static func normalizedAPIKey(_ rawValue: String?) -> String? {
+        guard let rawValue else { return nil }
+
+        let candidate = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !candidate.isEmpty else { return nil }
+
+        // Ignore unresolved build variable placeholders.
+        if (candidate.hasPrefix("$(") && candidate.hasSuffix(")")) ||
+            (candidate.hasPrefix("${") && candidate.hasSuffix("}")) {
+            return nil
+        }
+
+        return candidate
     }
     
     // MARK: - Product Identifiers
