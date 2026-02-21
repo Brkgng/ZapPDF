@@ -31,33 +31,33 @@ import UniformTypeIdentifiers
 /// .fileImporter(isPresented: $showFilePicker, ...) { ... }
 /// ```
 struct FileDropZone: View {
-    
+
     // MARK: - Properties
-    
+
     /// Whether the drop zone is empty (no files added yet).
     let isEmpty: Bool
-    
+
     /// Binding to track if a drag is currently over the drop zone.
     @Binding var isTargeted: Bool
-    
+
     /// Callback when files are dropped onto the zone.
     var onFilesDropped: ([URL]) -> Void
-    
+
     /// Callback when the file picker button is tapped.
     var onPickerRequested: () -> Void
-    
+
     /// Accepted file types (defaults to PDF and generic file URLs).
     /// Note: We include .fileURL to accept generic file drops from Finder,
     /// and rely on handleDrop to filter for actual PDF files.
     var acceptedTypes: [UTType] = [.pdf, .fileURL]
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         ZStack {
             // Background
             backgroundView
-            
+
             // Content
             if isEmpty {
                 emptyStateView
@@ -71,9 +71,9 @@ struct FileDropZone: View {
             onDrop: handleDrop
         ))
     }
-    
+
     // MARK: - Background View
-    
+
     private var backgroundView: some View {
         RoundedRectangle(cornerRadius: 16)
             .fill(backgroundFill)
@@ -85,7 +85,7 @@ struct FileDropZone: View {
                     )
             )
     }
-    
+
     private var backgroundFill: Color {
         if isTargeted {
             return Color.accentColor.opacity(0.1)
@@ -97,9 +97,9 @@ struct FileDropZone: View {
             #endif
         }
     }
-    
+
     // MARK: - Empty State View
-    
+
     private var emptyStateView: some View {
         VStack(spacing: 16) {
             // Icon
@@ -107,18 +107,18 @@ struct FileDropZone: View {
                 .font(.system(size: 48))
                 .foregroundColor(isTargeted ? .accentColor : .secondary)
                 .symbolEffect(.bounce, value: isTargeted)
-            
+
             // Title
             Text(isTargeted ? L10n.Dashboard.dropHere : L10n.Dashboard.addFiles)
                 .font(.headline)
                 .foregroundColor(isTargeted ? .accentColor : .primary)
-            
+
             // Subtitle
             Text(L10n.Dashboard.dragAndDrop)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
-            
+
             // File Picker Button
             Button {
                 onPickerRequested()
@@ -131,9 +131,9 @@ struct FileDropZone: View {
         .padding(32)
         .animation(.easeInOut(duration: 0.2), value: isTargeted)
     }
-    
+
     // MARK: - Drop Handler
-    
+
     private func handleDrop(urls: [URL]) {
         // Filter to only PDF files, handling URL normalization for Finder drops
         let pdfURLs = urls.compactMap { url -> URL? in
@@ -146,13 +146,13 @@ struct FileDropZone: View {
             } else {
                 normalizedURL = url
             }
-            
+
             // Primary check: file extension (fast, no security scope needed)
             // This works for the vast majority of PDF files
             if normalizedURL.pathExtension.lowercased() == "pdf" {
                 return normalizedURL
             }
-            
+
             // Secondary check: use UTType via resourceValues
             // This requires file access, so we need security scope
             let didStartAccess = normalizedURL.startAccessingSecurityScopedResource()
@@ -161,16 +161,16 @@ struct FileDropZone: View {
                     normalizedURL.stopAccessingSecurityScopedResource()
                 }
             }
-            
+
             if let typeIdentifier = try? normalizedURL.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier,
                let utType = UTType(typeIdentifier),
                utType.conforms(to: .pdf) {
                 return normalizedURL
             }
-            
+
             return nil
         }
-        
+
         if !pdfURLs.isEmpty {
             onFilesDropped(pdfURLs)
         }
@@ -184,7 +184,7 @@ private struct DropHandlerModifier: ViewModifier {
     @Binding var isTargeted: Bool
     let acceptedTypes: [UTType]
     let onDrop: ([URL]) -> Void
-    
+
     func body(content: Content) -> some View {
         #if os(macOS)
         content
@@ -201,30 +201,30 @@ private struct DropHandlerModifier: ViewModifier {
             }
         #endif
     }
-    
+
     #if os(macOS)
     private func handleProviders(_ providers: [NSItemProvider]) -> Bool {
         let syncQueue = DispatchQueue(label: "com.zappdf.drophandler", attributes: .concurrent)
         var loadedURLs: [URL] = []
         let group = DispatchGroup()
-        
+
         for provider in providers {
             // Check which type identifiers are available and try to load
             var didLoad = false
-            
+
             // First: Try loading from accepted types (e.g., com.adobe.pdf)
             // When dragging from Finder, the provider exposes the content type, not file-url
             for acceptedType in acceptedTypes {
                 if provider.hasItemConformingToTypeIdentifier(acceptedType.identifier) {
                     didLoad = true
                     group.enter()
-                    
-                    provider.loadItem(forTypeIdentifier: acceptedType.identifier, options: nil) { item, error in
+
+                    provider.loadItem(forTypeIdentifier: acceptedType.identifier, options: nil) { item, _ in
                         defer { group.leave() }
-                        
+
                         // The item can be Data (file URL bytes), URL, or file path String
                         var fileURL: URL?
-                        
+
                         if let url = item as? URL {
                             fileURL = url
                         } else if let data = item as? Data {
@@ -237,7 +237,7 @@ private struct DropHandlerModifier: ViewModifier {
                                   FileManager.default.fileExists(atPath: string) {
                             fileURL = URL(fileURLWithPath: string)
                         }
-                        
+
                         if let url = fileURL {
                             syncQueue.async(flags: .barrier) {
                                 loadedURLs.append(url)
@@ -247,16 +247,16 @@ private struct DropHandlerModifier: ViewModifier {
                     break // Only load once per provider
                 }
             }
-            
+
             // Second: Try public.file-url if accepted types didn't work
             if !didLoad && provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
                 didLoad = true
                 group.enter()
-                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
+                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
                     defer { group.leave() }
-                    
+
                     var fileURL: URL?
-                    
+
                     if let data = item as? Data {
                         fileURL = URL(dataRepresentation: data, relativeTo: nil)
                     } else if let url = item as? URL {
@@ -264,7 +264,7 @@ private struct DropHandlerModifier: ViewModifier {
                     } else if let string = item as? String {
                         fileURL = URL(fileURLWithPath: string)
                     }
-                    
+
                     if let url = fileURL {
                         syncQueue.async(flags: .barrier) {
                             loadedURLs.append(url)
@@ -272,12 +272,13 @@ private struct DropHandlerModifier: ViewModifier {
                     }
                 }
             }
-            
+
             // Third: Try loadObject as last resort
             if !didLoad && provider.canLoadObject(ofClass: URL.self) {
                 group.enter()
-                _ = provider.loadObject(ofClass: URL.self) { url, error in
+                _ = provider.loadObject(ofClass: URL.self) { url, _ in
                     defer { group.leave() }
+
                     if let url = url {
                         syncQueue.async(flags: .barrier) {
                             loadedURLs.append(url)
@@ -286,7 +287,7 @@ private struct DropHandlerModifier: ViewModifier {
                 }
             }
         }
-        
+
         group.notify(queue: .main) {
             syncQueue.sync {
                 if !loadedURLs.isEmpty {
@@ -294,7 +295,7 @@ private struct DropHandlerModifier: ViewModifier {
                 }
             }
         }
-        
+
         return true
     }
     #endif
@@ -309,7 +310,7 @@ struct FileDropZoneWithContent<Content: View>: View {
     var onFilesDropped: ([URL]) -> Void
     var onPickerRequested: () -> Void
     @ViewBuilder var content: () -> Content
-    
+
     var body: some View {
         ZStack {
             if isEmpty {
@@ -321,30 +322,33 @@ struct FileDropZoneWithContent<Content: View>: View {
                 )
             } else {
                 // Show content with drop overlay
-                content()
-                    .modifier(DropHandlerModifier(
-                        isTargeted: $isTargeted,
-                        acceptedTypes: [.pdf],
-                        onDrop: onFilesDropped
-                    ))
-                    .overlay {
-                        if isTargeted {
-                            dropOverlay
-                        }
+                ZStack {
+                    content()
+
+                    if isTargeted {
+                        dropOverlay
+                            .allowsHitTesting(false)
                     }
+                }
+                .contentShape(Rectangle())
+                .modifier(DropHandlerModifier(
+                    isTargeted: $isTargeted,
+                    acceptedTypes: [.pdf, .fileURL],
+                    onDrop: onFilesDropped
+                ))
             }
         }
     }
-    
+
     private var dropOverlay: some View {
         ZStack {
             Color.accentColor.opacity(0.15)
-            
+
             VStack(spacing: 12) {
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 48))
                     .foregroundColor(.accentColor)
-                
+
                 Text(L10n.Dashboard.dropToAdd)
                     .font(.headline)
                     .foregroundColor(.accentColor)
@@ -358,7 +362,7 @@ struct FileDropZoneWithContent<Content: View>: View {
 
 #Preview("Empty State") {
     @Previewable @State var isTargeted = false
-    
+
     FileDropZone(
         isEmpty: true,
         isTargeted: $isTargeted
@@ -372,7 +376,7 @@ struct FileDropZoneWithContent<Content: View>: View {
 
 #Preview("Targeted State") {
     @Previewable @State var isTargeted = true
-    
+
     FileDropZone(
         isEmpty: true,
         isTargeted: $isTargeted
@@ -386,7 +390,7 @@ struct FileDropZoneWithContent<Content: View>: View {
 
 #Preview("With Content") {
     @Previewable @State var isTargeted = false
-    
+
     let mockFiles = [
         PDFFile(
             url: URL(fileURLWithPath: "/tmp/Doc1.pdf"),
@@ -401,7 +405,7 @@ struct FileDropZoneWithContent<Content: View>: View {
             fileSize: 1_000_000
         )
     ]
-    
+
     FileDropZoneWithContent(
         isEmpty: false,
         isTargeted: $isTargeted,

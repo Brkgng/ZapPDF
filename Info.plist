@@ -18,6 +18,21 @@
             <string>Alternate</string>
         </dict>
     </array>
+
+    <!-- Internal drag-and-drop type for in-app file row reordering -->
+    <key>UTExportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+            </array>
+            <key>UTTypeDescription</key>
+            <string>ZapPDF Internal Reorder File Identifier</string>
+            <key>UTTypeIdentifier</key>
+            <string>com.zappdf.internal.reorder-file-id</string>
+        </dict>
+    </array>
     
     <!-- macOS: Support opening documents in place (required for sandboxed apps) -->
     <key>LSSupportsOpeningDocumentsInPlace</key>

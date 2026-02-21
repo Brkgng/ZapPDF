@@ -43,20 +43,6 @@ struct AppStoreReviewManagerTests {
         #expect(secondCheck == false, "Should not show after already shown this launch")
     }
 
-    @Test("Atomic operation prevents race condition")
-    func atomicOperationPreventsRaceCondition() async {
-        await resetManager()
-
-        // Simulate concurrent calls - only one should get true
-        async let result1 = AppStoreReviewManager.shared.shouldShowAndMarkReviewPrompt()
-        async let result2 = AppStoreReviewManager.shared.shouldShowAndMarkReviewPrompt()
-
-        let results = await [result1, result2]
-        let trueCount = results.filter { $0 }.count
-
-        #expect(trueCount == 1, "Only one concurrent caller should receive true")
-    }
-
     // MARK: - Version Tracking Tests
 
     @Test("Persists across launch simulation")

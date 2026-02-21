@@ -22,8 +22,8 @@ struct SettingsView: View {
     // App Store subscription management URL
     private let subscriptionURL = URL(string: "https://apps.apple.com/account/subscriptions")
     
-    // Mock support email
-    private let supportEmail = "support@zappdf.app"
+    // Support form URL
+    private let supportURL = URL(string: "https://forms.gle/542Dty1NrMJcKCe98")
     
     var body: some View {
         #if os(macOS)
@@ -229,9 +229,7 @@ struct SettingsView: View {
     }
     
     private func contactSupport() {
-        let mailURL = URL(string: "mailto:\(supportEmail)")
-        
-        if let url = mailURL {
+        if let url = supportURL {
             openURL(url)
         }
     }

@@ -16,6 +16,30 @@ import RevenueCatUI
 import VisionKit
 #endif
 
+#if os(macOS)
+import AppKit
+import Combine
+
+private enum DashboardInternalDragType {
+    static let reorderFileID = UTType(exportedAs: "com.zappdf.internal.reorder-file-id")
+
+    static func makeReorderProvider(fileID: UUID) -> NSItemProvider {
+        let provider = NSItemProvider()
+        let data = Data(fileID.uuidString.utf8)
+
+        provider.registerDataRepresentation(
+            forTypeIdentifier: reorderFileID.identifier,
+            visibility: .ownProcess
+        ) { completion in
+            completion(data, nil)
+            return nil
+        }
+
+        return provider
+    }
+}
+#endif
+
 // MARK: - DashboardView
 
 /// Main dashboard view for file selection and PDF operations.
@@ -36,11 +60,11 @@ import VisionKit
 /// }
 /// ```
 struct DashboardView: View {
-    
+
     // MARK: - Properties
-    
+
     @EnvironmentObject private var viewModel: DashboardViewModel
-    
+
     @State private var showFilePicker = false
     @State private var isDropTargeted = false
     @State private var selectedAction: UserAction?
@@ -55,7 +79,11 @@ struct DashboardView: View {
     @State private var clearedFiles: [PDFFile] = []
     @State private var clearedSelection: Set<UUID> = []
     @State private var showSettings = false
-    
+
+    #if os(macOS)
+    private let dragStateResetTimer = Timer.publish(every: 0.15, on: .main, in: .common).autoconnect()
+    #endif
+
     #if os(iOS)
     @State private var showScanner = false
     @State private var showPhotoImporter = false
@@ -64,9 +92,9 @@ struct DashboardView: View {
     @State private var showScanShareSheet = false
     @State private var scanShareItems: [Any] = []
     #endif
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         NavigationStack {
             mainContent
@@ -162,6 +190,14 @@ struct DashboardView: View {
                 .onReceive(NotificationCenter.default.publisher(for: .filesCleared)) { notification in
                     handleFilesCleared(notification)
                 }
+                #if os(macOS)
+                .onReceive(dragStateResetTimer) { _ in
+                    clearStaleDragStateIfNeeded()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: NSApplication.didResignActiveNotification)) { _ in
+                    draggingFileID = nil
+                }
+                #endif
                 .overlay(alignment: .bottom) {
                     if showUndoToast {
                         undoToast
@@ -195,9 +231,9 @@ struct DashboardView: View {
                 #endif
         }
     }
-    
+
     // MARK: - Main Content
-    
+
     @ViewBuilder
     private var mainContent: some View {
         if viewModel.hasFiles {
@@ -206,9 +242,17 @@ struct DashboardView: View {
             emptyStateContent
         }
     }
-    
+
+    #if os(macOS)
+    private func clearStaleDragStateIfNeeded() {
+        guard draggingFileID != nil else { return }
+        guard NSEvent.pressedMouseButtons == 0 else { return }
+        draggingFileID = nil
+    }
+    #endif
+
     // MARK: - Empty State
-    
+
     private var emptyStateContent: some View {
         FileDropZone(
             isEmpty: true,
@@ -222,9 +266,9 @@ struct DashboardView: View {
         }
         .padding()
     }
-    
+
     // MARK: - File List Content
-    
+
     private var fileListContent: some View {
         VStack(spacing: 0) {
             // File list
@@ -242,16 +286,16 @@ struct DashboardView: View {
             ) {
                 fileList
             }
-            
+
             Divider()
-            
+
             // Summary and actions
             bottomBar
         }
     }
-    
+
     // MARK: - File List
-    
+
     #if os(macOS)
     // macOS: ScrollView with onDrag/onDrop for reliable drag-and-drop
     private var fileList: some View {
@@ -275,19 +319,21 @@ struct DashboardView: View {
                     )
                     .onDrag {
                         draggingFileID = file.id
-                        return NSItemProvider(object: file.id.uuidString as NSString)
+                        return DashboardInternalDragType.makeReorderProvider(fileID: file.id)
                     } preview: {
                         // Invisible drag preview
                         Color.clear.frame(width: 1, height: 1)
                     }
-                    .onDrop(of: [.text], delegate: FileDropDelegate(
-                        item: file,
-                        files: viewModel.files,
-                        draggingFileID: $draggingFileID,
-                        onMove: { source, dest in
-                            viewModel.reorderFiles(from: source, to: dest)
-                        }
-                    ))
+                    .if(draggingFileID != nil) { row in
+                        row.onDrop(of: [DashboardInternalDragType.reorderFileID], delegate: FileDropDelegate(
+                            item: file,
+                            files: viewModel.files,
+                            draggingFileID: $draggingFileID,
+                            onMove: { source, dest in
+                                viewModel.reorderFiles(from: source, to: dest)
+                            }
+                        ))
+                    }
                     .opacity(draggingFileID == file.id ? 0.5 : 1.0)
                     .contextMenu {
                         Button {
@@ -298,9 +344,9 @@ struct DashboardView: View {
                                 systemImage: viewModel.isSelected(file) ? "circle" : "checkmark.circle"
                             )
                         }
-                        
+
                         Divider()
-                        
+
                         Button(role: .destructive) {
                             viewModel.removeFile(file)
                         } label: {
@@ -344,9 +390,9 @@ struct DashboardView: View {
                             systemImage: viewModel.isSelected(file) ? "circle" : "checkmark.circle"
                         )
                     }
-                    
+
                     Divider()
-                    
+
                     Button(role: .destructive) {
                         viewModel.removeFile(file)
                     } label: {
@@ -364,9 +410,9 @@ struct DashboardView: View {
         .listStyle(.inset)
     }
     #endif
-    
+
     // MARK: - Bottom Bar
-    
+
     private var bottomBar: some View {
         VStack(spacing: 16) {
             // Summary
@@ -374,27 +420,27 @@ struct DashboardView: View {
                 // Selection count
                 Text(L10n.Dashboard.selectedOfTotal(viewModel.selectedCount, viewModel.files.count))
                     .font(.subheadline)
-                
+
                 Text("•")
                     .foregroundColor(.secondary)
-                
+
                 Text(L10n.Dashboard.totalPages(viewModel.totalPageCount))
                     .font(.subheadline)
-                
+
                 Text("•")
                     .foregroundColor(.secondary)
-                
+
                 Text(viewModel.formattedTotalSize)
                     .font(.subheadline)
-                
+
                 Spacer()
-                
+
                 ClearAllButton {
                     showClearConfirmation = true
                 }
             }
             .foregroundColor(.secondary)
-            
+
             // Merge order hint - show when merge is available
             if viewModel.filesForAction(.merge).count >= 2 {
                 HStack(spacing: 6) {
@@ -405,7 +451,7 @@ struct DashboardView: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
             }
-            
+
             // Action buttons
             actionButtonsRow
         }
@@ -416,11 +462,11 @@ struct DashboardView: View {
         .background(Color(uiColor: .systemBackground))
         #endif
     }
-    
+
     // MARK: - Action Buttons Row
-    
+
     private let buttonSpacing: CGFloat = 12
-    
+
     private var actionButtonsRow: some View {
         Group {
             #if os(iOS)
@@ -442,7 +488,7 @@ struct DashboardView: View {
             #endif
         }
     }
-    
+
     @ViewBuilder
     private var actionButtons: some View {
         // Shared modifier for button content sizing
@@ -455,7 +501,7 @@ struct DashboardView: View {
             return AnyView(view.frame(minWidth: 100))
             #endif
         }
-        
+
         // Merge button
         buttonModifier(StyledActionButton(
             action: .merge,
@@ -463,7 +509,7 @@ struct DashboardView: View {
         ) {
             handleActionTap(.merge)
         })
-        
+
         // Split button
         buttonModifier(StyledActionButton(
             action: .split,
@@ -471,7 +517,7 @@ struct DashboardView: View {
         ) {
             handleActionTap(.split)
         })
-        
+
         // Edit Pages button
         buttonModifier(StyledActionButton(
             action: .editPages,
@@ -479,7 +525,7 @@ struct DashboardView: View {
         ) {
             handleActionTap(.editPages)
         })
-        
+
         // Flatten button
         buttonModifier(StyledActionButton(
             action: .flatten,
@@ -488,9 +534,9 @@ struct DashboardView: View {
             handleActionTap(.flatten)
         })
     }
-    
+
     // MARK: - Toolbar Content
-    
+
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         // Subscription status badge
@@ -517,7 +563,7 @@ struct DashboardView: View {
             )
         }
         #endif
-        
+
         #if os(iOS)
         ToolbarItem(placement: .primaryAction) {
             Menu {
@@ -526,7 +572,7 @@ struct DashboardView: View {
                 } label: {
                     Label(L10n.Dashboard.addFiles, systemImage: "doc.badge.plus")
                 }
-                
+
                 if DocumentScanner.isSupported {
                     Button {
                         showScanner = true
@@ -534,7 +580,7 @@ struct DashboardView: View {
                         Label(L10n.Scanner.scanDocument, systemImage: "doc.viewfinder")
                     }
                 }
-                
+
                 Button {
                     showPhotoImporter = true
                 } label: {
@@ -554,7 +600,7 @@ struct DashboardView: View {
             }
         }
         #endif
-        
+
         #if os(iOS)
         ToolbarItem(placement: .secondaryAction) {
             Button {
@@ -564,7 +610,7 @@ struct DashboardView: View {
             }
         }
         #endif
-        
+
         #if os(macOS)
         if viewModel.hasFiles {
             ToolbarItem(placement: .secondaryAction) {
@@ -575,7 +621,7 @@ struct DashboardView: View {
                         Label(L10n.Action.selectAll, systemImage: "checkmark.circle")
                     }
                     .keyboardShortcut("a", modifiers: .command)
-                    
+
                     Button {
                         viewModel.deselectAll()
                     } label: {
@@ -588,7 +634,7 @@ struct DashboardView: View {
             }
         }
         #endif
-        
+
         #if os(iOS)
         if viewModel.hasFiles {
             ToolbarItem(placement: .topBarLeading) {
@@ -598,7 +644,7 @@ struct DashboardView: View {
                     } label: {
                         Label(L10n.Action.selectAll, systemImage: "checkmark.circle")
                     }
-                    
+
                     Button {
                         viewModel.deselectAll()
                     } label: {
@@ -611,9 +657,9 @@ struct DashboardView: View {
         }
         #endif
     }
-    
+
     // MARK: - Actions
-    
+
     private func handleFileImport(_ result: Result<[URL], Error>) {
         switch result {
         case .success(let urls):
@@ -622,42 +668,42 @@ struct DashboardView: View {
                 guard url.startAccessingSecurityScopedResource() else { return nil }
                 return url
             }
-            
+
             Task {
                 await viewModel.addFiles(urls: accessibleURLs)
-                
+
                 // Stop accessing after files are loaded
                 for url in accessibleURLs {
                     url.stopAccessingSecurityScopedResource()
                 }
             }
-            
+
         case .failure(let error):
             viewModel.errorMessage = L10n.Dashboard.failedToImport(error.localizedDescription)
         }
     }
-    
+
     private func handleActionTap(_ action: UserAction) {
         Task {
             let canProceed = await viewModel.prepareAction(action)
-            
+
             if canProceed {
                 await MainActor.run {
                     selectedAction = action
-                    
+
                     switch action {
                     case .merge:
                         // Show processing directly for merge
                         startAction(.merge, options: .merge(outputFileName: L10n.Dashboard.mergedOutputName))
-                        
+
                     case .split:
                         // Show split options sheet
                         showSplitOptions = true
-                        
+
                     case .editPages:
                         // Show page editor view
                         showReorderView = true
-                        
+
                     case .flatten:
                         // Show processing directly for flatten
                         startAction(.flatten, options: .flatten())
@@ -666,35 +712,35 @@ struct DashboardView: View {
             }
         }
     }
-    
+
     private func startAction(_ action: UserAction, options: ProcessingOptions) {
         selectedAction = action
         processingOptions = options
         showProcessingView = true
     }
-    
+
     // MARK: - Helpers
-    
+
     private var hasError: Binding<Bool> {
         Binding(
             get: { viewModel.errorMessage != nil },
             set: { if !$0 { viewModel.errorMessage = nil } }
         )
     }
-    
+
     // MARK: - Undo Toast
-    
+
     private var undoToast: some View {
         HStack(spacing: 12) {
             Image(systemName: "trash.fill")
                 .font(.body)
                 .foregroundColor(.secondary)
-            
+
             Text(L10n.Dashboard.undoMessage(clearedFiles.count))
                 .font(.subheadline)
-            
+
             Spacer()
-            
+
             Button {
                 undoClear()
             } label: {
@@ -712,23 +758,23 @@ struct DashboardView: View {
         .padding(.horizontal, 20)
         .padding(.bottom, 16)
     }
-    
+
     private func handleFilesCleared(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
               let previousFiles = userInfo["previousFiles"] as? [PDFFile],
               let previousSelection = userInfo["previousSelection"] as? Set<UUID>,
               !previousFiles.isEmpty
         else { return }
-        
+
         // Store data for undo
         clearedFiles = previousFiles
         clearedSelection = previousSelection
-        
+
         // Show toast with animation
         withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
             showUndoToast = true
         }
-        
+
         // Auto-dismiss after 5 seconds
         Task {
             try? await Task.sleep(for: .seconds(5))
@@ -739,23 +785,23 @@ struct DashboardView: View {
             }
         }
     }
-    
+
     private func undoClear() {
         viewModel.restoreFiles(clearedFiles, selection: clearedSelection)
-        
+
         withAnimation(.easeOut(duration: 0.2)) {
             showUndoToast = false
         }
-        
+
         // Trigger haptic
         #if os(iOS)
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
         #endif
     }
-    
+
     // MARK: - Scanning (iOS)
-    
+
     #if os(iOS)
     private func handleScanCompleted(_ scan: VNDocumentCameraScan) {
         isProcessingScan = true
@@ -802,7 +848,7 @@ struct DashboardView: View {
             }
         }
     }
-    
+
     private func handlePhotoProvidersSelected(_ providers: [NSItemProvider]) {
         guard !providers.isEmpty else { return }
 
@@ -842,7 +888,7 @@ struct DashboardView: View {
             }
         }
     }
-    
+
     private func handleScanError(_ error: Error) {
         viewModel.errorMessage = L10n.Scanner.errorCamera(error.localizedDescription)
     }
@@ -863,22 +909,22 @@ struct SplitOptionsSheet: View {
     let fileName: String
     @Binding var splitMode: PDFSplitter.SplitMode
     let onConfirm: () -> Void
-    
+
     @Environment(\.dismiss) private var dismiss
-    
+
     // Split modes: 0 = splitEvery, 1 = byRange, 2 = selectPages
     @State private var selectedModeIndex = 0
-    
+
     // Mode 0: Split Every N
     @State private var splitEveryN = 1
-    
+
     // Mode 1: Page Ranges
     @State private var pageRangeText = ""
     @State private var rangeError: String?
-    
+
     // Mode 2: Select Pages
     @State private var selectedPages: Set<Int> = []
-    
+
     // Convenience initializer for backwards compatibility
     init(
         pageCount: Int,
@@ -899,7 +945,7 @@ struct SplitOptionsSheet: View {
         self._rangeError = State(initialValue: nil)
         self._selectedPages = State(initialValue: initialState.selectedPages)
     }
-    
+
     // Full initializer with URL for visual page selector
     init(
         pageCount: Int,
@@ -921,26 +967,26 @@ struct SplitOptionsSheet: View {
         self._rangeError = State(initialValue: nil)
         self._selectedPages = State(initialValue: initialState.selectedPages)
     }
-    
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
                     // Source file info
                     sourceFileInfo
-                    
+
                     Divider()
-                    
+
                     // Split mode picker
                     splitModePicker
-                    
+
                     Divider()
-                    
+
                     // Mode-specific options
                     modeOptionsSection
-                    
+
                     Divider()
-                    
+
                     // Output preview
                     outputPreviewSection
                 }
@@ -956,7 +1002,7 @@ struct SplitOptionsSheet: View {
                         dismiss()
                     }
                 }
-                
+
                 ToolbarItem(placement: .confirmationAction) {
                     Button(L10n.SplitOptions.split) {
                         performSplit()
@@ -976,9 +1022,9 @@ struct SplitOptionsSheet: View {
         .frame(minWidth: 500, minHeight: 700)
         #endif
     }
-    
+
     // MARK: - Source File Info
-    
+
     private var sourceFileInfo: some View {
         HStack(spacing: 12) {
             Image(systemName: "doc.fill")
@@ -987,7 +1033,7 @@ struct SplitOptionsSheet: View {
                 .frame(width: 40, height: 40)
                 .background(Color.accentColor.opacity(0.1))
                 .clipShape(RoundedRectangle(cornerRadius: 8))
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(fileName)
                     .font(.headline)
@@ -997,18 +1043,18 @@ struct SplitOptionsSheet: View {
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
         }
     }
-    
+
     // MARK: - Split Mode Picker
-    
+
     private var splitModePicker: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(L10n.SplitOptions.splitMode)
                 .font(.headline)
-            
+
             #if os(macOS)
             // macOS: Radio button style for clarity
             VStack(alignment: .leading, spacing: 8) {
@@ -1018,14 +1064,14 @@ struct SplitOptionsSheet: View {
                     title: L10n.Operation.Split.splitEvery,
                     subtitle: L10n.SplitOptions.divideIntoChunks
                 )
-                
+
                 modeRadioButton(
                     index: 1,
                     icon: "number",
                     title: L10n.Operation.Split.extractRanges,
                     subtitle: L10n.SplitOptions.specifyRanges
                 )
-                
+
                 modeRadioButton(
                     index: 2,
                     icon: "hand.tap",
@@ -1041,7 +1087,7 @@ struct SplitOptionsSheet: View {
                 Text(L10n.SplitOptions.select).tag(2)
             }
             .pickerStyle(.segmented)
-            
+
             // Mode description
             Text(modeDescription)
                 .font(.caption)
@@ -1049,7 +1095,7 @@ struct SplitOptionsSheet: View {
             #endif
         }
     }
-    
+
     @ViewBuilder
     private func modeRadioButton(index: Int, icon: String, title: String, subtitle: String) -> some View {
         Button {
@@ -1063,7 +1109,7 @@ struct SplitOptionsSheet: View {
                     Circle()
                         .stroke(selectedModeIndex == index ? Color.accentColor : Color.gray.opacity(0.5), lineWidth: 2)
                         .frame(width: 20, height: 20)
-                    
+
                     if selectedModeIndex == index {
                         Circle()
                             .fill(Color.accentColor)
@@ -1071,13 +1117,13 @@ struct SplitOptionsSheet: View {
                     }
                 }
                 .allowsHitTesting(false)
-                
+
                 // Icon
                 Image(systemName: icon)
                     .font(.title3)
                     .foregroundColor(selectedModeIndex == index ? .accentColor : .secondary)
                     .frame(width: 24)
-                
+
                 // Text
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
@@ -1087,7 +1133,7 @@ struct SplitOptionsSheet: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Spacer()
             }
             .padding(.vertical, 8)
@@ -1108,7 +1154,7 @@ struct SplitOptionsSheet: View {
             Self.modeOptionAccessibilityValue(isSelected: selectedModeIndex == index)
         )
     }
-    
+
     private var modeDescription: String {
         Self.modeDescription(for: selectedModeIndex)
     }
@@ -1191,15 +1237,15 @@ struct SplitOptionsSheet: View {
             )
         }
     }
-    
+
     // MARK: - Mode Options Section
-    
+
     @ViewBuilder
     private var modeOptionsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(L10n.SplitOptions.options)
                 .font(.headline)
-            
+
             switch selectedModeIndex {
             case 0:
                 splitEveryOptions
@@ -1212,14 +1258,14 @@ struct SplitOptionsSheet: View {
             }
         }
     }
-    
+
     // Mode 0: Split Every N
     private var splitEveryOptions: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(L10n.SplitOptions.pagesPerFile)
                     .foregroundColor(.secondary)
-                
+
                 Spacer()
 
                 TextField(
@@ -1232,11 +1278,11 @@ struct SplitOptionsSheet: View {
                 .keyboardType(.numberPad)
                 #endif
                 .frame(width: 70)
-                
+
                 Stepper("\(splitEveryN)", value: $splitEveryN, in: 1...max(1, pageCount))
                     .labelsHidden()
                     .frame(width: 100)
-                
+
                 Text(L10n.SplitOptions.pageCount(splitEveryN))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
@@ -1247,7 +1293,7 @@ struct SplitOptionsSheet: View {
             .cornerRadius(8)
         }
     }
-    
+
     // Mode 1: Page Ranges
     private var pageRangeOptions: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -1256,7 +1302,7 @@ struct SplitOptionsSheet: View {
                 .onChange(of: pageRangeText) { _, newValue in
                     validateRanges(newValue)
                 }
-            
+
             if let error = rangeError {
                 HStack(spacing: 4) {
                     Image(systemName: "exclamationmark.triangle.fill")
@@ -1274,13 +1320,13 @@ struct SplitOptionsSheet: View {
                         .foregroundColor(.green)
                 }
             }
-            
+
             Text(L10n.SplitOptions.enterPageRanges)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
     }
-    
+
     // Mode 2: Select Pages
     @ViewBuilder
     private var selectPagesOptions: some View {
@@ -1295,22 +1341,22 @@ struct SplitOptionsSheet: View {
             simplePageSelector
         }
     }
-    
+
     private var simplePageSelector: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(L10n.SplitOptions.selectPagesToExtract)
                     .foregroundColor(.secondary)
-                
+
                 Spacer()
-                
+
                 Button(L10n.Common.all) {
                     selectedPages = Set(1...pageCount)
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
                 .font(.caption)
-                
+
                 Button(L10n.Common.none) {
                     selectedPages.removeAll()
                 }
@@ -1318,7 +1364,7 @@ struct SplitOptionsSheet: View {
                 .foregroundColor(.accentColor)
                 .font(.caption)
             }
-            
+
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(1...pageCount, id: \.self) { page in
@@ -1346,15 +1392,15 @@ struct SplitOptionsSheet: View {
                     }
                 }
             }
-            
+
             Text(L10n.SplitOptions.pagesSelected(selectedPages.count))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
     }
-    
+
     // MARK: - Output Preview Section
-    
+
     private var outputPreviewSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -1367,9 +1413,9 @@ struct SplitOptionsSheet: View {
             SplitOutputListView(items: outputFiles, showsTotalCount: true)
         }
     }
-    
+
     // MARK: - Computed Properties
-    
+
     private var canSplit: Bool {
         switch selectedModeIndex {
         case 0:
@@ -1382,7 +1428,7 @@ struct SplitOptionsSheet: View {
             return false
         }
     }
-    
+
     private var sourceBaseName: String {
         let baseName = URL(fileURLWithPath: fileName)
             .deletingPathExtension()
@@ -1412,7 +1458,7 @@ struct SplitOptionsSheet: View {
             return "\(finalStem).pdf"
         }
     }
-    
+
     private var outputFiles: [SplitOutputListView.Item] {
         switch selectedModeIndex {
         case 0:
@@ -1433,7 +1479,7 @@ struct SplitOptionsSheet: View {
                     : L10n.SplitOptions.pagesRange(rangeStart, rangeEnd)
                 return .init(name: names[index], detail: desc)
             }
-            
+
         case 1:
             guard let ranges = try? PageRangeParser.parse(pageRangeText, maxPage: pageCount) else {
                 return []
@@ -1446,7 +1492,7 @@ struct SplitOptionsSheet: View {
                     : L10n.SplitOptions.pagesRange(range.lowerBound, range.upperBound)
                 return .init(name: names[index], detail: desc)
             }
-            
+
         case 2:
             guard !selectedPages.isEmpty else { return [] }
             let sortedPages = selectedPages.sorted()
@@ -1455,12 +1501,12 @@ struct SplitOptionsSheet: View {
                 ? sortedPages.map(String.init).joined(separator: ", ")
                 : "\(sortedPages.prefix(3).map(String.init).joined(separator: ", "))..."
             return [.init(name: name, detail: L10n.SplitOptions.pagesLabel(pageList))]
-            
+
         default:
             return []
         }
     }
-    
+
     // MARK: - Actions
 
     private func syncFromSplitMode() {
@@ -1471,13 +1517,13 @@ struct SplitOptionsSheet: View {
         selectedPages = initialState.selectedPages
         validateRanges(pageRangeText)
     }
-    
+
     private func validateRanges(_ text: String) {
         guard !text.isEmpty else {
             rangeError = nil
             return
         }
-        
+
         do {
             _ = try PageRangeParser.parse(text, maxPage: pageCount)
             rangeError = nil
@@ -1487,25 +1533,25 @@ struct SplitOptionsSheet: View {
             rangeError = L10n.Common.invalidFormat
         }
     }
-    
+
     private func performSplit() {
         switch selectedModeIndex {
         case 0:
             splitMode = .splitEvery(n: splitEveryN)
-            
+
         case 1:
             if let ranges = try? PageRangeParser.parse(pageRangeText, maxPage: pageCount) {
                 splitMode = .byPageRange(ranges: ranges)
             }
-            
+
         case 2:
             let sortedPages = selectedPages.sorted()
             splitMode = .extractPages(indices: sortedPages)
-            
+
         default:
             break
         }
-        
+
         dismiss()
         onConfirm()
     }
@@ -1520,25 +1566,53 @@ struct FileDropDelegate: DropDelegate {
     let files: [PDFFile]
     @Binding var draggingFileID: UUID?
     let onMove: (IndexSet, Int) -> Void
-    
+
+    private func isInternalReorderDrag(_ info: DropInfo) -> Bool {
+        guard draggingFileID != nil else { return false }
+        return info.hasItemsConforming(to: [DashboardInternalDragType.reorderFileID])
+    }
+
+    func validateDrop(info: DropInfo) -> Bool {
+        isInternalReorderDrag(info)
+    }
+
     func dropEntered(info: DropInfo) {
-        guard let draggingID = draggingFileID,
-              draggingID != item.id,
-              let fromIndex = files.firstIndex(where: { $0.id == draggingID }),
-              let toIndex = files.firstIndex(where: { $0.id == item.id })
-        else { return }
-        
+        guard isInternalReorderDrag(info) else {
+            return
+        }
+
+        guard let draggingID = draggingFileID else {
+            return
+        }
+
+        guard draggingID != item.id else {
+            return
+        }
+
+        guard let fromIndex = files.firstIndex(where: { $0.id == draggingID }),
+              let toIndex = files.firstIndex(where: { $0.id == item.id }) else {
+            return
+        }
+
         withAnimation(.easeInOut(duration: 0.2)) {
             onMove(IndexSet(integer: fromIndex), toIndex > fromIndex ? toIndex + 1 : toIndex)
         }
     }
-    
+
     func performDrop(info: DropInfo) -> Bool {
+        guard isInternalReorderDrag(info) else {
+            return false
+        }
+
         draggingFileID = nil
         return true
     }
-    
+
     func dropUpdated(info: DropInfo) -> DropProposal? {
+        guard isInternalReorderDrag(info) else {
+            return nil
+        }
+
         return DropProposal(operation: .move)
     }
 }
@@ -1558,7 +1632,5 @@ struct FileDropDelegate: DropDelegate {
     SplitOptionsSheet(
         pageCount: 10,
         splitMode: .constant(.splitEvery(n: 1))
-    ) {
-        print("Split confirmed")
-    }
+    ) { }
 }
