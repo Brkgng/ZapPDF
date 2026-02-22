@@ -435,9 +435,11 @@ struct DashboardView: View {
 
                 Spacer()
 
+                #if os(macOS)
                 ClearAllButton {
                     showClearConfirmation = true
                 }
+                #endif
             }
             .foregroundColor(.secondary)
 
@@ -535,6 +537,21 @@ struct DashboardView: View {
         })
     }
 
+    // MARK: - iOS Toolbar Actions
+
+    enum IOSTrailingToolbarAction: Hashable {
+        case settings
+        case clearAll
+    }
+
+    static func iOSTrailingToolbarActions(hasFiles: Bool) -> [IOSTrailingToolbarAction] {
+        var actions: [IOSTrailingToolbarAction] = [.settings]
+        if hasFiles {
+            actions.append(.clearAll)
+        }
+        return actions
+    }
+
     // MARK: - Toolbar Content
 
     @ToolbarContentBuilder
@@ -602,11 +619,23 @@ struct DashboardView: View {
         #endif
 
         #if os(iOS)
-        ToolbarItem(placement: .secondaryAction) {
-            Button {
-                showSettings = true
-            } label: {
-                Label(L10n.Settings.title, systemImage: "gearshape")
+        ToolbarItemGroup(placement: .secondaryAction) {
+            let actions = Self.iOSTrailingToolbarActions(hasFiles: viewModel.hasFiles)
+
+            if actions.contains(.settings) {
+                Button {
+                    showSettings = true
+                } label: {
+                    Label(L10n.Settings.title, systemImage: "gearshape")
+                }
+            }
+
+            if actions.contains(.clearAll) {
+                Button(role: .destructive) {
+                    showClearConfirmation = true
+                } label: {
+                    Label(L10n.Dashboard.clearAll, systemImage: "trash")
+                }
             }
         }
         #endif

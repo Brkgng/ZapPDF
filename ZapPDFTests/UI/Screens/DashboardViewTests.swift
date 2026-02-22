@@ -24,6 +24,36 @@ struct DashboardViewTests {
     }
 }
 
+// MARK: - Dashboard iOS Trailing Toolbar Tests
+
+@Suite("Dashboard iOS Trailing Toolbar Tests")
+struct DashboardIOSTrailingToolbarTests {
+
+    @Test("iOS trailing toolbar always includes settings")
+    func iOSTrailingToolbarAlwaysIncludesSettings() {
+        let emptyStateActions = DashboardView.iOSTrailingToolbarActions(hasFiles: false)
+        let withFilesActions = DashboardView.iOSTrailingToolbarActions(hasFiles: true)
+
+        #expect(emptyStateActions.contains(.settings))
+        #expect(withFilesActions.contains(.settings))
+    }
+
+    @Test("iOS trailing toolbar hides clear all when there are no files")
+    func iOSTrailingToolbarHidesClearAllWithoutFiles() {
+        let actions = DashboardView.iOSTrailingToolbarActions(hasFiles: false)
+
+        #expect(actions == [.settings])
+        #expect(actions.contains(.clearAll) == false)
+    }
+
+    @Test("iOS trailing toolbar shows clear all when files exist")
+    func iOSTrailingToolbarShowsClearAllWithFiles() {
+        let actions = DashboardView.iOSTrailingToolbarActions(hasFiles: true)
+
+        #expect(actions == [.settings, .clearAll])
+    }
+}
+
 // MARK: - SplitOptionsSheet Tests
 
 @Suite("SplitOptionsSheet Tests")
