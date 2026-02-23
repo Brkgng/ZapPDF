@@ -20,7 +20,7 @@ import RevenueCatUI
 #if os(macOS)
 enum PaywallPresentationMetrics {
     static let minWidth: CGFloat = 520
-    static let minHeight: CGFloat = 620
+    static let minHeight: CGFloat = 750
 }
 #endif
 

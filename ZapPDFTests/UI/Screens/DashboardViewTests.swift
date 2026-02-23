@@ -54,6 +54,77 @@ struct DashboardIOSTrailingToolbarTests {
     }
 }
 
+// MARK: - Dashboard iOS Action Layout Tests
+
+@Suite("Dashboard iOS Action Layout Tests")
+struct DashboardIOSActionLayoutTests {
+
+    @Test("iPad regular width 1024 uses four columns")
+    func iPadRegularWidth1024UsesFourColumns() {
+        let columns = DashboardView.iOSActionColumnCount(
+            containerWidth: 1024,
+            actionCount: 4,
+            isPad: true,
+            horizontalSizeClass: .regular,
+            isAccessibilityTextSize: false
+        )
+
+        #expect(columns == 4)
+    }
+
+    @Test("iPad regular width 834 uses four columns")
+    func iPadRegularWidth834UsesFourColumns() {
+        let columns = DashboardView.iOSActionColumnCount(
+            containerWidth: 834,
+            actionCount: 4,
+            isPad: true,
+            horizontalSizeClass: .regular,
+            isAccessibilityTextSize: false
+        )
+
+        #expect(columns == 4)
+    }
+
+    @Test("iPad narrow width falls back to two columns")
+    func iPadNarrowWidthFallsBackToTwoColumns() {
+        let columns = DashboardView.iOSActionColumnCount(
+            containerWidth: 700,
+            actionCount: 4,
+            isPad: true,
+            horizontalSizeClass: .regular,
+            isAccessibilityTextSize: false
+        )
+
+        #expect(columns == 2)
+    }
+
+    @Test("iPad accessibility text size falls back to two columns")
+    func iPadAccessibilityTextSizeFallsBackToTwoColumns() {
+        let columns = DashboardView.iOSActionColumnCount(
+            containerWidth: 1024,
+            actionCount: 4,
+            isPad: true,
+            horizontalSizeClass: .regular,
+            isAccessibilityTextSize: true
+        )
+
+        #expect(columns == 2)
+    }
+
+    @Test("iPhone keeps compact two-column behavior")
+    func iPhoneKeepsCompactTwoColumnBehavior() {
+        let columns = DashboardView.iOSActionColumnCount(
+            containerWidth: 390,
+            actionCount: 4,
+            isPad: false,
+            horizontalSizeClass: .compact,
+            isAccessibilityTextSize: false
+        )
+
+        #expect(columns == 2)
+    }
+}
+
 // MARK: - SplitOptionsSheet Tests
 
 @Suite("SplitOptionsSheet Tests")

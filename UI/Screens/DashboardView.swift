@@ -64,6 +64,10 @@ struct DashboardView: View {
     // MARK: - Properties
 
     @EnvironmentObject private var viewModel: DashboardViewModel
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    #endif
 
     @State private var showFilePicker = false
     @State private var isDropTargeted = false
@@ -79,6 +83,9 @@ struct DashboardView: View {
     @State private var clearedFiles: [PDFFile] = []
     @State private var clearedSelection: Set<UUID> = []
     @State private var showSettings = false
+    #if os(iOS)
+    @State private var iOSActionGridWidth: CGFloat = 0
+    #endif
 
     #if os(macOS)
     private let dragStateResetTimer = Timer.publish(every: 0.15, on: .main, in: .common).autoconnect()
@@ -468,22 +475,73 @@ struct DashboardView: View {
     // MARK: - Action Buttons Row
 
     private let buttonSpacing: CGFloat = 12
+    private static let orderedDashboardActions: [UserAction] = [.merge, .split, .editPages, .flatten]
+
+    enum IOSHorizontalLayoutClass: Equatable {
+        case compact
+        case regular
+    }
+
+    static func iOSActionColumnCount(
+        containerWidth: CGFloat,
+        actionCount: Int,
+        isPad: Bool,
+        horizontalSizeClass: IOSHorizontalLayoutClass,
+        isAccessibilityTextSize: Bool
+    ) -> Int {
+        let count = max(1, actionCount)
+        guard isPad else {
+            return min(2, count)
+        }
+
+        let isWideEnough = containerWidth >= 744
+        if isAccessibilityTextSize || horizontalSizeClass != .regular || !isWideEnough {
+            return min(2, count)
+        }
+
+        return min(4, count)
+    }
 
     private var actionButtonsRow: some View {
         Group {
             #if os(iOS)
-            // iOS: Adaptive Grid Layout
-            // Uses adaptive columns to fill width, handling 5 items gracefully
-            LazyVGrid(columns: [
-                GridItem(.adaptive(minimum: 140, maximum: 220), spacing: buttonSpacing)
-            ], spacing: buttonSpacing) {
-                actionButtons
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                let columns = Self.iOSActionColumnCount(
+                    containerWidth: iOSActionGridWidth,
+                    actionCount: Self.orderedDashboardActions.count,
+                    isPad: true,
+                    horizontalSizeClass: horizontalSizeClass == .regular ? .regular : .compact,
+                    isAccessibilityTextSize: dynamicTypeSize.isAccessibilitySize
+                )
+                let gridItems = Array(
+                    repeating: GridItem(.flexible(minimum: 0), spacing: buttonSpacing),
+                    count: columns
+                )
+
+                LazyVGrid(columns: gridItems, spacing: buttonSpacing) {
+                    actionButtons(isPadLayout: true)
+                }
+                .background {
+                    GeometryReader { geometry in
+                        Color.clear
+                            .task(id: geometry.size.width) {
+                                iOSActionGridWidth = geometry.size.width
+                            }
+                    }
+                }
+            } else {
+                // iPhone: keep existing adaptive behavior.
+                LazyVGrid(columns: [
+                    GridItem(.adaptive(minimum: 140, maximum: 220), spacing: buttonSpacing)
+                ], spacing: buttonSpacing) {
+                    actionButtons()
+                }
             }
             #else
             // macOS: Horizontal Toolbar Style
             // Uses equal-width buttons that don't compress vertically
             HStack(spacing: buttonSpacing) {
-                actionButtons
+                actionButtons()
             }
             .frame(maxHeight: .infinity)
             .fixedSize(horizontal: false, vertical: true)
@@ -492,49 +550,23 @@ struct DashboardView: View {
     }
 
     @ViewBuilder
-    private var actionButtons: some View {
-        // Shared modifier for button content sizing
-        let buttonModifier = { (view: StyledActionButton) -> AnyView in
+    private func actionButtons(isPadLayout: Bool = false) -> some View {
+        ForEach(Self.orderedDashboardActions, id: \.self) { action in
+            StyledActionButton(
+                action: action,
+                isEnabled: viewModel.canPerform(action: action)
+            ) {
+                handleActionTap(action)
+            }
             #if os(iOS)
-            // iOS: Fill grid cell
-            return AnyView(view.frame(maxWidth: .infinity))
+            .frame(maxWidth: .infinity)
+            .if(isPadLayout) { button in
+                button.frame(minHeight: 56)
+            }
             #else
-            // macOS: Intrinsic size with min-width for uniformity, but no infinite stretch
-            return AnyView(view.frame(minWidth: 100))
+            .frame(minWidth: 100)
             #endif
         }
-
-        // Merge button
-        buttonModifier(StyledActionButton(
-            action: .merge,
-            isEnabled: viewModel.canPerform(action: .merge)
-        ) {
-            handleActionTap(.merge)
-        })
-
-        // Split button
-        buttonModifier(StyledActionButton(
-            action: .split,
-            isEnabled: viewModel.canPerform(action: .split)
-        ) {
-            handleActionTap(.split)
-        })
-
-        // Edit Pages button
-        buttonModifier(StyledActionButton(
-            action: .editPages,
-            isEnabled: viewModel.canPerform(action: .editPages)
-        ) {
-            handleActionTap(.editPages)
-        })
-
-        // Flatten button
-        buttonModifier(StyledActionButton(
-            action: .flatten,
-            isEnabled: viewModel.canPerform(action: .flatten)
-        ) {
-            handleActionTap(.flatten)
-        })
     }
 
     // MARK: - iOS Toolbar Actions
