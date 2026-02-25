@@ -21,7 +21,7 @@ import PDFKit
 /// let outputURLs = try await splitter.split(
 ///     file: pdfFile,
 ///     mode: .splitEvery(n: 5),
-///     progress: { print("Progress: \($0 * 100)%") }
+///     progress: { _ in }
 /// )
 /// ```
 actor PDFSplitter {

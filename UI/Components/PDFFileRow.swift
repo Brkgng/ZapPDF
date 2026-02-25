@@ -301,13 +301,9 @@ extension PDFFileRow {
     )
     
     return VStack(spacing: 0) {
-        PDFFileRow(pdfFile: mockFile, onDelete: {
-            print("Delete tapped")
-        })
+        PDFFileRow(pdfFile: mockFile, onDelete: {})
         Divider()
-        PDFFileRow(pdfFile: mockFile, showDragHandle: true, onDelete: {
-            print("Delete tapped")
-        })
+        PDFFileRow(pdfFile: mockFile, showDragHandle: true, onDelete: {})
     }
     .padding()
 }
@@ -321,9 +317,7 @@ extension PDFFileRow {
     )
     
     return VStack(spacing: 8) {
-        PDFFileRowCompact(pdfFile: mockFile, onDelete: {
-            print("Delete tapped")
-        })
+        PDFFileRowCompact(pdfFile: mockFile, onDelete: {})
         PDFFileRowCompact(pdfFile: mockFile)
     }
     .padding()
@@ -353,12 +347,9 @@ extension PDFFileRow {
     
     return VStack(spacing: 0) {
         ForEach(files) { file in
-            PDFFileRow(pdfFile: file, showDragHandle: true, onDelete: {
-                print("Delete \(file.fileName)")
-            })
+            PDFFileRow(pdfFile: file, showDragHandle: true, onDelete: {})
             Divider()
         }
     }
     .padding()
 }
-

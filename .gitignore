@@ -20,7 +20,7 @@ xcuserdata/
 .swiftpm/
 Packages/
 Package.pins
-Package.resolved
+# Package.resolved
 
 # CocoaPods
 Pods/

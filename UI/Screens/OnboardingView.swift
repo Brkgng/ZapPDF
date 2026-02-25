@@ -310,7 +310,5 @@ struct OnboardingView: View {
 }
 
 #Preview("Final Page") {
-    OnboardingFinalPage {
-        print("Completed!")
-    }
+    OnboardingFinalPage {}
 }

@@ -23,7 +23,7 @@ enum PDFFileOrigin: String, Sendable {
 /// Example:
 /// ```swift
 /// let pdfFile = try await PDFFile(url: selectedURL)
-/// print("File: \(pdfFile.fileName), Pages: \(pdfFile.pageCount)")
+/// let summary = "\(pdfFile.fileName), \(pdfFile.pageCount) pages"
 /// ```
 struct PDFFile: Identifiable, Hashable, Sendable {
     
@@ -168,18 +168,10 @@ struct PDFFile: Identifiable, Hashable, Sendable {
         
         do {
             let (resolvedURL, isStale) = try URL.resolve(from: bookmarkData)
-            
-            if isStale {
-                #if DEBUG
-                print("⚠️ Bookmark is stale for: \(fileName)")
-                #endif
-            }
+            _ = isStale
             
             return resolvedURL
         } catch {
-            #if DEBUG
-            print("❌ Bookmark resolution failed for: \(fileName), error: \(error)")
-            #endif
             // Fallback to original URL — may still work if accessed immediately
             return url
         }

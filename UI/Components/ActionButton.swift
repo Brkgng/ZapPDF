@@ -296,9 +296,7 @@ struct StyledActionButton: View {
 #Preview("Primary Style") {
     VStack(spacing: 20) {
         ForEach(UserAction.allCases) { action in
-            StyledActionButton(action: action, isEnabled: true, style: .primary) {
-                print("\(action.displayName) tapped")
-            }
+            StyledActionButton(action: action, isEnabled: true, style: .primary) {}
         }
     }
     .padding()
@@ -307,9 +305,7 @@ struct StyledActionButton: View {
 #Preview("Secondary Style") {
     VStack(spacing: 20) {
         ForEach(UserAction.allCases) { action in
-            StyledActionButton(action: action, isEnabled: true, style: .secondary) {
-                print("\(action.displayName) tapped")
-            }
+            StyledActionButton(action: action, isEnabled: true, style: .secondary) {}
         }
     }
     .padding()
@@ -318,9 +314,7 @@ struct StyledActionButton: View {
 #Preview("Tinted Style (New)") {
     VStack(spacing: 20) {
         ForEach(UserAction.allCases) { action in
-            StyledActionButton(action: action, isEnabled: true, style: .tinted) {
-                print("\(action.displayName) tapped")
-            }
+            StyledActionButton(action: action, isEnabled: true, style: .tinted) {}
         }
     }
     .padding()
@@ -329,9 +323,7 @@ struct StyledActionButton: View {
 #Preview("Compact Style") {
     HStack(spacing: 16) {
         ForEach(UserAction.allCases) { action in
-            StyledActionButton(action: action, isEnabled: true, style: .compact) {
-                print("\(action.displayName) tapped")
-            }
+            StyledActionButton(action: action, isEnabled: true, style: .compact) {}
         }
     }
     .padding()

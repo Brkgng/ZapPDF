@@ -366,11 +366,7 @@ struct FileDropZoneWithContent<Content: View>: View {
     FileDropZone(
         isEmpty: true,
         isTargeted: $isTargeted
-    ) { urls in
-        print("Dropped: \(urls)")
-    } onPickerRequested: {
-        print("Picker requested")
-    }
+    ) { _ in } onPickerRequested: {}
     .padding()
 }
 
@@ -380,11 +376,7 @@ struct FileDropZoneWithContent<Content: View>: View {
     FileDropZone(
         isEmpty: true,
         isTargeted: $isTargeted
-    ) { urls in
-        print("Dropped: \(urls)")
-    } onPickerRequested: {
-        print("Picker requested")
-    }
+    ) { _ in } onPickerRequested: {}
     .padding()
 }
 

@@ -117,11 +117,7 @@ actor UsageManager {
             if let cached = try KeychainHelper.loadBool(for: .proStatus) {
                 return cached
             }
-        } catch {
-            #if DEBUG
-            print("UsageManager: Failed to load pro status from Keychain: \(error)")
-            #endif
-        }
+        } catch {}
         
         // Migration: check UserDefaults for legacy cache
         if UserDefaults.standard.bool(forKey: kLegacyCachedIsProKey) {
@@ -129,14 +125,8 @@ actor UsageManager {
             do {
                 try KeychainHelper.saveBool(true, for: .proStatus)
                 UserDefaults.standard.removeObject(forKey: kLegacyCachedIsProKey)
-                #if DEBUG
-                print("UsageManager: Successfully migrated legacy Pro status to Keychain")
-                #endif
                 return true
             } catch {
-                #if DEBUG
-                print("UsageManager: Failed to migrate legacy Pro status: \(error)")
-                #endif
                 // Return true anyway so user doesn't lose access this session,
                 // but migration failed so it will try again next launch
                 return true
@@ -207,8 +197,6 @@ actor UsageManager {
             }
         } catch {
             // If Keychain fails, assume first launch
-            // Log error in production
-            print("UsageManager: Failed to load remaining actions: \(error)")
             cachedRemainingActions = freeActionLimit
             return freeActionLimit
         }
@@ -283,10 +271,7 @@ actor UsageManager {
         do {
             try KeychainHelper.saveInt(freeActionLimit, for: .actionsRemaining)
             cachedRemainingActions = freeActionLimit
-        } catch {
-            // Log error in production
-            print("UsageManager: Failed to reset usage: \(error)")
-        }
+        } catch {}
     }
     
     /// Set Pro status.
@@ -311,11 +296,7 @@ actor UsageManager {
         if !inMemoryOnly {
             do {
                 try KeychainHelper.saveBool(isPro, for: .proStatus)
-            } catch {
-                #if DEBUG
-                print("UsageManager: Failed to save Pro status to Keychain: \(error)")
-                #endif
-            }
+            } catch {}
         }
         
         postStateChangeNotification()

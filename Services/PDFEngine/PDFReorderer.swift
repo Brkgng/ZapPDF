@@ -22,7 +22,7 @@ import PDFKit
 ///     file: pdfFile,
 ///     newOrder: [2, 0, 1, 3, 4],
 ///     rotations: [2: .clockwise90],
-///     progress: { print("Progress: \($0 * 100)%") }
+///     progress: { _ in }
 /// )
 /// ```
 actor PDFReorderer {

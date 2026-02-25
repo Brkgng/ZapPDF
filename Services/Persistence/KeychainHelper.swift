@@ -59,7 +59,7 @@ enum KeychainError: Error, LocalizedError, Sendable {
 ///
 /// // Load data
 /// if let loaded = try KeychainHelper.load(for: .actionsRemaining) {
-///     print("Loaded: \(String(data: loaded, encoding: .utf8)!)")
+///     let loadedText = String(data: loaded, encoding: .utf8)
 /// }
 ///
 /// // Delete

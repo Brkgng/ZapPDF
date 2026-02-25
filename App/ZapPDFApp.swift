@@ -73,19 +73,12 @@ struct ZapPDFApp: App {
     private func handleIncomingURL(_ url: URL) {
         // Verify it's a PDF
         guard url.pathExtension.lowercased() == "pdf" else {
-            #if DEBUG
-            print("⚠️ Ignoring non-PDF URL: \(url)")
-            #endif
             return
         }
         
         // Add file to dashboard
         Task { @MainActor in
             await dashboardViewModel.addFiles(urls: [url])
-            
-            #if DEBUG
-            print("✅ Added external PDF: \(url.lastPathComponent)")
-            #endif
         }
     }
     
@@ -94,19 +87,12 @@ struct ZapPDFApp: App {
         #if canImport(RevenueCat)
         let apiKey = StoreConfiguration.revenueCatAPIKey
         guard !apiKey.isEmpty else {
-            #if DEBUG
-            print("⚠️ RevenueCat not configured - API key missing")
-            #endif
             return
         }
         
         Purchases.logLevel = .warn
         Purchases.configure(withAPIKey: apiKey)
         Purchases.shared.delegate = RevenueCatDelegateHandler.shared
-        
-        #if DEBUG
-        print("✅ RevenueCat configured for macOS")
-        #endif
         #endif
     }
     #endif

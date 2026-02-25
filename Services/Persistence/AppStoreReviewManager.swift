@@ -67,11 +67,7 @@ actor AppStoreReviewManager: ReviewPromptManaging {
         hasShownReviewThisLaunch = true
         do {
             try KeychainHelper.saveString(version, for: .lastReviewPromptVersion)
-        } catch {
-            #if DEBUG
-            print("AppStoreReviewManager: Failed to save version to Keychain: \(error)")
-            #endif
-        }
+        } catch {}
 
         return true
     }

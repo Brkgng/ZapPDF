@@ -19,7 +19,7 @@ import Foundation
 /// let outputURL = try await merger.merge(
 ///     files: pdfFiles,
 ///     options: .init(outputFileName: "combined"),
-///     progress: { print("Progress: \($0 * 100)%") }
+///     progress: { _ in }
 /// )
 /// ```
 actor PDFMerger {

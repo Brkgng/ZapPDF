@@ -30,9 +30,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         #if canImport(RevenueCat)
         let apiKey = StoreConfiguration.revenueCatAPIKey
         guard !apiKey.isEmpty else {
-            #if DEBUG
-            print("⚠️ RevenueCat not configured - API key missing")
-            #endif
             return
         }
         
@@ -42,10 +39,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         // Register delegate immediately, but defer all non-essential fetches.
         Purchases.shared.delegate = RevenueCatDelegateHandler.shared
-        
-        #if DEBUG
-        print("✅ RevenueCat configured in AppDelegate")
-        #endif
         #endif
     }
 }

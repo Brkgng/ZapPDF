@@ -19,15 +19,6 @@ private enum CacheKeys {
     static let lastSync = "com.zappdf.cached.lastSync"
 }
 
-// MARK: - Debug Logging
-
-/// Debug logging helper for RevenueCat operations.
-private func debugLog(_ message: String) {
-    #if DEBUG
-    print(message)
-    #endif
-}
-
 // MARK: - RevenueCat Manager
 
 /// Actor managing RevenueCat SDK integration for subscriptions.
@@ -128,7 +119,6 @@ actor RevenueCatManager: SubscriptionManaging {
         }
         
         guard !isRefreshingStatus else {
-            debugLog("⚠️ RevenueCatManager: refresh skipped (\(reason.rawValue)) - already in progress")
             return
         }
         
@@ -136,7 +126,6 @@ actor RevenueCatManager: SubscriptionManaging {
         if !force,
            let lastRefresh = lastStatusRefreshAt,
            now.timeIntervalSince(lastRefresh) < minimumRefreshInterval(for: reason) {
-            debugLog("⚠️ RevenueCatManager: refresh skipped (\(reason.rawValue)) - throttled")
             return
         }
         
@@ -151,7 +140,6 @@ actor RevenueCatManager: SubscriptionManaging {
             lastStatusRefreshAt = Date()
             await handleCustomerInfoUpdate(customerInfo)
         } catch {
-            debugLog("RevenueCatManager: Failed to refresh status: \(error.localizedDescription)")
             // Keep cached/current status on error
         }
         #endif
@@ -182,11 +170,8 @@ actor RevenueCatManager: SubscriptionManaging {
                 willRenew: ent.willRenew,
                 productIdentifier: productId
             )
-            
-            debugLog("📊 Subscription: \(proType.rawValue), expires: \(ent.expirationDate?.description ?? "never"), willRenew: \(ent.willRenew)")
         } else {
             proStatus = .inactive
-            debugLog("📊 Subscription status: Free user")
         }
         
         // Persist for offline support
@@ -220,14 +205,7 @@ actor RevenueCatManager: SubscriptionManaging {
         
         do {
             offerings = try await Purchases.shared.offerings()
-            
-            if let current = offerings?.current {
-                debugLog("✅ RevenueCatManager: warmed offerings '\(current.identifier)' with \(current.availablePackages.count) packages")
-            } else {
-                debugLog("⚠️ RevenueCatManager: warmed offerings but no 'current' offering configured")
-            }
         } catch {
-            debugLog("❌ RevenueCatManager: Failed to warm offerings: \(error.localizedDescription)")
         }
         #endif
     }
@@ -253,7 +231,6 @@ actor RevenueCatManager: SubscriptionManaging {
         get async {
             #if canImport(RevenueCat)
             guard await ensureSDKReady() else {
-                debugLog("⚠️ availablePackages: SDK not configured yet")
                 return []
             }
             
@@ -261,7 +238,6 @@ actor RevenueCatManager: SubscriptionManaging {
             
             // Convert RevenueCat packages to our abstraction
             guard let currentOffering = offerings?.current else {
-                debugLog("⚠️ availablePackages: No 'current' offering found")
                 return []
             }
             
@@ -274,8 +250,6 @@ actor RevenueCatManager: SubscriptionManaging {
                     rcPackage: rcPackage
                 )
             }
-            
-            debugLog("✅ availablePackages: Returning \(packages.count) packages from '\(currentOffering.identifier)'")
             return packages
             #else
             return []
@@ -353,9 +327,7 @@ actor RevenueCatManager: SubscriptionManaging {
         await MainActor.run {
             Purchases.shared.delegate = RevenueCatDelegateHandler.shared
         }
-        
-        debugLog("✅ RevenueCatManager ready (lazy fetch mode)")
-        
+
         return true
     }
     
@@ -406,8 +378,6 @@ final class RevenueCatDelegateHandler: NSObject, PurchasesDelegate {
     
     /// Called when customer info is updated (subscription changes).
     func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
-        debugLog("🔔 RevenueCat delegate: Received customer info update")
-        
         Task {
             await RevenueCatManager.shared.handleCustomerInfoUpdate(customerInfo)
         }

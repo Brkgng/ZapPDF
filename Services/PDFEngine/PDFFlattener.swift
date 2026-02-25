@@ -20,7 +20,7 @@ import PDFKit
 /// let outputURL = try await flattener.flatten(
 ///     file: pdfFile,
 ///     options: .init(outputFileName: "flattened_doc"),
-///     progress: { print("Progress: \($0 * 100)%") }
+///     progress: { _ in }
 /// )
 /// ```
 actor PDFFlattener {

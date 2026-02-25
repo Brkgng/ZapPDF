@@ -16,8 +16,8 @@ import SwiftUI
 /// Example:
 /// ```swift
 /// let action = UserAction.merge
-/// print(action.displayName)  // "Merge PDFs"
-/// print(action.requiresMultipleFiles)  // true
+/// let title = action.displayName  // "Merge PDFs"
+/// let needsMultipleFiles = action.requiresMultipleFiles  // true
 /// ```
 enum UserAction: String, CaseIterable, Identifiable, Sendable {
     case merge
@@ -134,5 +134,4 @@ enum UserAction: String, CaseIterable, Identifiable, Sendable {
         .accentColor
     }
 }
-
 

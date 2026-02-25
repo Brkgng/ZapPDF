@@ -10,8 +10,7 @@ A privacy-first PDF utility app for macOS, iOS, and iPadOS.
 - **Flatten PDFs** - Merge annotations and form content into page content
 - **Share Sheet Support** - Open PDFs from Files, Mail, and other apps directly in ZapPDF
 - **Document Scanning (iOS/iPadOS)** - Scan paper documents or import photos and save as PDF
-- **Freemium Model** - 5 free actions, with Pro unlocking unlimited actions
-- **In-App Language Switching** - English, Turkish, German, French, Spanish, Japanese, Chinese (Simplified)
+- **In-App Language Switching** - English, Turkish, German, French, Spanish, Japanese, Chinese (Simplified). More languages are coming and contributions are welcome.
 
 ## Requirements
 
@@ -22,11 +21,44 @@ A privacy-first PDF utility app for macOS, iOS, and iPadOS.
 ## Getting Started
 
 1. Clone the repository.
-2. Open `ZapPDF.xcodeproj` in Xcode
+2. Open `ZapPDF.xcodeproj` in Xcode.
 3. Select a target device or simulator.
 4. Build and run (`Cmd+R`).
 
-The app runs without a RevenueCat key. Subscription purchases are disabled until a key is configured.
+## Project Structure
+
+The app follows MVVM architecture with a shared codebase:
+
+```text
+ZapPDF/
+├── App/                    # App entry point, lifecycle, assets, localization files
+├── Common/
+│   ├── Extensions/         # Shared Foundation/SwiftUI extensions
+│   ├── Localization/       # Localization accessors and language manager
+│   └── Utils/              # Cross-cutting helper utilities
+├── Config/                 # Local config templates (for example, Secrets.xcconfig.example)
+├── Models/                 # Pure data models (PDFFile, AppLanguage, UserAction, etc.)
+├── Monetization/           # RevenueCat and subscription abstractions
+├── Services/
+│   ├── PDFEngine/          # Merge, split, flatten, reorder implementations
+│   ├── Persistence/        # Usage limits, keychain, review prompt persistence
+│   └── DocumentScanner/    # iOS/iPadOS document scanning support
+├── UI/
+│   ├── Screens/            # Top-level app screens
+│   ├── Components/         # Reusable SwiftUI components
+│   └── Representables/     # Bridging views (for example, PDFKit wrappers)
+├── ViewModels/             # MVVM state and business-flow coordination
+├── ZapPDFTests/
+│   ├── Extensions/
+│   ├── Helpers/
+│   ├── Models/
+│   ├── Monetization/
+│   ├── Services/
+│   ├── UI/
+│   ├── Utils/
+│   └── ViewModels/
+└── ZapPDF.xcodeproj/       # Xcode project
+```
 
 ## Build and Test
 
@@ -41,7 +73,13 @@ xcodebuild test -project ZapPDF.xcodeproj -scheme ZapPDF -destination 'platform=
 xcodebuild build -project ZapPDF.xcodeproj -scheme ZapPDF -configuration Release -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
 ```
 
-## Optional RevenueCat Setup (Local Only)
+## Monetization
+
+- ZapPDF currently includes a free tier with a limited number of actions.
+- Pro unlocks unlimited PDF operations.
+- RevenueCat configuration is optional for local development; without an API key, purchase flows are disabled.
+
+## Optional RevenueCat Setup (Monetization Testing)
 
 1. Copy `Config/Secrets.xcconfig.example` to `Config/Secrets.xcconfig`.
 2. Fill your key in `Config/Secrets.xcconfig`:
@@ -51,21 +89,6 @@ xcodebuild build -project ZapPDF.xcodeproj -scheme ZapPDF -configuration Release
    - Add `REVENUECAT_API_KEY` to `Info.plist` (recommended through local build settings/xcconfig).
 
 Never commit real keys or local secret files.
-
-## Project Structure
-
-The app follows MVVM architecture with a shared codebase:
-
-```
-ZapPDF/
-├── App/           # Entry point, assets, entitlements
-├── Common/        # Extensions and utilities
-├── Models/        # Pure data structures
-├── ViewModels/    # UI state and business logic coordination
-├── Services/      # PDF engine, usage tracking, persistence
-├── UI/            # SwiftUI views and components
-└── Monetization/  # StoreKit/RevenueCat integration
-```
 
 ## Security and Privacy
 

@@ -10,7 +10,6 @@ import Foundation
 @preconcurrency import VisionKit
 import PDFKit
 import UIKit
-import os.log
 
 /// Protocol for document scan operations to enable testing.
 protocol DocumentScanning {
@@ -46,10 +45,6 @@ final class DocumentScanner: Sendable {
     static let shared = DocumentScanner()
 
     private init() {}
-
-    // MARK: - Logger
-
-    nonisolated(unsafe) private static let logger = Logger(subsystem: "com.zappdf", category: "DocumentScanner")
 
     // MARK: - Availability
 
@@ -144,7 +139,6 @@ final class DocumentScanner: Sendable {
         progress: (@Sendable (Double) -> Void)?,
         imageProvider: @escaping AsyncImageProvider
     ) async throws -> ScanConversionResult {
-        let logger = Self.logger
         let preferredBaseName = Self.normalizedBaseName(fileName) ?? Self.defaultOutputName(prefix: defaultPrefix)
 
         let conversionTask = Task.detached(priority: .userInitiated) {
@@ -164,12 +158,10 @@ final class DocumentScanner: Sendable {
                             successCount += 1
                         } else {
                             failedIndices.append(pageIndex)
-                            logger.warning("Failed to convert page \(pageIndex) to PDF")
                         }
                     }
                 } else {
                     failedIndices.append(pageIndex)
-                    logger.warning("Failed to load image for page \(pageIndex)")
                 }
 
                 if let progress {
@@ -186,8 +178,6 @@ final class DocumentScanner: Sendable {
 
             try Task.checkCancellation()
             let outputURL = try Self.writePDFAtomically(pdfDocument, preferredBaseName: preferredBaseName)
-
-            logger.info("Created PDF with \(successCount) pages at \(outputURL.lastPathComponent)")
 
             return ScanConversionResult(
                 pdfURL: outputURL,
@@ -216,7 +206,6 @@ final class DocumentScanner: Sendable {
         let fileManager = FileManager.default
 
         guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-            logger.error("Failed to get Application Support directory, falling back to temp directory")
             return fileManager.temporaryDirectory
         }
 
@@ -225,9 +214,7 @@ final class DocumentScanner: Sendable {
         if !fileManager.fileExists(atPath: scansURL.path) {
             do {
                 try fileManager.createDirectory(at: scansURL, withIntermediateDirectories: true)
-                logger.info("Created scans directory at \(scansURL.path)")
             } catch {
-                logger.error("Failed to create scans directory: \(error.localizedDescription)")
                 return fileManager.temporaryDirectory
             }
         }
@@ -243,21 +230,17 @@ final class DocumentScanner: Sendable {
         let fileManager = FileManager.default
 
         guard isInScansDirectory(url) else {
-            logger.warning("Refusing to delete file outside scans directory: \(url.path)")
             return false
         }
 
         guard fileManager.fileExists(atPath: url.path) else {
-            logger.debug("File no longer exists: \(url.lastPathComponent)")
             return false
         }
 
         do {
             try fileManager.removeItem(at: url)
-            logger.info("Deleted scanned file: \(url.lastPathComponent)")
             return true
         } catch {
-            logger.error("Failed to delete scanned file \(url.lastPathComponent): \(error.localizedDescription)")
             return false
         }
     }

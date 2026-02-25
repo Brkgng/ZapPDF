@@ -120,9 +120,7 @@ struct ClearAllButton: View {
 // MARK: - Preview
 
 #Preview("Default State") {
-    ClearAllButton {
-        print("Clear All tapped")
-    }
+    ClearAllButton {}
     .padding()
 }
 
@@ -152,9 +150,7 @@ struct ClearAllButton: View {
             
             Spacer()
             
-            ClearAllButton {
-                print("Clear All tapped")
-            }
+            ClearAllButton {}
         }
         .foregroundColor(.secondary)
         .padding()

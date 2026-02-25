@@ -319,9 +319,6 @@ actor PDFRenderer {
     ) async -> CGImage? {
         // Resolve the bookmark to get a valid URL
         guard let accessURL = try? file.resolvedURL() else {
-            #if DEBUG
-            print("❌ Failed to resolve URL for: \(file.fileName)")
-            #endif
             return nil
         }
         
