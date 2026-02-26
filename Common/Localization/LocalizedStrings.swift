@@ -19,12 +19,6 @@ import Foundation
 /// ```
 enum L10n {
     
-    // MARK: - App
-    
-    enum App {
-        static let name = String(localized: "app.name", defaultValue: "ZapPDF")
-    }
-    
     // MARK: - Common Actions
     
     enum Action {
@@ -115,15 +109,6 @@ enum L10n {
             static let title = String(localized: "operation.editPages.title", defaultValue: "Edit Pages")
             static let description = String(localized: "operation.editPages.description", defaultValue: "Reorder, rotate, and delete pages")
             static let save = String(localized: "operation.editPages.save", defaultValue: "Save")
-            static let saveEdited = String(localized: "operation.editPages.saveEdited", defaultValue: "Save Changes")
-        }
-        
-        /// Legacy: Reorder operation strings (kept for backward compatibility).
-        @available(*, deprecated, message: "Use EditPages instead")
-        enum Reorder {
-            static let title = String(localized: "operation.reorder.title", defaultValue: "Reorder Pages")
-            static let description = String(localized: "operation.reorder.description", defaultValue: "Reorder pages within a PDF")
-            static let saveReordered = String(localized: "operation.reorder.saveReordered", defaultValue: "Save Reordered")
         }
         
         enum Flatten {
@@ -190,7 +175,6 @@ enum L10n {
         }
     }
 
-    
     // MARK: - Page Editor (Page Reorder)
     
     enum PageReorder {
@@ -204,7 +188,6 @@ enum L10n {
         // Rotation
         static let rotateLeft = String(localized: "pageEditor.rotateLeft", defaultValue: "Rotate Left")
         static let rotateRight = String(localized: "pageEditor.rotateRight", defaultValue: "Rotate Right")
-        static let rotate180 = String(localized: "pageEditor.rotate180", defaultValue: "Rotate 180°")
         
         static func rotatedBy(_ degrees: Int) -> String {
             String(localized: "Rotated \(degrees)°", comment: "Rotation indicator showing current rotation")
@@ -247,14 +230,10 @@ enum L10n {
     
     enum Common {
         static let loading = String(localized: "common.loading", defaultValue: "Loading...")
-        static let proBadge = String(localized: "common.proBadge", defaultValue: "PRO")
         static let mergeOrderHint = String(localized: "common.mergeOrderHint", defaultValue: "Files merge in displayed order. Drag to reorder.")
         static let selection = String(localized: "common.selection", defaultValue: "Selection")
         static let select = String(localized: "common.select", defaultValue: "Select")
         static let deselect = String(localized: "common.deselect", defaultValue: "Deselect")
-        static let processing = String(localized: "common.processing", defaultValue: "Processing...")
-        static let comingSoon = String(localized: "common.comingSoon", defaultValue: "Coming soon!")
-        static let pricingPlaceholder = String(localized: "common.pricingPlaceholder", defaultValue: "Pricing will be available when StoreKit is integrated")
         static let saveFailed = String(localized: "common.saveFailed", defaultValue: "Save Failed")
         static let unableToSave = String(localized: "common.unableToSave", defaultValue: "Unable to save the file.")
         static let errorTitle = String(localized: "common.errorTitle", defaultValue: "Error")
@@ -264,8 +243,6 @@ enum L10n {
         static let invalidFormat = String(localized: "common.invalidFormat", defaultValue: "Invalid format")
     }
 
-
-    
     // MARK: - Processing
     
     enum Processing {
@@ -276,7 +253,6 @@ enum L10n {
         static let cancelConfirmTitle = String(localized: "processing.cancelConfirmTitle", defaultValue: "Cancel Operation?")
         static let cancelConfirmMessage = String(localized: "processing.cancelConfirmMessage", defaultValue: "The current operation will be stopped and any progress will be lost.")
         static let completed = String(localized: "processing.completed", defaultValue: "Completed!")
-        static let failed = String(localized: "processing.failed", defaultValue: "Operation Failed")
         static let fileSaved = String(localized: "processing.fileSaved", defaultValue: "File Saved")
         static let fileSavedMessage = String(localized: "processing.fileSavedMessage", defaultValue: "Your PDF has been saved successfully.")
         static let filesSaved = String(localized: "processing.filesSaved", defaultValue: "Files Saved")
@@ -561,15 +537,6 @@ enum L10n {
         static let rotateRight = String(localized: "help.rotateRight", defaultValue: "Rotate Right (⌘R)")
     }
     
-    // MARK: - Save Panel (macOS)
-    
-    enum SavePanel {
-        static let reorderTitle = String(localized: "savePanel.reorder.title", defaultValue: "Save Reordered PDF")
-        static let reorderMessage = String(localized: "savePanel.reorder.message", defaultValue: "Choose where to save the reordered PDF")
-        static let editPagesTitle = String(localized: "savePanel.editPages.title", defaultValue: "Save Edited PDF")
-        static let editPagesMessage = String(localized: "savePanel.editPages.message", defaultValue: "Choose where to save the edited PDF")
-    }
-    
     // MARK: - PDF Display Modes
     
     enum PDFDisplay {
@@ -586,7 +553,6 @@ enum L10n {
         static let language = String(localized: "settings.language", defaultValue: "Language")
         static let languageDescription = String(localized: "settings.languageDescription", defaultValue: "Choose your preferred language")
         static let systemDefault = String(localized: "settings.systemDefault", defaultValue: "System Default")
-        static let appearance = String(localized: "settings.appearance", defaultValue: "Appearance")
         static let about = String(localized: "settings.about", defaultValue: "About")
         static let version = String(localized: "settings.version", defaultValue: "Version")
         static let subscription = String(localized: "settings.subscription", defaultValue: "Subscription")
@@ -633,7 +599,6 @@ enum L10n {
     enum Scanner {
         static let scanDocument = String(localized: "scanner.scanDocument", defaultValue: "Scan Document")
         static let importFromPhotos = String(localized: "scanner.importFromPhotos", defaultValue: "Import from Photos")
-        static let scannedDocument = String(localized: "scanner.scannedDocument", defaultValue: "Scanned Document")
         static let processing = String(localized: "scanner.processing", defaultValue: "Creating PDF...")
         
         // Errors
