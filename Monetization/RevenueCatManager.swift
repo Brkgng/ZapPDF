@@ -86,15 +86,36 @@ actor RevenueCatManager: SubscriptionManaging {
         // Cached state is now managed by UsageManager (Keychain)
         // We don't load anything here to avoid source-of-truth conflicts
     }
-    
-    // MARK: - Configuration
-    
-    /// Called by AppDelegate after SDK is configured synchronously.
-    ///
-    /// This method only marks the SDK as ready and registers the delegate.
-    /// It intentionally avoids network calls to keep app launch fast.
-    func onSDKConfigured() async {
-        _ = await ensureSDKReady()
+
+    // MARK: - Product Mapping
+
+    /// Maps a product identifier to a displayable Pro type.
+    static func proType(forProductID productID: String) -> ProType {
+        let normalizedID = productID
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        guard !normalizedID.isEmpty else {
+            return .none
+        }
+
+        if StoreConfiguration.ProductID.lifetimeIDs.contains(normalizedID) ||
+            normalizedID.contains("lifetime") {
+            return .lifetime
+        }
+
+        if StoreConfiguration.ProductID.yearlyIDs.contains(normalizedID) ||
+            normalizedID.contains("yearly") ||
+            normalizedID.contains("annual") {
+            return .annual
+        }
+
+        if StoreConfiguration.ProductID.monthlyIDs.contains(normalizedID) ||
+            normalizedID.contains("monthly") {
+            return .monthly
+        }
+
+        return .none
     }
     
     // MARK: - Offline Caching
@@ -213,14 +234,7 @@ actor RevenueCatManager: SubscriptionManaging {
     #if canImport(RevenueCat)
     /// Determine ProType from product identifier.
     private func determineProType(from productId: String) -> ProType {
-        if productId.contains("lifetime") || productId == StoreConfiguration.ProductID.lifetime {
-            return .lifetime
-        } else if productId.contains("yearly") || productId.contains("annual") || productId == StoreConfiguration.ProductID.yearly {
-            return .annual
-        } else if productId.contains("monthly") || productId == StoreConfiguration.ProductID.monthly {
-            return .monthly
-        }
-        return .annual // Default fallback
+        Self.proType(forProductID: productId)
     }
     #endif
     
@@ -322,12 +336,15 @@ actor RevenueCatManager: SubscriptionManaging {
             return true
         }
         
-        isConfigured = true
-        
-        await MainActor.run {
-            Purchases.shared.delegate = RevenueCatDelegateHandler.shared
+        let didBootstrap = await MainActor.run {
+            RevenueCatBootstrapper.configureIfNeeded()
         }
 
+        guard didBootstrap else {
+            return false
+        }
+
+        isConfigured = true
         return true
     }
     

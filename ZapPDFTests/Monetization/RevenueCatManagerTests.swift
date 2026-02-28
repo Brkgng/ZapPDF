@@ -35,12 +35,23 @@ struct RevenueCatManagerTests {
     func productIDsAreCorrectlyDefined() {
         #expect(StoreConfiguration.ProductID.monthly == "monthly")
         #expect(StoreConfiguration.ProductID.yearly == "yearly")
-        #expect(StoreConfiguration.ProductID.lifetime == "lifetime")
+        #expect(StoreConfiguration.ProductID.lifetime == "lifetime_2026")
+        #expect(StoreConfiguration.ProductID.legacyLifetime == "lifetime")
+        #expect(StoreConfiguration.ProductID.lifetimeIDs.contains(StoreConfiguration.ProductID.lifetime))
+        #expect(StoreConfiguration.ProductID.lifetimeIDs.contains(StoreConfiguration.ProductID.legacyLifetime))
     }
     
     @Test("Entitlement ID is correctly defined")
     func entitlementIDIsCorrectlyDefined() {
         #expect(StoreConfiguration.EntitlementID.pro == "ZapPDF Pro")
+    }
+
+    @Test("Product ID mapping resolves expected Pro types")
+    func productIDMappingResolvesExpectedProTypes() {
+        #expect(RevenueCatManager.proType(forProductID: "yearly") == .annual)
+        #expect(RevenueCatManager.proType(forProductID: "lifetime_2026") == .lifetime)
+        #expect(RevenueCatManager.proType(forProductID: "lifetime") == .lifetime)
+        #expect(RevenueCatManager.proType(forProductID: "unknown_sku") == .none)
     }
     
     // MARK: - SubscriptionPackage Tests

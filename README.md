@@ -36,7 +36,6 @@ ZapPDF/
 │   ├── Extensions/         # Shared Foundation/SwiftUI extensions
 │   ├── Localization/       # Localization accessors and language manager
 │   └── Utils/              # Cross-cutting helper utilities
-├── Config/                 # Local config templates (for example, Secrets.xcconfig.example)
 ├── Models/                 # Pure data models (PDFFile, AppLanguage, UserAction, etc.)
 ├── Monetization/           # RevenueCat and subscription abstractions
 ├── Services/
@@ -77,25 +76,12 @@ xcodebuild build -project ZapPDF.xcodeproj -scheme ZapPDF -configuration Release
 
 - ZapPDF currently includes a free tier with a limited number of actions.
 - Pro unlocks unlimited PDF operations.
-- RevenueCat configuration is optional for local development; without an API key, purchase flows are disabled.
-
-## Optional RevenueCat Setup (Monetization Testing)
-
-1. Copy `Config/Secrets.xcconfig.example` to `Config/Secrets.xcconfig`.
-2. Fill your key in `Config/Secrets.xcconfig`:
-   `REVENUECAT_API_KEY=your_public_sdk_key`
-3. Provide the key at runtime using one of these methods:
-   - Set `REVENUECAT_API_KEY` as an environment variable in your run scheme.
-   - Add `REVENUECAT_API_KEY` to `Info.plist` (recommended through local build settings/xcconfig).
-
-Never commit real keys or local secret files.
 
 ## Security and Privacy
 
 - All PDF processing happens locally on device.
-- Files are not automatically uploaded to external servers.
+- Files are not uploaded to any external servers.
 - Subscription networking is limited to RevenueCat endpoints when an API key is configured.
-- Keep API keys local (`Config/Secrets.xcconfig`, env vars, or local plist settings).
 
 ## License
 

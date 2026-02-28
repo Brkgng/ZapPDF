@@ -65,8 +65,20 @@ enum StoreConfiguration {
         /// Annual Pro subscription
         static let yearly = "yearly"
         
-        /// Lifetime Pro purchase
-        static let lifetime = "lifetime"
+        /// Canonical lifetime Pro purchase identifier.
+        static let lifetime = "lifetime_2026"
+
+        /// Legacy lifetime product identifier used by older purchases.
+        static let legacyLifetime = "lifetime"
+
+        /// All monthly identifiers accepted by the app.
+        static let monthlyIDs: Set<String> = [monthly]
+
+        /// All yearly identifiers accepted by the app.
+        static let yearlyIDs: Set<String> = [yearly]
+
+        /// All lifetime identifiers accepted by the app.
+        static let lifetimeIDs: Set<String> = [lifetime, legacyLifetime]
     }
     
     // MARK: - Entitlement Identifiers

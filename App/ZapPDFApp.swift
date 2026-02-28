@@ -7,11 +7,8 @@
 
 import SwiftUI
 
-#if canImport(RevenueCat)
-import RevenueCat
-#endif
-
 @main
+@MainActor
 struct ZapPDFApp: App {
     @Environment(\.scenePhase) private var scenePhase
     
@@ -84,16 +81,7 @@ struct ZapPDFApp: App {
     
     #if os(macOS)
     private func configureRevenueCatMacOS() {
-        #if canImport(RevenueCat)
-        let apiKey = StoreConfiguration.revenueCatAPIKey
-        guard !apiKey.isEmpty else {
-            return
-        }
-        
-        Purchases.logLevel = .warn
-        Purchases.configure(withAPIKey: apiKey)
-        Purchases.shared.delegate = RevenueCatDelegateHandler.shared
-        #endif
+        _ = RevenueCatBootstrapper.configureIfNeeded()
     }
     #endif
 }
