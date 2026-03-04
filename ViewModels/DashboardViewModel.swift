@@ -76,6 +76,7 @@ final class DashboardViewModel: ObservableObject {
     // MARK: - Dependencies
     
     private let usageManager: any UsageManaging
+    private let monetizationStateProvider: () -> MonetizationAvailability.State
     
     /// Cancellables for Combine subscriptions.
     private var cancellables = Set<AnyCancellable>()
@@ -91,6 +92,7 @@ final class DashboardViewModel: ObservableObject {
     /// Creates a DashboardViewModel with the default UsageManager.
     init() {
         self.usageManager = UsageManager.shared
+        self.monetizationStateProvider = { MonetizationAvailability.state }
         #if os(iOS)
         self.scannedFileCleanupDelay = .seconds(6)
         #endif
@@ -98,8 +100,12 @@ final class DashboardViewModel: ObservableObject {
     }
     
     /// Creates a DashboardViewModel with a custom UsageManager (for testing).
-    init(usageManager: any UsageManaging) {
+    init(
+        usageManager: any UsageManaging,
+        monetizationStateProvider: (() -> MonetizationAvailability.State)? = nil
+    ) {
         self.usageManager = usageManager
+        self.monetizationStateProvider = monetizationStateProvider ?? { MonetizationAvailability.state }
         #if os(iOS)
         self.scannedFileCleanupDelay = .seconds(6)
         #endif
@@ -108,8 +114,13 @@ final class DashboardViewModel: ObservableObject {
 
     #if os(iOS)
     /// Creates a DashboardViewModel with custom scan cleanup delay (for iOS tests).
-    init(usageManager: any UsageManaging, scannedFileCleanupDelay: Duration) {
+    init(
+        usageManager: any UsageManaging,
+        scannedFileCleanupDelay: Duration,
+        monetizationStateProvider: (() -> MonetizationAvailability.State)? = nil
+    ) {
         self.usageManager = usageManager
+        self.monetizationStateProvider = monetizationStateProvider ?? { MonetizationAvailability.state }
         self.scannedFileCleanupDelay = scannedFileCleanupDelay
         setupNotificationObserver()
     }
@@ -386,6 +397,11 @@ final class DashboardViewModel: ObservableObject {
         let canPerform = await usageManager.canPerformAction()
         return !canPerform
     }
+
+    /// Handles manual upgrade taps from the toolbar/badge.
+    func handleUpgradeTap() {
+        _ = presentPaywallOrSetUnavailableError()
+    }
     
     /// Prepare to execute an action, checking usage limits first.
     ///
@@ -398,11 +414,23 @@ final class DashboardViewModel: ObservableObject {
         }
         
         if await shouldShowPaywall() {
-            showPaywall = true
+            _ = presentPaywallOrSetUnavailableError()
             return false
         }
         
         return true
+    }
+
+    @discardableResult
+    private func presentPaywallOrSetUnavailableError() -> Bool {
+        switch monetizationStateProvider() {
+        case .enabled:
+            showPaywall = true
+            return true
+        case .disabled(let message):
+            errorMessage = message
+            return false
+        }
     }
     
     // MARK: - Subscription Methods

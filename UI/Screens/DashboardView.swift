@@ -596,7 +596,7 @@ struct DashboardView: View {
                 remainingActions: viewModel.remainingFreeActions,
                 freeActionLimit: viewModel.freeActionLimit,
                 onUpgradeTapped: {
-                    viewModel.showPaywall = true
+                    viewModel.handleUpgradeTap()
                 }
             )
         }
@@ -607,7 +607,7 @@ struct DashboardView: View {
                 remainingActions: viewModel.remainingFreeActions,
                 freeActionLimit: viewModel.freeActionLimit,
                 onUpgradeTapped: {
-                    viewModel.showPaywall = true
+                    viewModel.handleUpgradeTap()
                 }
             )
         }

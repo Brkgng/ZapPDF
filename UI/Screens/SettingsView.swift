@@ -127,30 +127,38 @@ struct SettingsView: View {
         Section {
             // Subscription status
             SubscriptionStatusRow()
-            
-            // Manage Subscription - opens App Store
-            if let url = subscriptionURL {
-                Link(destination: url) {
+
+            if MonetizationAvailability.isEnabled {
+                // Manage Subscription - opens App Store
+                if let url = subscriptionURL {
+                    Link(destination: url) {
+                        subscriptionActionRow(
+                            title: L10n.Settings.manageSubscription,
+                            systemImage: "arrow.up.forward.app"
+                        )
+                    }
+                }
+
+                // Restore Purchases
+                Button {
+                    restorePurchases()
+                } label: {
                     subscriptionActionRow(
-                        title: L10n.Settings.manageSubscription,
-                        systemImage: "arrow.up.forward.app"
+                        title: L10n.Settings.restorePurchases,
+                        systemImage: "arrow.clockwise",
+                        showsProgress: isRestoring
                     )
                 }
+                .buttonStyle(.plain)
+                .foregroundStyle(Color.accentColor)
+                .disabled(isRestoring)
+            } else {
+                HStack {
+                    Label(MonetizationAvailability.unavailableMessage, systemImage: "exclamationmark.triangle")
+                    Spacer()
+                }
+                .foregroundStyle(.secondary)
             }
-            
-            // Restore Purchases
-            Button {
-                restorePurchases()
-            } label: {
-                subscriptionActionRow(
-                    title: L10n.Settings.restorePurchases,
-                    systemImage: "arrow.clockwise",
-                    showsProgress: isRestoring
-                )
-            }
-            .buttonStyle(.plain)
-            .foregroundStyle(Color.accentColor)
-            .disabled(isRestoring)
             
             // Contact Support
             Button {

@@ -11,10 +11,14 @@ import Foundation
 
 /// Configuration for RevenueCat SDK and subscription products.
 ///
-/// API key lookup order:
-/// 1. `REVENUECAT_API_KEY` environment variable
-/// 2. `REVENUECAT_API_KEY` in Info.plist
-/// 3. Empty string fallback (monetization disabled)
+/// Security model:
+/// - The API key is never committed to source control.
+/// - Xcode injects `REVENUECAT_API_KEY` into the generated `Info.plist`
+///   from local, gitignored build settings (see `Config/Secrets.local.xcconfig`).
+///
+/// Runtime lookup order:
+/// 1. `REVENUECAT_API_KEY` in bundled `Info.plist` (all builds)
+/// 2. Empty string fallback (monetization disabled)
 enum StoreConfiguration {
 
     private static let revenueCatAPIKeyName = "REVENUECAT_API_KEY"
@@ -23,10 +27,6 @@ enum StoreConfiguration {
     
     /// RevenueCat API key.
     static var revenueCatAPIKey: String {
-        if let envKey = normalizedAPIKey(ProcessInfo.processInfo.environment[revenueCatAPIKeyName]) {
-            return envKey
-        }
-
         let plistKey = Bundle.main.object(forInfoDictionaryKey: revenueCatAPIKeyName) as? String
         if let plistKey = normalizedAPIKey(plistKey) {
             return plistKey
@@ -40,7 +40,9 @@ enum StoreConfiguration {
         !revenueCatAPIKey.isEmpty
     }
 
-    private static func normalizedAPIKey(_ rawValue: String?) -> String? {
+    /// Normalizes a raw API key candidate by trimming whitespace and rejecting unresolved placeholders.
+    /// Internal for unit tests that validate configuration parsing behavior.
+    static func normalizedAPIKey(_ rawValue: String?) -> String? {
         guard let rawValue else { return nil }
 
         let candidate = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -49,6 +51,10 @@ enum StoreConfiguration {
         // Ignore unresolved build variable placeholders.
         if (candidate.hasPrefix("$(") && candidate.hasSuffix(")")) ||
             (candidate.hasPrefix("${") && candidate.hasSuffix("}")) {
+            return nil
+        }
+
+        if candidate == "YOUR_PUBLIC_SDK_KEY_HERE" {
             return nil
         }
 

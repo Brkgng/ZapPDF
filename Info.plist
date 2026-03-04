@@ -41,5 +41,9 @@
     <!-- iOS: Camera access for document scanning -->
     <key>NSCameraUsageDescription</key>
     <string>ZapPDF uses the camera to scan physical documents and convert them to PDF.</string>
+
+    <!-- RevenueCat: public SDK key injected from xcconfig at build time -->
+    <key>REVENUECAT_API_KEY</key>
+    <string>$(REVENUECAT_API_KEY)</string>
 </dict>
 </plist>

@@ -44,32 +44,46 @@ struct PaywallView: View {
     
     var body: some View {
         #if canImport(RevenueCatUI)
-        RevenueCatUI.PaywallView(displayCloseButton: true)
-            .task {
-                await RevenueCatManager.shared.warmOfferingsIfNeeded()
-                await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .paywallPresented)
-            }
-            .onPurchaseCompleted { customerInfo in
-                handlePurchaseSuccess(customerInfo)
-            }
-            .onPurchaseFailure { _ in
-                errorMessage = L10n.Error.purchaseFailed
-                showError = true
-            }
-            .onRestoreCompleted { customerInfo in
-                handleRestoreSuccess(customerInfo)
-            }
-            .onRestoreFailure { _ in
-                errorMessage = L10n.Error.restoreFailed
-                showError = true
-            }
-            .alert(L10n.Error.title, isPresented: $showError) {
-                Button(L10n.Action.ok, role: .cancel) { }
-            } message: {
-                if let errorMessage {
-                    Text(errorMessage)
+        Group {
+            if MonetizationAvailability.isEnabled {
+                RevenueCatUI.PaywallView(displayCloseButton: true)
+                    .task {
+                        await RevenueCatManager.shared.warmOfferingsIfNeeded()
+                        await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .paywallPresented)
+                    }
+                    .onPurchaseCompleted { customerInfo in
+                        handlePurchaseSuccess(customerInfo)
+                    }
+                    .onPurchaseFailure { _ in
+                        errorMessage = L10n.Error.purchaseFailed
+                        showError = true
+                    }
+                    .onRestoreCompleted { customerInfo in
+                        handleRestoreSuccess(customerInfo)
+                    }
+                    .onRestoreFailure { _ in
+                        errorMessage = L10n.Error.restoreFailed
+                        showError = true
+                    }
+            } else {
+                VStack(spacing: 12) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.title2)
+                        .foregroundStyle(.orange)
+                    Text(MonetizationAvailability.unavailableMessage)
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.secondary)
                 }
             }
+        }
+        .padding()
+        .alert(L10n.Error.title, isPresented: $showError) {
+            Button(L10n.Action.ok, role: .cancel) { }
+        } message: {
+            if let errorMessage {
+                Text(errorMessage)
+            }
+        }
         #else
         Text("RevenueCat not available")
         #endif
@@ -108,20 +122,26 @@ struct PaywallView: View {
 /// ```
 struct ProPaywallModifier: ViewModifier {
     func body(content: Content) -> some View {
-        content
-            .presentPaywallIfNeeded(
-                requiredEntitlementIdentifier: StoreConfiguration.EntitlementID.pro,
-                purchaseCompleted: { _ in
-                    Task {
-                        await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .purchaseCompleted, force: true)
-                    }
-                },
-                restoreCompleted: { _ in
-                    Task {
-                        await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .restoreCompleted, force: true)
-                    }
-                }
-            )
+        Group {
+            if MonetizationAvailability.isEnabled {
+                content
+                    .presentPaywallIfNeeded(
+                        requiredEntitlementIdentifier: StoreConfiguration.EntitlementID.pro,
+                        purchaseCompleted: { _ in
+                            Task {
+                                await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .purchaseCompleted, force: true)
+                            }
+                        },
+                        restoreCompleted: { _ in
+                            Task {
+                                await RevenueCatManager.shared.refreshStatusIfNeeded(reason: .restoreCompleted, force: true)
+                            }
+                        }
+                    )
+            } else {
+                content
+            }
+        }
     }
 }
 

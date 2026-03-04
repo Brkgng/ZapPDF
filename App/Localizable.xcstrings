@@ -5802,6 +5802,53 @@
         }
       }
     },
+    "monetization.unavailable" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In-App-Käufe sind in diesem Build nicht verfügbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "In-app purchases are unavailable in this build."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las compras dentro de la app no están disponibles en esta compilación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les achats intégrés ne sont pas disponibles dans cette version."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このビルドではアプリ内課金を利用できません。"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu derlemede uygulama içi satın alımlar kullanılamıyor."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此构建版本不支持应用内购买。"
+          }
+        }
+      }
+    },
     "Moved from position %lld" : {
       "comment" : "Label showing original page position",
       "localizations" : {

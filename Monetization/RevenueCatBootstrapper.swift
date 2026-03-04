@@ -30,7 +30,8 @@ enum RevenueCatBootstrapper {
             return true
         }
 
-        Purchases.logLevel = .warn
+        // Keep logs actionable in this app by hiding non-critical ATT attribution warnings.
+        Purchases.logLevel = .error
         Purchases.configure(withAPIKey: apiKey)
         Purchases.shared.delegate = RevenueCatDelegateHandler.shared
         didConfigure = true

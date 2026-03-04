@@ -249,6 +249,58 @@ struct DashboardViewModelTests {
         
         #expect(shouldShow == false)
     }
+
+    @Test("Upgrade tap presents paywall when monetization is enabled")
+    @MainActor
+    func upgradeTapPresentsPaywallWhenMonetizationIsEnabled() async throws {
+        let mockUsageManager = MockUsageManager()
+        let viewModel = DashboardViewModel(
+            usageManager: mockUsageManager,
+            monetizationStateProvider: { .enabled }
+        )
+
+        viewModel.handleUpgradeTap()
+
+        #expect(viewModel.showPaywall == true)
+        #expect(viewModel.errorMessage == nil)
+    }
+
+    @Test("Upgrade tap shows message when monetization is disabled")
+    @MainActor
+    func upgradeTapShowsMessageWhenMonetizationIsDisabled() async throws {
+        let mockUsageManager = MockUsageManager()
+        let viewModel = DashboardViewModel(
+            usageManager: mockUsageManager,
+            monetizationStateProvider: { .disabled(message: "disabled") }
+        )
+
+        viewModel.handleUpgradeTap()
+
+        #expect(viewModel.showPaywall == false)
+        #expect(viewModel.errorMessage == "disabled")
+    }
+
+    @Test("Prepare action does not present paywall when monetization is disabled")
+    @MainActor
+    func prepareActionDoesNotPresentPaywallWhenMonetizationDisabled() async throws {
+        let mockUsageManager = MockUsageManager()
+        await mockUsageManager.setMockRemaining(0)
+
+        let viewModel = DashboardViewModel(
+            usageManager: mockUsageManager,
+            monetizationStateProvider: { .disabled(message: L10n.Monetization.unavailable) }
+        )
+
+        let testURL = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "prepare_action_no_paywall")
+        defer { PDFTestHelpers.cleanup(url: testURL) }
+        await viewModel.addFiles(urls: [testURL])
+
+        let canProceed = await viewModel.prepareAction(.split)
+
+        #expect(canProceed == false)
+        #expect(viewModel.showPaywall == false)
+        #expect(viewModel.errorMessage == L10n.Monetization.unavailable)
+    }
     
     // MARK: - Error Handling Tests
     

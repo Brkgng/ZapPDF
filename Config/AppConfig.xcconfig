@@ -1,0 +1,6 @@
+// Defaults for public/open-source builds.
+REVENUECAT_API_KEY =
+
+// Local overrides (gitignored).
+#include? "Secrets.local.xcconfig"
+

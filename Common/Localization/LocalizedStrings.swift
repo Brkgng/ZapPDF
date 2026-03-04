@@ -479,10 +479,19 @@ enum L10n {
     }
     
     // MARK: - Usage Errors
-    
+
     enum UsageError {
         static let noActionsRemaining = String(localized: "usage.noActionsRemaining", defaultValue: "You've used all your free actions.")
         static let persistenceFailed = String(localized: "usage.persistenceFailed", defaultValue: "Failed to save usage data.")
+    }
+
+    // MARK: - Monetization
+
+    enum Monetization {
+        static let unavailable = String(
+            localized: "monetization.unavailable",
+            defaultValue: "In-app purchases are unavailable in this build."
+        )
     }
     
     // MARK: - Validation

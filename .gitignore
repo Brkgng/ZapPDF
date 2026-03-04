@@ -81,5 +81,5 @@ playground.xcworkspace
 
 # RevenueCat (keep API keys out of repo)
 RevenueCatKeys.swift
-Config/Secrets.xcconfig
+Config/Secrets.local.xcconfig
 Monetization/Secrets.swift
