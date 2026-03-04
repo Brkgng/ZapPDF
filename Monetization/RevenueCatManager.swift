@@ -69,6 +69,11 @@ actor RevenueCatManager: SubscriptionManaging {
     /// Whether a status refresh is already running.
     private var isRefreshingStatus: Bool = false
     
+    /// Whether the initial server-side entitlement check has completed.
+    /// Forces the very first refresh to bypass throttling so stale
+    /// Keychain-cached Pro status is corrected promptly on cold start.
+    private var hasCompletedInitialRefresh: Bool = false
+    
     /// Whether offerings are currently being fetched.
     private var isWarmingOfferings: Bool = false
     
@@ -144,7 +149,11 @@ actor RevenueCatManager: SubscriptionManaging {
         }
         
         let now = Date()
-        if !force,
+        let shouldForce = Self.shouldUseFetchCurrent(
+            force: force,
+            hasCompletedInitialRefresh: hasCompletedInitialRefresh
+        )
+        if !shouldForce,
            let lastRefresh = lastStatusRefreshAt,
            now.timeIntervalSince(lastRefresh) < minimumRefreshInterval(for: reason) {
             return
@@ -157,8 +166,15 @@ actor RevenueCatManager: SubscriptionManaging {
         }
         
         do {
-            let customerInfo = try await Purchases.shared.customerInfo()
+            let customerInfo: CustomerInfo
+            if shouldForce {
+                customerInfo = try await Purchases.shared.customerInfo(fetchPolicy: .fetchCurrent)
+            } else {
+                customerInfo = try await Purchases.shared.customerInfo()
+            }
+
             lastStatusRefreshAt = Date()
+            hasCompletedInitialRefresh = true
             await handleCustomerInfoUpdate(customerInfo)
         } catch {
             // Keep cached/current status on error
@@ -357,6 +373,12 @@ actor RevenueCatManager: SubscriptionManaging {
         case .settingsOpened, .paywallPresented:
             return 10
         }
+    }
+
+    /// Determines when to bypass SDK cache and force a network-backed entitlement refresh.
+    /// - Note: Force refresh for explicit force requests and until first successful refresh.
+    static func shouldUseFetchCurrent(force: Bool, hasCompletedInitialRefresh: Bool) -> Bool {
+        force || !hasCompletedInitialRefresh
     }
     
     private func mapPackageType(_ rcType: PackageType) -> SubscriptionPackageType {

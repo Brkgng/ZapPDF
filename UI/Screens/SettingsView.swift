@@ -18,6 +18,7 @@ struct SettingsView: View {
     @State private var restoreMessage = ""
     @State private var restoreSuccess = false
     @State private var showRestartAlert = false
+    @State private var showPaywall = false
     
     // App Store subscription management URL
     private let subscriptionURL = URL(string: "https://apps.apple.com/account/subscriptions")
@@ -26,11 +27,22 @@ struct SettingsView: View {
     private let supportURL = URL(string: "https://forms.gle/542Dty1NrMJcKCe98")
     
     var body: some View {
-        #if os(macOS)
-        macOSContent
-        #else
-        iOSContent
-        #endif
+        Group {
+            #if os(macOS)
+            macOSContent
+            #else
+            iOSContent
+            #endif
+        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView()
+                #if os(macOS)
+                .frame(
+                    minWidth: PaywallPresentationMetrics.minWidth,
+                    minHeight: PaywallPresentationMetrics.minHeight
+                )
+                #endif
+        }
     }
     
     // MARK: - macOS Layout
@@ -126,7 +138,9 @@ struct SettingsView: View {
     private var subscriptionSection: some View {
         Section {
             // Subscription status
-            SubscriptionStatusRow()
+            SubscriptionStatusRow {
+                showPaywall = true
+            }
 
             if MonetizationAvailability.isEnabled {
                 // Manage Subscription - opens App Store
@@ -259,12 +273,19 @@ private extension Bundle {
 private struct SubscriptionStatusRow: View {
     @State private var proStatus: ProStatus?
     @State private var offlinePro: Bool = false
+    let onUpgradeTapped: () -> Void
     
     var body: some View {
         HStack {
-            Label(statusText, systemImage: statusIcon)
+            Label(displayState.statusText, systemImage: displayState.statusIcon)
             Spacer()
-            if let subtitle = statusSubtitle {
+            if displayState.showsUpgradeCTA {
+                Button(L10n.Action.upgrade) {
+                    onUpgradeTapped()
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            } else if let subtitle = displayState.statusSubtitle {
                 Text(subtitle)
                     .foregroundStyle(.secondary)
                     .font(.footnote)
@@ -286,57 +307,80 @@ private struct SubscriptionStatusRow: View {
         proStatus = await RevenueCatManager.shared.proStatus
         offlinePro = await UsageManager.shared.getProStatus()
     }
-    
-    private var statusText: String {
-        guard let status = proStatus, status.isActive else {
-            // Check UsageManager for offline Pro access (via local state)
-            if offlinePro {
-                return L10n.Settings.proPlan
+
+    private var displayState: SubscriptionStatusDisplayState {
+        SubscriptionStatusDisplayState.make(
+            proStatus: proStatus,
+            offlinePro: offlinePro,
+            monetizationEnabled: MonetizationAvailability.isEnabled
+        )
+    }
+}
+
+struct SubscriptionStatusDisplayState: Equatable {
+    let statusText: String
+    let statusIcon: String
+    let statusSubtitle: String?
+    let showsUpgradeCTA: Bool
+
+    static func make(
+        proStatus: ProStatus?,
+        offlinePro: Bool,
+        monetizationEnabled: Bool,
+        dateFormatter: DateFormatter = SubscriptionStatusDisplayState.defaultDateFormatter()
+    ) -> SubscriptionStatusDisplayState {
+        if let status = proStatus, status.isActive {
+            let statusText: String
+            switch status.type {
+            case .lifetime:
+                statusText = L10n.Settings.proLifetime
+            case .annual:
+                statusText = L10n.Settings.proAnnual
+            case .monthly:
+                statusText = L10n.Settings.proMonthly
+            case .none:
+                // Handle "Pro with unknown product type" from partial/offline sync.
+                statusText = L10n.Settings.proPlan
             }
-            return L10n.Settings.freePlan
+
+            var subtitle: String?
+            if !status.isLifetime, let expirationDate = status.expirationDate {
+                let dateString = dateFormatter.string(from: expirationDate)
+                subtitle = status.willRenew == true
+                    ? L10n.Settings.renewsOn(dateString)
+                    : L10n.Settings.expiresOn(dateString)
+            }
+
+            return SubscriptionStatusDisplayState(
+                statusText: statusText,
+                statusIcon: "star.fill",
+                statusSubtitle: subtitle,
+                showsUpgradeCTA: false
+            )
         }
-        
-        switch status.type {
-        case .lifetime:
-            return L10n.Settings.proLifetime
-        case .annual:
-            return L10n.Settings.proAnnual
-        case .monthly:
-            return L10n.Settings.proMonthly
-        case .none:
-            // Explicitly handle the "Pro but unknown type" state.
-            // This occurs when UsageManager confirms Pro status via Keychain (offline),
-            // but RevenueCat hasn't synced the specific entitlement details yet.
-            return L10n.Settings.proPlan
+
+        if offlinePro {
+            return SubscriptionStatusDisplayState(
+                statusText: L10n.Settings.proPlan,
+                statusIcon: "star.fill",
+                statusSubtitle: nil,
+                showsUpgradeCTA: false
+            )
         }
+
+        return SubscriptionStatusDisplayState(
+            statusText: L10n.Settings.freePlan,
+            statusIcon: "person.fill",
+            statusSubtitle: nil,
+            showsUpgradeCTA: monetizationEnabled
+        )
     }
-    
-    private var statusIcon: String {
-        guard let status = proStatus, status.isActive else {
-            return offlinePro ? "star.fill" : "person.fill"
-        }
-        return "star.fill"
-    }
-    
-    private var statusSubtitle: String? {
-        guard let status = proStatus, status.isActive else { return nil }
-        
-        // Lifetime has no expiration
-        if status.isLifetime { return nil }
-        
-        // Show expiration date if available
-        guard let expDate = status.expirationDate else { return nil }
-        
+
+    private static func defaultDateFormatter() -> DateFormatter {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
-        let dateString = formatter.string(from: expDate)
-        
-        if status.willRenew == true {
-            return L10n.Settings.renewsOn(dateString)
-        } else {
-            return L10n.Settings.expiresOn(dateString)
-        }
+        return formatter
     }
 }
 

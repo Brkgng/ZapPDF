@@ -64,14 +64,21 @@ resolve_key_from_build_settings() {
 
 project_dir="${PROJECT_DIR:-${SRCROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}}"
 resolved_key_from_files=""
-resolved_key_from_build_settings="$(resolve_key_from_build_settings "${project_dir}")"
+resolved_key_from_build_settings=""
+resolved_key="$(trim "${REVENUECAT_API_KEY:-}")"
 
-parse_xcconfig_file "${project_dir}/Config/AppConfig.xcconfig"
-parse_xcconfig_file "${project_dir}/Config/Secrets.local.xcconfig"
+if [[ "${PREFLIGHT_USE_ENV_ONLY:-0}" != "1" ]]; then
+  resolved_key_from_build_settings="$(resolve_key_from_build_settings "${project_dir}")"
 
-resolved_key="$(trim "${resolved_key_from_build_settings}")"
-if is_invalid_key "${resolved_key}"; then
-  resolved_key="$(trim "${resolved_key_from_files}")"
+  parse_xcconfig_file "${project_dir}/Config/AppConfig.xcconfig"
+  parse_xcconfig_file "${project_dir}/Config/Secrets.local.xcconfig"
+
+  if is_invalid_key "${resolved_key}"; then
+    resolved_key="$(trim "${resolved_key_from_build_settings}")"
+  fi
+  if is_invalid_key "${resolved_key}"; then
+    resolved_key="$(trim "${resolved_key_from_files}")"
+  fi
 fi
 
 if is_invalid_key "${resolved_key}"; then

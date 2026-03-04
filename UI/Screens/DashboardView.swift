@@ -606,6 +606,7 @@ struct DashboardView: View {
                 isPro: viewModel.isPro,
                 remainingActions: viewModel.remainingFreeActions,
                 freeActionLimit: viewModel.freeActionLimit,
+                presentationStyle: .compactToolbar,
                 onUpgradeTapped: {
                     viewModel.handleUpgradeTap()
                 }
@@ -698,7 +699,7 @@ struct DashboardView: View {
 
         #if os(iOS)
         if viewModel.hasFiles {
-            ToolbarItem(placement: .topBarLeading) {
+            ToolbarItem(placement: .secondaryAction) {
                 Menu {
                     Button {
                         viewModel.selectAll()

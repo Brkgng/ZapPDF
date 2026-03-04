@@ -144,6 +144,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D48C9FE92EFB1D9A00C8D9A1 /* Build configuration list for PBXNativeTarget "ZapPDF" */;
 			buildPhases = (
+				E1A100012F99000100000004 /* Monetization Preflight */,
 				D48C9FDA2EFB1D9900C8D9A1 /* Sources */,
 				D48C9FDB2EFB1D9900C8D9A1 /* Frameworks */,
 				D48C9FDC2EFB1D9900C8D9A1 /* Resources */,
@@ -257,6 +258,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E1A100012F99000100000004 /* Monetization Preflight */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/scripts/preflight_monetization_archive.sh",
+			);
+			name = "Monetization Preflight";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$CONFIGURATION\" = \"Release\" ]; then\n  PREFLIGHT_USE_ENV_ONLY=1 bash \"${SRCROOT}/scripts/preflight_monetization_archive.sh\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D48C9FDA2EFB1D9900C8D9A1 /* Sources */ = {

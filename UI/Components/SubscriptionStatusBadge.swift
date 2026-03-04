@@ -27,6 +27,12 @@ struct SubscriptionStatusBadge: View {
     
     // MARK: - Properties
     
+    /// Rendering style for contexts with different space constraints.
+    enum PresentationStyle {
+        case full
+        case compactToolbar
+    }
+    
     /// Whether the user has Pro subscription.
     let isPro: Bool
     
@@ -36,8 +42,25 @@ struct SubscriptionStatusBadge: View {
     /// Total free action limit.
     let freeActionLimit: Int
     
+    /// Rendering style (defaults to full text).
+    let presentationStyle: PresentationStyle
+    
     /// Action when free user taps to upgrade.
     let onUpgradeTapped: () -> Void
+    
+    init(
+        isPro: Bool,
+        remainingActions: Int,
+        freeActionLimit: Int,
+        presentationStyle: PresentationStyle = .full,
+        onUpgradeTapped: @escaping () -> Void
+    ) {
+        self.isPro = isPro
+        self.remainingActions = remainingActions
+        self.freeActionLimit = freeActionLimit
+        self.presentationStyle = presentationStyle
+        self.onUpgradeTapped = onUpgradeTapped
+    }
     
     // MARK: - Body
     
@@ -80,43 +103,66 @@ struct SubscriptionStatusBadge: View {
         Button {
             onUpgradeTapped()
         } label: {
-            HStack(spacing: 6) {
-                Image(systemName: statusIcon)
-                    .font(.caption)
-                
-                Text(statusText)
-                    .font(.caption)
-                
-                if remainingActions == 0 {
-                    Text(L10n.Action.upgrade)
-                        .font(.caption.weight(.semibold))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 2)
-                        .background(
-                            Capsule()
-                                .fill(Color.orange)
-                        )
-                        .foregroundStyle(.white)
-                }
+            if presentationStyle == .compactToolbar {
+                compactFreeBadgeLabel
+            } else {
+                fullFreeBadgeLabel
             }
-            .foregroundStyle(statusColor)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(
-                Capsule()
-                    .fill(statusBackgroundColor)
-            )
         }
         .buttonStyle(.plain)
         #if os(macOS)
         .help(L10n.Accessibility.upgradeHint)
         #endif
     }
+
+    private var compactFreeBadgeLabel: some View {
+        Text("\(Image(systemName: statusIcon)) \(statusText)")
+            .font(.footnote.weight(.semibold))
+            .monospacedDigit()
+            .lineLimit(1)
+            .fixedSize(horizontal: true, vertical: false)
+            .foregroundStyle(statusColor)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+    }
+
+    private var fullFreeBadgeLabel: some View {
+        HStack(spacing: 6) {
+            Image(systemName: statusIcon)
+                .font(.caption)
+            
+            Text(statusText)
+                .font(.caption)
+            
+            if clampedRemainingActions == 0 {
+                Text(L10n.Action.upgrade)
+                    .font(.caption.weight(.semibold))
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 2)
+                    .background(
+                        Capsule()
+                            .fill(Color.orange)
+                    )
+                    .foregroundStyle(.white)
+            }
+        }
+        .foregroundStyle(statusColor)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(
+            Capsule()
+                .fill(statusBackgroundColor)
+        )
+    }
     
     // MARK: - Status Helpers
-    
+
+    private var clampedRemainingActions: Int {
+        max(remainingActions, 0)
+    }
+
     private var statusIcon: String {
-        switch remainingActions {
+        switch clampedRemainingActions {
         case 0:
             return "xmark.circle.fill"
         case 1...2:
@@ -127,7 +173,11 @@ struct SubscriptionStatusBadge: View {
     }
     
     private var statusText: String {
-        switch remainingActions {
+        if presentationStyle == .compactToolbar {
+            return L10n.Paywall.actionsLeft(clampedRemainingActions)
+        }
+        
+        switch clampedRemainingActions {
         case 0:
             return L10n.Paywall.noActionsLeft()
         case 1:
@@ -135,23 +185,23 @@ struct SubscriptionStatusBadge: View {
         case 2:
             return L10n.Paywall.actionsLeft(2)
         default:
-            return L10n.Paywall.actionsRemaining(remainingActions, of: freeActionLimit)
+            return L10n.Paywall.actionsRemaining(clampedRemainingActions, of: freeActionLimit)
         }
     }
     
     private var statusColor: Color {
-        switch remainingActions {
+        switch clampedRemainingActions {
         case 0:
             return .red
         case 1...2:
             return .orange
         default:
-            return .secondary
+            return presentationStyle == .compactToolbar ? .primary : .secondary
         }
     }
     
     private var statusBackgroundColor: Color {
-        switch remainingActions {
+        switch clampedRemainingActions {
         case 0:
             return .red.opacity(0.15)
         case 1...2:
@@ -203,6 +253,17 @@ struct SubscriptionStatusBadge: View {
         isPro: false,
         remainingActions: 0,
         freeActionLimit: 5,
+        onUpgradeTapped: {}
+    )
+    .padding()
+}
+
+#Preview("Free User - Compact") {
+    SubscriptionStatusBadge(
+        isPro: false,
+        remainingActions: 5,
+        freeActionLimit: 5,
+        presentationStyle: .compactToolbar,
         onUpgradeTapped: {}
     )
     .padding()

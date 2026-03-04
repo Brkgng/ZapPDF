@@ -83,6 +83,11 @@ actor UsageManager {
     /// Whether cached Pro status has been loaded from storage.
     private var hasLoadedCachedProStatus: Bool = false
     
+    /// Whether the Pro status has been server-verified since launch.
+    /// Ensures the first `setProStatus` call always posts a notification
+    /// so the UI syncs after RevenueCat verification on cold start.
+    private var hasVerifiedProStatus: Bool = false
+    
     /// Whether to use in-memory storage only (for testing)
     private let inMemoryOnly: Bool
     
@@ -284,7 +289,10 @@ actor UsageManager {
     func setProStatus(_ isPro: Bool) {
         loadCachedProStatusIfNeeded()
         
-        guard self.isPro != isPro else {
+        let wasVerified = hasVerifiedProStatus
+        hasVerifiedProStatus = true
+        
+        guard self.isPro != isPro || !wasVerified else {
             return
         }
         
