@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import StoreKit
 
 #if canImport(RevenueCatUI)
 import RevenueCatUI
@@ -64,6 +65,7 @@ struct DashboardView: View {
     // MARK: - Properties
 
     @EnvironmentObject private var viewModel: DashboardViewModel
+    @Environment(\.requestReview) private var requestReview
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -194,6 +196,9 @@ struct DashboardView: View {
                 .task {
                     await viewModel.loadSubscriptionState()
                 }
+                .onAppear {
+                    attemptReviewPrompt()
+                }
                 .onReceive(NotificationCenter.default.publisher(for: .filesCleared)) { notification in
                     handleFilesCleared(notification)
                 }
@@ -257,6 +262,14 @@ struct DashboardView: View {
         draggingFileID = nil
     }
     #endif
+
+    private func attemptReviewPrompt() {
+        Task {
+            if await AppStoreReviewManager.shared.shouldShowAndMarkReviewPrompt() {
+                requestReview()
+            }
+        }
+    }
 
     // MARK: - Empty State
 
