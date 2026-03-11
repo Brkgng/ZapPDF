@@ -16,7 +16,7 @@ struct OnboardingPage: View {
     
     var body: some View {
         VStack(spacing: 24) {
-            Spacer()
+            Spacer(minLength: 0)
             
             // Icon
             Image(systemName: iconName)
@@ -37,8 +37,7 @@ struct OnboardingPage: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
             
-            Spacer()
-            Spacer()
+            Spacer(minLength: 0)
         }
         .padding()
     }
@@ -104,6 +103,7 @@ struct OnboardingNavigationControls: View {
                 } label: {
                     Label(L10n.Onboarding.next, systemImage: "chevron.right")
                 }
+                .keyboardShortcut(.defaultAction)
             } else {
                 Button(L10n.Action.getStarted) {
                     onComplete()
@@ -124,7 +124,7 @@ struct OnboardingFinalPage: View {
     
     var body: some View {
         VStack(spacing: 24) {
-            Spacer()
+            Spacer(minLength: 0)
             
             // Icon
             Image(systemName: "checkmark.circle.fill")
@@ -145,7 +145,7 @@ struct OnboardingFinalPage: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
             
-            Spacer()
+            Spacer(minLength: 0)
             
             // Get Started Button (iOS only - macOS uses navigation controls)
             #if os(iOS)
@@ -164,7 +164,7 @@ struct OnboardingFinalPage: View {
             .padding(.horizontal, 32)
             #endif
             
-            Spacer()
+            Spacer(minLength: 0)
         }
         .padding()
     }
@@ -214,20 +214,14 @@ struct OnboardingView: View {
                 .ignoresSafeArea()
             #endif
             
+            #if os(macOS)
+            // Keep macOS controls pinned so short windows compress the page body first.
+            onboardingPage(for: currentPage)
+                .id(currentPage)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .animation(.easeInOut(duration: 0.2), value: currentPage)
+            #else
             VStack(spacing: 0) {
-                // Skip button (except on last page)
-                HStack {
-                    Spacer()
-                    
-                    if currentPage < Self.pageCount - 1 {
-                        Button(L10n.Action.skip) {
-                            completeOnboarding()
-                        }
-                        .foregroundColor(.secondary)
-                        .padding()
-                    }
-                }
-                
                 // Page content
                 TabView(selection: $currentPage) {
                     // Page 1: Welcome
@@ -263,27 +257,54 @@ struct OnboardingView: View {
                     }
                     .tag(3)
                 }
-                #if os(iOS)
                 .tabViewStyle(.page(indexDisplayMode: .always))
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
-                #endif
-                
-                // Navigation controls for macOS
-                #if os(macOS)
-                OnboardingNavigationControls(
-                    pageCount: Self.pageCount,
-                    currentPage: $currentPage,
-                    onComplete: completeOnboarding
-                )
-                #endif
             }
-            #if os(macOS)
-            .frame(minWidth: 700, minHeight: 500)
             #endif
         }
+        #if os(macOS)
+        .safeAreaInset(edge: .bottom) {
+            OnboardingNavigationControls(
+                pageCount: Self.pageCount,
+                currentPage: $currentPage,
+                onComplete: completeOnboarding
+            )
+        }
+        #endif
     }
     
     // MARK: - Private Methods
+
+    @ViewBuilder
+    private func onboardingPage(for page: Int) -> some View {
+        switch page {
+        case 0:
+            OnboardingPage(
+                iconName: "doc.text.fill",
+                iconColor: .accentColor,
+                title: L10n.Onboarding.welcomeTitle,
+                description: L10n.Onboarding.welcomeDescription
+            )
+        case 1:
+            OnboardingPage(
+                iconName: "lock.shield.fill",
+                iconColor: .green,
+                title: L10n.Onboarding.privacyTitle,
+                description: L10n.Onboarding.privacyDescription
+            )
+        case 2:
+            OnboardingPage(
+                iconName: "square.grid.2x2.fill",
+                iconColor: .orange,
+                title: L10n.Onboarding.featuresTitle,
+                description: L10n.Onboarding.featuresDescription
+            )
+        default:
+            OnboardingFinalPage {
+                completeOnboarding()
+            }
+        }
+    }
     
     private func completeOnboarding() {
         withAnimation {
