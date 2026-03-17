@@ -1,5 +1,14 @@
 # ZapPDF
 
+[![Platform](https://img.shields.io/badge/platform-macOS%20|%20iOS%20|%20iPadOS-blue)](https://github.com/brkgng/ZapPDF)
+[![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+
+![ZapPDF Hero Banner](assets/hero-banner.png)
+
+## Download
+
+[![Download on the App Store](https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg)](https://apps.apple.com/us/app/zappdf-merge-split-edit/id6759740507)
+
 A privacy-first PDF utility app for macOS, iOS, and iPadOS.
 
 ## Features
