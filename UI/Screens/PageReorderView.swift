@@ -32,6 +32,9 @@ struct PageReorderView: View {
     
     /// Whether discard confirmation is showing.
     @State private var showingDiscardConfirmation = false
+
+    /// Reuses one opened PDF document for reorder thumbnails.
+    @State private var thumbnailSession: PDFThumbnailSession?
     
     // MARK: - Initialization
     
@@ -50,7 +53,11 @@ struct PageReorderView: View {
             #endif
         }
         .task {
+            thumbnailSession = await PDFRenderer.shared.makeThumbnailSession(for: viewModel.sourceFile)
             await viewModel.loadPages()
+        }
+        .onDisappear {
+            thumbnailSession = nil
         }
         .navigationDestination(isPresented: $showProcessingView) {
             if let options = processingOptions {
@@ -103,6 +110,7 @@ struct PageReorderView: View {
                     DraggablePageGrid(
                         pages: viewModel.pages,
                         pdfFile: viewModel.sourceFile,
+                        thumbnailSession: thumbnailSession,
                         selectedIndex: $viewModel.selectedPageIndex,
                         onMove: viewModel.movePages,
                         onRotate: { index, clockwise in
@@ -193,6 +201,7 @@ struct PageReorderView: View {
                     DraggablePageList(
                         pages: viewModel.pages,
                         pdfFile: viewModel.sourceFile,
+                        thumbnailSession: thumbnailSession,
                         selectedIndex: $viewModel.selectedPageIndex,
                         onMove: viewModel.movePages,
                         onRotate: { index, clockwise in
@@ -317,7 +326,8 @@ struct PageReorderView: View {
                             displayNumber: selectedIndex + 1,
                             isSelected: false,
                             size: CGSize(width: previewWidth, height: previewHeight),
-                            rotation: page.rotation
+                            rotation: page.rotation,
+                            thumbnailSession: thumbnailSession
                         )
                         
                         if viewModel.pages.isManuallyReordered(at: selectedIndex) {

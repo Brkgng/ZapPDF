@@ -42,6 +42,9 @@ struct PageThumbnailView: View {
     
     /// The rotation to apply to the page.
     var rotation: PageRotation = .none
+
+    /// Reuses an already opened PDF while the reorder screen is visible.
+    var thumbnailSession: PDFThumbnailSession? = nil
     
     // MARK: - Private State
     
@@ -49,7 +52,7 @@ struct PageThumbnailView: View {
     @State private var isLoading: Bool = true
     @State private var loadingTask: Task<Void, Never>?
     
-    private static let renderer = PDFRenderer()
+    private static let renderer = PDFRenderer.shared
     
     // MARK: - Body
     
@@ -155,11 +158,16 @@ struct PageThumbnailView: View {
         )
         
         let task = Task {
-            let result = await Self.renderer.thumbnail(
-                for: pdfFile,
-                pageIndex: pageIndex,
-                size: renderSize
-            )
+            let result: CGImage?
+            if let thumbnailSession {
+                result = await thumbnailSession.thumbnail(pageIndex: pageIndex, size: renderSize)
+            } else {
+                result = await Self.renderer.thumbnail(
+                    for: pdfFile,
+                    pageIndex: pageIndex,
+                    size: renderSize
+                )
+            }
             
             if !Task.isCancelled {
                 await MainActor.run {

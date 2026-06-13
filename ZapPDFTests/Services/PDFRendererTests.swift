@@ -108,6 +108,14 @@ struct PDFRendererTests {
         cacheCount = await renderer.cacheCount
         #expect(cacheCount == 0)
     }
+
+    @Test("Shared renderer can be cleared")
+    func sharedRendererCanBeCleared() async {
+        await PDFRenderer.shared.clearCache()
+
+        let cacheCount = await PDFRenderer.shared.cacheCount
+        #expect(cacheCount == 0)
+    }
     
     // MARK: - Cache Isolation Tests
     
@@ -145,6 +153,57 @@ struct PDFRendererTests {
         // Should have 3 separate cache entries
         let cacheCount = await renderer.cacheCount
         #expect(cacheCount == 3)
+    }
+
+    @Test("Thumbnail session renders multiple pages")
+    func thumbnailSessionRendersMultiplePages() async throws {
+        let identifier = UUID().uuidString
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "session_render_\(identifier)")
+        defer { PDFTestHelpers.cleanup(url: url) }
+
+        let renderer = PDFRenderer()
+        let file = PDFFile(url: url, fileName: url.lastPathComponent, pageCount: 3, fileSize: 1000)
+
+        let session = await renderer.makeThumbnailSession(for: file)
+        #expect(session != nil)
+
+        let size = CGSize(width: 100, height: 140)
+        let firstThumbnail = await session?.thumbnail(pageIndex: 0, size: size)
+        let secondThumbnail = await session?.thumbnail(pageIndex: 1, size: size)
+
+        #expect(firstThumbnail != nil)
+        #expect(secondThumbnail != nil)
+    }
+
+    @Test("Thumbnail session populates renderer cache")
+    func thumbnailSessionPopulatesRendererCache() async throws {
+        let identifier = UUID().uuidString
+        let url = try PDFTestHelpers.createTestPDF(pageCount: 2, identifier: "session_cache_\(identifier)")
+        defer { PDFTestHelpers.cleanup(url: url) }
+
+        let renderer = PDFRenderer()
+        let file = PDFFile(url: url, fileName: url.lastPathComponent, pageCount: 2, fileSize: 1000)
+        let size = CGSize(width: 100, height: 140)
+
+        let session = await renderer.makeThumbnailSession(for: file)
+        _ = await session?.thumbnail(pageIndex: 0, size: size)
+        _ = await session?.thumbnail(pageIndex: 1, size: size)
+
+        let cacheCount = await renderer.cacheCount
+        #expect(cacheCount == 2)
+    }
+
+    @Test("Thumbnail session returns nil for missing PDF")
+    func thumbnailSessionReturnsNilForMissingPDF() async {
+        let renderer = PDFRenderer()
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("missing_\(UUID().uuidString)")
+            .appendingPathExtension("pdf")
+        let file = PDFFile(url: url, fileName: url.lastPathComponent, pageCount: 0, fileSize: 0)
+
+        let session = await renderer.makeThumbnailSession(for: file)
+
+        #expect(session == nil)
     }
     
     // MARK: - In-Flight Task Tests

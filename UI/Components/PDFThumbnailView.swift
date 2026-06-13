@@ -43,7 +43,7 @@ struct PDFThumbnailView: View {
     @State private var loadingTask: Task<Void, Never>?
     
     /// Shared renderer instance for thumbnail generation.
-    private static let renderer = PDFRenderer()
+    private static let renderer = PDFRenderer.shared
     
     // MARK: - Body
     

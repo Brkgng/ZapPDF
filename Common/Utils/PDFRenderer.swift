@@ -86,6 +86,7 @@ final class ThumbnailCacheKey: NSObject {
 /// }
 /// ```
 actor PDFRenderer {
+    static let shared = PDFRenderer()
     
     // MARK: - Platform-Specific Limits
     
@@ -200,6 +201,14 @@ actor PDFRenderer {
         
         return result
     }
+
+    func makeThumbnailSession(for file: PDFFile) async -> PDFThumbnailSession? {
+        guard let accessURL = try? file.resolvedURL() else {
+            return nil
+        }
+
+        return PDFThumbnailSession(url: accessURL, renderer: self)
+    }
     
     /// Clear all cached thumbnails.
     func clearCache() {
@@ -270,14 +279,6 @@ actor PDFRenderer {
         
         let pageCount = document.pageCount
         
-        // Reuse the internal render logic but with the ALREADY LOADED document
-        // We need to refactor renderThumbnail to accept a document or extract the logic
-        // For now, to be safe and minimal, we'll implement the rendering inline here
-        // or extract a private helper that takes a PDFPage.
-        
-        // Let's implement inline to avoid touching existing private methods too much
-        // and ensure we use the 'document' we just opened.
-        
         guard let page = document.page(at: 0) else {
             return (nil, pageCount)
         }
@@ -337,6 +338,29 @@ actor PDFRenderer {
         
         return await generatePreviewData(for: accessURL, size: size)
     }
+
+    fileprivate func cachedThumbnail(for url: URL, pageIndex: Int, size: CGSize) -> CGImage? {
+        let cacheKey = ThumbnailCacheKey(
+            url: url,
+            pageIndex: pageIndex,
+            width: Int(size.width),
+            height: Int(size.height)
+        )
+
+        return cache.object(forKey: cacheKey)?.image
+    }
+
+    fileprivate func cacheThumbnail(_ image: CGImage, for url: URL, pageIndex: Int, size: CGSize) {
+        let cacheKey = ThumbnailCacheKey(
+            url: url,
+            pageIndex: pageIndex,
+            width: Int(size.width),
+            height: Int(size.height)
+        )
+        let wrapper = CGImageWrapper(image: image)
+        cache.setObject(wrapper, forKey: cacheKey, cost: wrapper.cost)
+        cachedKeys.insert(cacheKey)
+    }
     
     // MARK: - Private Methods
     
@@ -370,7 +394,7 @@ actor PDFRenderer {
     }
     
     /// Helper to render a specific PDF page.
-    private static func renderPage(_ page: PDFPage, size: CGSize) -> CGImage? {
+    fileprivate static func renderPage(_ page: PDFPage, size: CGSize) -> CGImage? {
         // Get page bounds
         let pageBounds = page.bounds(for: .mediaBox)
         
@@ -423,5 +447,54 @@ actor PDFRenderer {
         #endif
         
         return context.makeImage()
+    }
+}
+
+actor PDFThumbnailSession {
+    private let url: URL
+    private let renderer: PDFRenderer
+    private let document: PDFDocument
+    private let didStartAccessing: Bool
+
+    init?(url: URL, renderer: PDFRenderer) {
+        let didStartAccessing = url.startAccessingSecurityScopedResource()
+
+        guard let document = PDFDocument(url: url) else {
+            if didStartAccessing {
+                url.stopAccessingSecurityScopedResource()
+            }
+            return nil
+        }
+
+        self.url = url
+        self.renderer = renderer
+        self.document = document
+        self.didStartAccessing = didStartAccessing
+    }
+
+    deinit {
+        if didStartAccessing {
+            url.stopAccessingSecurityScopedResource()
+        }
+    }
+
+    func thumbnail(pageIndex: Int, size: CGSize) async -> CGImage? {
+        if let cached = await renderer.cachedThumbnail(for: url, pageIndex: pageIndex, size: size) {
+            return cached
+        }
+
+        guard !Task.isCancelled,
+              let page = document.page(at: pageIndex) else {
+            return nil
+        }
+
+        let image = PDFRenderer.renderPage(page, size: size)
+
+        guard !Task.isCancelled, let image else {
+            return nil
+        }
+
+        await renderer.cacheThumbnail(image, for: url, pageIndex: pageIndex, size: size)
+        return image
     }
 }

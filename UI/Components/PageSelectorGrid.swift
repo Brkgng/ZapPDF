@@ -193,7 +193,7 @@ private struct SelectablePageThumbnail: View {
     @State private var thumbnail: CGImage?
     @State private var isLoading: Bool = true
     
-    private static let renderer = PDFRenderer()
+    private static let renderer = PDFRenderer.shared
     
     var body: some View {
         ZStack {
@@ -290,4 +290,3 @@ private struct SelectablePageThumbnail: View {
     )
     .padding()
 }
-

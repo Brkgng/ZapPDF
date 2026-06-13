@@ -42,6 +42,9 @@ struct DraggablePageGrid: View {
     
     /// The source PDF file for thumbnail loading.
     let pdfFile: PDFFile
+
+    /// Shared page thumbnail session for the visible reorder screen.
+    var thumbnailSession: PDFThumbnailSession? = nil
     
     /// Currently selected page index (binding).
     @Binding var selectedIndex: Int?
@@ -162,7 +165,8 @@ struct DraggablePageGrid: View {
                                 displayNumber: index + 1,
                                 isSelected: true,
                                 size: size,
-                                rotation: page.rotation
+                                rotation: page.rotation,
+                                thumbnailSession: thumbnailSession
                             )
                             .opacity(0.8)
                         }
@@ -185,7 +189,8 @@ struct DraggablePageGrid: View {
             displayNumber: index + 1,
             isSelected: selectedIndex == index,
             size: size,
-            rotation: page.rotation
+            rotation: page.rotation,
+            thumbnailSession: thumbnailSession
         )
         .contentShape(Rectangle())
         .onTapGesture {
@@ -259,6 +264,7 @@ struct PageDropDelegate: DropDelegate {
 struct DraggablePageList: View {
     let pages: [PageItem]
     let pdfFile: PDFFile
+    var thumbnailSession: PDFThumbnailSession? = nil
     @Binding var selectedIndex: Int?
     let onMove: (IndexSet, Int) -> Void
     
@@ -278,7 +284,8 @@ struct DraggablePageList: View {
                         displayNumber: index + 1,
                         isSelected: selectedIndex == index,
                         size: CGSize(width: 60, height: 85),
-                        rotation: page.rotation
+                        rotation: page.rotation,
+                        thumbnailSession: thumbnailSession
                     )
                     
                     VStack(alignment: .leading, spacing: 4) {

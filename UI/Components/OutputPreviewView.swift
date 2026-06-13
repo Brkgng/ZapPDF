@@ -44,7 +44,7 @@ struct OutputPreviewView: View {
     @State private var debounceTask: Task<Void, Never>?
     
     /// Shared renderer instance for thumbnail generation.
-    private static let renderer = PDFRenderer()
+    private static let renderer = PDFRenderer.shared
     
     // MARK: - Body
     
