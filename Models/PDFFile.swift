@@ -69,17 +69,18 @@ struct PDFFile: Identifiable, Hashable, Sendable {
         self.fileName = url.lastPathComponent
         self.origin = origin
         
-        // Extract metadata within security scope
-        let metadata = try await url.withSecurityScopeAsync {
-            try PDFFile.extractMetadata(from: url)
+        // Extract metadata and create bookmark within security scope so that
+        // both operations benefit from sandbox access for security-scoped URLs.
+        let (metadata, bookmark) = try await url.withSecurityScopeAsync {
+            let metadata = try PDFFile.extractMetadata(from: url)
+            let bookmark = try? url.createBookmarkData()
+            return (metadata, bookmark)
         }
         
         self.pageCount = metadata.pageCount
         self.fileSize = metadata.fileSize
         self.modificationDate = metadata.modificationDate
-        
-        // Create bookmark data for persistence (may fail, that's OK)
-        self.bookmarkData = try? url.createBookmarkData()
+        self.bookmarkData = bookmark
     }
     
     /// Internal initializer for creating PDFFile with known values (used in tests).

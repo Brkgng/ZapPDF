@@ -738,19 +738,13 @@ struct DashboardView: View {
     private func handleFileImport(_ result: Result<[URL], Error>) {
         switch result {
         case .success(let urls):
-            // Start security-scoped access (for file picker, URLs may need access)
-            let accessibleURLs = urls.compactMap { url -> URL? in
-                guard url.startAccessingSecurityScopedResource() else { return nil }
-                return url
-            }
-
+            // PDFFile.init handles security-scoped access internally via
+            // withSecurityScopeAsync, so we pass URLs through directly.
+            // Do NOT filter URLs based on startAccessingSecurityScopedResource()
+            // — it returns false when the file is already accessible (no scope
+            // needed), which does NOT mean the file is inaccessible.
             Task {
-                await viewModel.addFiles(urls: accessibleURLs)
-
-                // Stop accessing after files are loaded
-                for url in accessibleURLs {
-                    url.stopAccessingSecurityScopedResource()
-                }
+                await viewModel.addFiles(urls: urls)
             }
 
         case .failure(let error):
