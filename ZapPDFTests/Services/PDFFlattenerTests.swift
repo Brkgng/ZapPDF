@@ -148,6 +148,9 @@ struct PDFFlattenerTests {
         let flattener = PDFFlattener()
         var hasStarted = false
         
+        // Clean any stale partial outputs from prior runs before asserting cleanup later
+        Self.removeLeftoverOutputs(matching: "flattened_cancel_test")
+        
         // Start flatten in background
         let task = Task {
             try await flattener.flatten(
@@ -174,7 +177,9 @@ struct PDFFlattenerTests {
             _ = try await task.value
             Issue.record("Should have thrown error")
         } catch PDFEngineError.cancelled {
-            // Success
+            // Partial output must be cleaned up; no file should linger in temp dir
+            let leftovers = Self.leftoverOutputs(matching: "flattened_cancel_test")
+            #expect(leftovers.isEmpty, "Partial output should be cleaned up after cancellation, found: \(leftovers)")
             return
         } catch {
             Issue.record("Threw unexpected error: \(error)")
@@ -255,5 +260,26 @@ struct PDFFlattenerTests {
             count + (flattenedDoc.page(at: i)?.annotations.count ?? 0)
         }
         #expect(flattenedAnnotationCount == 0, "Flattened PDF should have no annotations")
+    }
+    
+    // MARK: - Helpers
+    
+    /// Returns any leftover flatten output files in the temp directory whose name
+    /// starts with the given prefix (excluding the `.pdf` extension).
+    private static func leftoverOutputs(matching prefix: String) -> [URL] {
+        let tempDir = FileManager.default.temporaryDirectory
+        let contents = (try? FileManager.default.contentsOfDirectory(
+            at: tempDir,
+            includingPropertiesForKeys: nil
+        )) ?? []
+        return contents.filter { $0.deletingPathExtension().lastPathComponent.hasPrefix(prefix) }
+    }
+    
+    /// Removes any stale flatten output files matching the prefix so a later
+    /// cleanup assertion is not polluted by a prior crashed run.
+    private static func removeLeftoverOutputs(matching prefix: String) {
+        for url in leftoverOutputs(matching: prefix) {
+            try? FileManager.default.removeItem(at: url)
+        }
     }
 }

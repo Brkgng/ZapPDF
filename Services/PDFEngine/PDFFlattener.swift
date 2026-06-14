@@ -106,6 +106,14 @@ actor PDFFlattener {
                 throw PDFEngineError.writeFailed(outputURL)
             }
             
+            var didComplete = false
+            defer {
+                pdfContext.closePDF()
+                if !didComplete {
+                    try? FileManager.default.removeItem(at: outputURL)
+                }
+            }
+            
             // Process each page
             for pageIndex in 0..<pageCount {
                 try await self.checkCancellation()
@@ -158,13 +166,12 @@ actor PDFFlattener {
                 progress(PDFProgressPolicy.finalizingStart)
             }
             
-            // Close the PDF context (finalizes file write)
-            pdfContext.closePDF()
-            
+            // Close the PDF context (defer finalizes the file write)
             await MainActor.run {
                 progress(1.0)
             }
             
+            didComplete = true
             return outputURL
         }
     }
