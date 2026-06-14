@@ -9,15 +9,15 @@ import Testing
 import Foundation
 @testable import ZapPDF
 
-@Suite("KeychainHelper Tests")
+@Suite("KeychainHelper Tests", .serialized)
 struct KeychainHelperTests {
     
     // MARK: - Setup/Teardown
     
     /// Clean up test keys before/after each test
     private func cleanup() {
-        try? KeychainHelper.delete(for: .actionsRemaining)
-        try? KeychainHelper.delete(for: .lastUsageReset)
+        try? KeychainHelper.delete(for: .keychainHelperTestPrimary)
+        try? KeychainHelper.delete(for: .keychainHelperTestSecondary)
     }
     
     // MARK: - Save and Load Tests
@@ -30,10 +30,10 @@ struct KeychainHelperTests {
         let testData = Data("test_secret_data".utf8)
         
         // Save
-        try KeychainHelper.save(testData, for: .actionsRemaining)
+        try KeychainHelper.save(testData, for: .keychainHelperTestPrimary)
         
         // Load
-        let loaded = try KeychainHelper.load(for: .actionsRemaining)
+        let loaded = try KeychainHelper.load(for: .keychainHelperTestPrimary)
         
         #expect(loaded == testData)
     }
@@ -42,7 +42,7 @@ struct KeychainHelperTests {
     func loadNonExistentKey() throws {
         cleanup()
         
-        let loaded = try KeychainHelper.load(for: .actionsRemaining)
+        let loaded = try KeychainHelper.load(for: .keychainHelperTestPrimary)
         
         #expect(loaded == nil)
     }
@@ -56,13 +56,13 @@ struct KeychainHelperTests {
         let secondData = Data("second_value".utf8)
         
         // Save first value
-        try KeychainHelper.save(firstData, for: .actionsRemaining)
+        try KeychainHelper.save(firstData, for: .keychainHelperTestPrimary)
         
         // Overwrite with second value
-        try KeychainHelper.save(secondData, for: .actionsRemaining)
+        try KeychainHelper.save(secondData, for: .keychainHelperTestPrimary)
         
         // Load should return second value
-        let loaded = try KeychainHelper.load(for: .actionsRemaining)
+        let loaded = try KeychainHelper.load(for: .keychainHelperTestPrimary)
         
         #expect(loaded == secondData)
     }
@@ -76,16 +76,16 @@ struct KeychainHelperTests {
         let testData = Data("to_be_deleted".utf8)
         
         // Save
-        try KeychainHelper.save(testData, for: .actionsRemaining)
+        try KeychainHelper.save(testData, for: .keychainHelperTestPrimary)
         
         // Verify it exists
-        #expect(KeychainHelper.exists(for: .actionsRemaining) == true)
+        #expect(KeychainHelper.exists(for: .keychainHelperTestPrimary) == true)
         
         // Delete
-        try KeychainHelper.delete(for: .actionsRemaining)
+        try KeychainHelper.delete(for: .keychainHelperTestPrimary)
         
         // Verify it's gone
-        let loaded = try KeychainHelper.load(for: .actionsRemaining)
+        let loaded = try KeychainHelper.load(for: .keychainHelperTestPrimary)
         #expect(loaded == nil)
     }
     
@@ -94,7 +94,7 @@ struct KeychainHelperTests {
         cleanup()
         
         // Should not throw
-        try KeychainHelper.delete(for: .actionsRemaining)
+        try KeychainHelper.delete(for: .keychainHelperTestPrimary)
     }
     
     // MARK: - Exists Tests
@@ -106,16 +106,16 @@ struct KeychainHelperTests {
         
         let testData = Data("exists_test".utf8)
         
-        try KeychainHelper.save(testData, for: .actionsRemaining)
+        try KeychainHelper.save(testData, for: .keychainHelperTestPrimary)
         
-        #expect(KeychainHelper.exists(for: .actionsRemaining) == true)
+        #expect(KeychainHelper.exists(for: .keychainHelperTestPrimary) == true)
     }
     
     @Test("Exists returns false for missing items")
     func existsReturnsFalse() {
         cleanup()
         
-        #expect(KeychainHelper.exists(for: .actionsRemaining) == false)
+        #expect(KeychainHelper.exists(for: .keychainHelperTestPrimary) == false)
     }
     
     // MARK: - Integer Convenience Tests
@@ -128,10 +128,10 @@ struct KeychainHelperTests {
         let testValue = 42
         
         // Save
-        try KeychainHelper.saveInt(testValue, for: .actionsRemaining)
+        try KeychainHelper.saveInt(testValue, for: .keychainHelperTestPrimary)
         
         // Load
-        let loaded = try KeychainHelper.loadInt(for: .actionsRemaining)
+        let loaded = try KeychainHelper.loadInt(for: .keychainHelperTestPrimary)
         
         #expect(loaded == testValue)
     }
@@ -140,7 +140,7 @@ struct KeychainHelperTests {
     func loadIntNonExistent() throws {
         cleanup()
         
-        let loaded = try KeychainHelper.loadInt(for: .actionsRemaining)
+        let loaded = try KeychainHelper.loadInt(for: .keychainHelperTestPrimary)
         
         #expect(loaded == nil)
     }
@@ -152,9 +152,9 @@ struct KeychainHelperTests {
         
         let testValue = 0
         
-        try KeychainHelper.saveInt(testValue, for: .actionsRemaining)
+        try KeychainHelper.saveInt(testValue, for: .keychainHelperTestPrimary)
         
-        let loaded = try KeychainHelper.loadInt(for: .actionsRemaining)
+        let loaded = try KeychainHelper.loadInt(for: .keychainHelperTestPrimary)
         
         #expect(loaded == testValue)
     }
@@ -166,9 +166,9 @@ struct KeychainHelperTests {
         
         let testValue = -5
         
-        try KeychainHelper.saveInt(testValue, for: .actionsRemaining)
+        try KeychainHelper.saveInt(testValue, for: .keychainHelperTestPrimary)
         
-        let loaded = try KeychainHelper.loadInt(for: .actionsRemaining)
+        let loaded = try KeychainHelper.loadInt(for: .keychainHelperTestPrimary)
         
         #expect(loaded == testValue)
     }
@@ -180,9 +180,9 @@ struct KeychainHelperTests {
         
         let testValue = Int.max
         
-        try KeychainHelper.saveInt(testValue, for: .actionsRemaining)
+        try KeychainHelper.saveInt(testValue, for: .keychainHelperTestPrimary)
         
-        let loaded = try KeychainHelper.loadInt(for: .actionsRemaining)
+        let loaded = try KeychainHelper.loadInt(for: .keychainHelperTestPrimary)
         
         #expect(loaded == testValue)
     }
@@ -197,20 +197,20 @@ struct KeychainHelperTests {
         let data1 = Data("value_for_key_1".utf8)
         let data2 = Data("value_for_key_2".utf8)
         
-        try KeychainHelper.save(data1, for: .actionsRemaining)
-        try KeychainHelper.save(data2, for: .lastUsageReset)
+        try KeychainHelper.save(data1, for: .keychainHelperTestPrimary)
+        try KeychainHelper.save(data2, for: .keychainHelperTestSecondary)
         
-        let loaded1 = try KeychainHelper.load(for: .actionsRemaining)
-        let loaded2 = try KeychainHelper.load(for: .lastUsageReset)
+        let loaded1 = try KeychainHelper.load(for: .keychainHelperTestPrimary)
+        let loaded2 = try KeychainHelper.load(for: .keychainHelperTestSecondary)
         
         #expect(loaded1 == data1)
         #expect(loaded2 == data2)
         
         // Delete one, other should remain
-        try KeychainHelper.delete(for: .actionsRemaining)
+        try KeychainHelper.delete(for: .keychainHelperTestPrimary)
         
-        let afterDelete1 = try KeychainHelper.load(for: .actionsRemaining)
-        let afterDelete2 = try KeychainHelper.load(for: .lastUsageReset)
+        let afterDelete1 = try KeychainHelper.load(for: .keychainHelperTestPrimary)
+        let afterDelete2 = try KeychainHelper.load(for: .keychainHelperTestSecondary)
         
         #expect(afterDelete1 == nil)
         #expect(afterDelete2 == data2)

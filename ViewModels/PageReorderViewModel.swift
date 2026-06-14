@@ -78,9 +78,6 @@ final class PageReorderViewModel: ObservableObject {
     /// The usage manager for tracking free tier usage.
     private let usageManager: any UsageManaging
     
-    /// Current save task for cancellation.
-    private var saveTask: Task<URL, Error>?
-    
     // MARK: - Initialization
     
     /// Creates a PageReorderViewModel for the given PDF file.
@@ -435,8 +432,6 @@ final class PageReorderViewModel: ObservableObject {
     
     /// Cancel any ongoing save operation.
     func cancel() {
-        saveTask?.cancel()
-        saveTask = nil
         Task {
             await reorderer.cancel()
         }

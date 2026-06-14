@@ -11,14 +11,6 @@ import Foundation
 import RevenueCat
 #endif
 
-// MARK: - Cache Keys
-
-/// Keys for persisting entitlement state to UserDefaults.
-/// Keys for persisting entitlement state to UserDefaults.
-private enum CacheKeys {
-    static let lastSync = "com.zappdf.cached.lastSync"
-}
-
 // MARK: - RevenueCat Manager
 
 /// Actor managing RevenueCat SDK integration for subscriptions.
@@ -123,13 +115,6 @@ actor RevenueCatManager: SubscriptionManaging {
         return .none
     }
     
-    // MARK: - Offline Caching
-    
-    /// Cache entitlement state to UserDefaults for offline support.
-    private func cacheState() {
-        UserDefaults.standard.set(Date(), forKey: CacheKeys.lastSync)
-    }
-    
     // MARK: - Status
     
     /// Refresh subscription status from RevenueCat.
@@ -210,9 +195,6 @@ actor RevenueCatManager: SubscriptionManaging {
         } else {
             proStatus = .inactive
         }
-        
-        // Persist for offline support
-        cacheState()
         
         // Sync with UsageManager
         await UsageManager.shared.setProStatus(hasProEntitlement)

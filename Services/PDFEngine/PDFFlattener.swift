@@ -191,8 +191,4 @@ actor PDFFlattener {
         }
         try Task.checkCancellation()
     }
-    
-    private nonisolated func checkCancellationSync() throws {
-        try Task.checkCancellation()
-    }
 }

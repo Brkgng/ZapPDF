@@ -226,8 +226,4 @@ actor PDFReorderer {
         }
         try Task.checkCancellation()
     }
-    
-    private nonisolated func checkCancellationSync() throws {
-        try Task.checkCancellation()
-    }
 }

@@ -2,7 +2,7 @@ import Testing
 import Foundation
 @testable import ZapPDF
 
-@Suite("UsageManager Persistence Tests")
+@Suite("UsageManager Persistence Tests", .serialized)
 struct UsageManagerPersistenceTests {
     
     // Legacy key

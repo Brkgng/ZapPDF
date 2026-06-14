@@ -74,23 +74,32 @@ enum KeychainHelper {
         /// Remaining free actions count
         case actionsRemaining = "com.zappdf.actionsRemaining"
         
-        /// Pro subscription receipt data
-        case proSubscriptionReceipt = "com.zappdf.proReceipt"
-        
-        /// Last usage reset timestamp
-        case lastUsageReset = "com.zappdf.lastReset"
-        
         /// Pro subscription status (cached for offline support)
         case proStatus = "com.zappdf.proStatus"
         
         /// Last app version that the review prompt was shown for
         case lastReviewPromptVersion = "com.zappdf.review.lastPromptVersion"
+
+        #if DEBUG
+        /// Primary key used by KeychainHelper tests.
+        case keychainHelperTestPrimary = "com.zappdf.tests.keychain.primary"
+
+        /// Secondary key used by KeychainHelper tests.
+        case keychainHelperTestSecondary = "com.zappdf.tests.keychain.secondary"
+        #endif
     }
     
     // MARK: - Private Constants
     
-    /// Service identifier for all Keychain items
-    private static let serviceIdentifier = "com.zappdf.keychain"
+    /// Service identifier for all Keychain items.
+    private static let serviceIdentifier: String = {
+        #if DEBUG
+        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
+            return "com.zappdf.keychain.tests.\(ProcessInfo.processInfo.processIdentifier)"
+        }
+        #endif
+        return "com.zappdf.keychain"
+    }()
     
     // MARK: - Public Methods
     
