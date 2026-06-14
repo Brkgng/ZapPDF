@@ -389,7 +389,26 @@ final class DashboardViewModel: ObservableObject {
         let actionFiles = filesForAction(action)
         return action.fileCountError(for: actionFiles.count)
     }
-    
+
+    /// Compute a pure, I/O-free preflight estimate for a merge.
+    ///
+    /// Uses the already-known `pageCount`/`fileSize` metadata on the candidate
+    /// files so the UI can warn about unusually large merges before opening the
+    /// processing view. The engine re-checks the hard cap against actual file
+    /// I/O, so this is an estimate for UX, not the safety net.
+    ///
+    /// - Returns: A `MergePreflightSummary`, or `nil` if no merge files are selected.
+    func mergePreflightSummary() -> MergePreflightSummary? {
+        let mergeFiles = filesForAction(.merge)
+        guard !mergeFiles.isEmpty else { return nil }
+
+        return MergePreflightSummary.evaluate(
+            totalPages: mergeFiles.totalPageCount,
+            totalBytes: mergeFiles.totalFileSize
+        )
+    }
+
+
     /// Check if the user should see the paywall before performing an action.
     ///
     /// - Returns: true if paywall should be shown (no free actions remaining)

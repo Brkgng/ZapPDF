@@ -78,6 +78,15 @@ enum L10n {
         }
         
         static let mergedOutputName = String(localized: "dashboard.mergedOutputName", defaultValue: "Merged")
+
+        static func largeMergeConfirmation(pages: Int, size: String) -> String {
+            String(
+                localized: "This merge combines \(pages) pages (\(size)). Large merges may take a while and use significant memory. Continue?",
+                comment: "Confirmation shown before a large merge"
+            )
+        }
+
+        static let largeMergeTitle = String(localized: "dashboard.largeMergeTitle", defaultValue: "Large Merge")
         
         static func couldNotLoadFile(_ filename: String) -> String {
             String(localized: "Could not load '\(filename)'. Please select a valid PDF file.", comment: "Single file load error")
@@ -411,6 +420,14 @@ enum L10n {
                 comment: "Error when outline/bookmark merge fails"
             )
         }
+
+        static func mergeTooLarge(pageCount: Int, inputBytes: Int64) -> String {
+            let formattedBytes = ByteCountFormatter.string(fromByteCount: inputBytes, countStyle: .file)
+            return String(
+                localized: "This merge combines \(pageCount) pages (\(formattedBytes)) and is too large to merge safely. Try merging fewer or smaller files.",
+                comment: "Error when a merge exceeds the safe preflight limits"
+            )
+        }
         
         static func accessDenied(filename: String) -> String {
             String(localized: "Cannot access '\(filename)'.", comment: "Error when file access is denied")
@@ -432,6 +449,7 @@ enum L10n {
         static let tryAgain = String(localized: "error.recovery.tryAgain", defaultValue: "Please try again.")
         static let tryAnotherPDF = String(localized: "error.recovery.tryAnotherPDF", defaultValue: "Try a different PDF file.")
         static let tryDisablingBookmarks = String(localized: "error.recovery.tryDisablingBookmarks", defaultValue: "Try merging again with bookmark preservation turned off.")
+        static let mergeFewerFiles = String(localized: "error.recovery.mergeFewerFiles", defaultValue: "Try merging fewer or smaller files at once.")
         static let upgradeForUnlimited = String(localized: "error.recovery.upgradeForUnlimited", defaultValue: "Upgrade to Pro for unlimited PDF operations.")
         
         // Purchase/Restore errors

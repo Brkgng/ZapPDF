@@ -44,6 +44,9 @@ enum PDFEngineError: Error, LocalizedError, Sendable {
 
     /// Failed to merge document outlines/bookmarks
     case outlineMergeFailed(URL)
+
+    /// The merge exceeds the safe preflight limits (page count or input bytes).
+    case mergeTooLarge(pageCount: Int, inputBytes: Int64)
     
     // MARK: - LocalizedError
     
@@ -71,6 +74,8 @@ enum PDFEngineError: Error, LocalizedError, Sendable {
             return L10n.Error.pageLoadFailed(filename: url.lastPathComponent, pageIndex: pageIndex + 1)
         case .outlineMergeFailed(let url):
             return L10n.Error.outlineMergeFailed(filename: url.lastPathComponent)
+        case .mergeTooLarge(let pageCount, let inputBytes):
+            return L10n.Error.mergeTooLarge(pageCount: pageCount, inputBytes: inputBytes)
         }
     }
     
@@ -98,6 +103,8 @@ enum PDFEngineError: Error, LocalizedError, Sendable {
             return L10n.Error.tryAnotherPDF
         case .outlineMergeFailed:
             return L10n.Error.tryDisablingBookmarks
+        case .mergeTooLarge:
+            return L10n.Error.mergeFewerFiles
         }
     }
 }

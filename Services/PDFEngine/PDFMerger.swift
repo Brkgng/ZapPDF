@@ -136,6 +136,17 @@ actor PDFMerger {
         let totalPages = preflightSources.reduce(0) { $0 + $1.pageCount }
         let inputBytes = preflightSources.reduce(Int64(0)) { $0 + $1.fileSize }
 
+        let preflightSummary = MergePreflightSummary.evaluate(
+            totalPages: totalPages,
+            totalBytes: inputBytes
+        )
+        if preflightSummary.risk == .unsafe {
+            throw PDFEngineError.mergeTooLarge(
+                pageCount: totalPages,
+                inputBytes: inputBytes
+            )
+        }
+
         let outputDocument = PDFDocument()
         var processedPages = 0
 
@@ -161,31 +172,34 @@ actor PDFMerger {
                 for pageIndex in 0..<sourceDocument.pageCount {
                     try self.checkCancellation()
 
-                    guard let sourcePage = sourceDocument.page(at: pageIndex) else {
-                        throw PDFEngineError.pageLoadFailed(resolvedURL, pageIndex: pageIndex)
+                    try autoreleasepool {
+                        guard let sourcePage = sourceDocument.page(at: pageIndex) else {
+                            throw PDFEngineError.pageLoadFailed(resolvedURL, pageIndex: pageIndex)
+                        }
+
+                        let copiedPage = try Self.copyPageForMerge(
+                            from: sourceDocument,
+                            at: pageIndex,
+                            sourceURL: resolvedURL
+                        )
+
+                        let outputPageIndex = outputDocument.pageCount
+                        outputDocument.insert(copiedPage, at: outputPageIndex)
+
+                        localPageMap[pageIndex] = outputPageIndex
+                        sourcePageMap[SourcePageKey(documentID: sourceDocumentID, pageIndex: pageIndex)] = outputPageIndex
+                        pendingLinkRemaps.append(
+                            contentsOf: Self.pendingLinkRemaps(
+                                from: sourcePage,
+                                sourceDocument: sourceDocument,
+                                sourceDocumentID: sourceDocumentID,
+                                outputPageIndex: outputPageIndex
+                            )
+                        )
+
+                        processedPages += 1
                     }
 
-                    let copiedPage = try Self.copyPageForMerge(
-                        from: sourceDocument,
-                        at: pageIndex,
-                        sourceURL: resolvedURL
-                    )
-
-                    let outputPageIndex = outputDocument.pageCount
-                    outputDocument.insert(copiedPage, at: outputPageIndex)
-
-                    localPageMap[pageIndex] = outputPageIndex
-                    sourcePageMap[SourcePageKey(documentID: sourceDocumentID, pageIndex: pageIndex)] = outputPageIndex
-                    pendingLinkRemaps.append(
-                        contentsOf: Self.pendingLinkRemaps(
-                            from: sourcePage,
-                            sourceDocument: sourceDocument,
-                            sourceDocumentID: sourceDocumentID,
-                            outputPageIndex: outputPageIndex
-                        )
-                    )
-
-                    processedPages += 1
                     await self.reportProcessingProgress(
                         processedPages: processedPages,
                         totalPages: totalPages,

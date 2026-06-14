@@ -3468,6 +3468,53 @@
         }
       }
     },
+    "dashboard.largeMergeTitle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Große Zusammenführung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Large Merge"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fusión grande"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fusion volumineuse"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大規模な結合"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Büyük Birleştirme"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大型合并"
+          }
+        }
+      }
+    },
     "dashboard.mergedOutputName" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -4075,6 +4122,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "请使用文件选择器重新选择文件。"
+          }
+        }
+      }
+    },
+    "error.recovery.mergeFewerFiles" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versuchen Sie, weniger oder kleinere Dateien auf einmal zusammenzuführen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Try merging fewer or smaller files at once."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intenta fusionar menos archivos o archivos más pequeños a la vez."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essayez de fusionner moins de fichiers ou des fichiers plus petits à la fois."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一度に結合するファイル数を減らすか、より小さいファイルを使用してください。"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tek seferde daha az veya daha küçük dosya birleştirmeyi deneyin."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请尝试一次合并更少或更小的文件。"
           }
         }
       }
@@ -12994,6 +13088,100 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法访问「%@」。请重新选择文件。"
+          }
+        }
+      }
+    },
+    "This merge combines %lld pages (%@). Large merges may take a while and use significant memory. Continue?" : {
+      "comment" : "Confirmation shown before a large merge",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Zusammenführung umfasst %1$lld Seiten (%2$@). Große Zusammenführungen können eine Weile dauern und viel Arbeitsspeicher verwenden. Fortfahren?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This merge combines %1$lld pages (%2$@). Large merges may take a while and use significant memory. Continue?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta fusión combina %1$lld páginas (%2$@). Las fusiones grandes pueden tardar un tiempo y usar mucha memoria. ¿Continuar?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette fusion combine %1$lld pages (%2$@). Les fusions volumineuses peuvent prendre du temps et utiliser beaucoup de mémoire. Continuer ?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この結合には%1$lldページ（%2$@）が含まれます。大規模な結合には時間がかかり、多くのメモリを使用する場合があります。続行しますか？"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu birleştirme %1$lld sayfayı (%2$@) kapsıyor. Büyük birleştirmeler biraz zaman alabilir ve önemli miktarda bellek kullanabilir. Devam edilsin mi?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此次合并包含 %1$lld 页（%2$@）。大型合并可能需要一些时间并占用大量内存。继续吗？"
+          }
+        }
+      }
+    },
+    "This merge combines %lld pages (%@) and is too large to merge safely. Try merging fewer or smaller files." : {
+      "comment" : "Error when a merge exceeds the safe preflight limits",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Zusammenführung umfasst %1$lld Seiten (%2$@) und ist zu groß, um sicher zusammengeführt zu werden. Versuchen Sie, weniger oder kleinere Dateien zusammenzuführen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This merge combines %1$lld pages (%2$@) and is too large to merge safely. Try merging fewer or smaller files."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta fusión combina %1$lld páginas (%2$@) y es demasiado grande para fusionarla de forma segura. Intenta fusionar menos archivos o archivos más pequeños."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette fusion combine %1$lld pages (%2$@) et est trop volumineuse pour être fusionnée en toute sécurité. Essayez de fusionner moins de fichiers ou des fichiers plus petits."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この結合には%1$lldページ（%2$@）が含まれ、安全に結合するには大きすぎます。結合するファイル数を減らすか、より小さいファイルを使用してください。"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu birleştirme %1$lld sayfayı (%2$@) kapsıyor ve güvenli şekilde birleştirmek için çok büyük. Daha az veya daha küçük dosya birleştirmeyi deneyin."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此次合并包含 %1$lld 页（%2$@），过大而无法安全合并。请尝试合并更少或更小的文件。"
           }
         }
       }

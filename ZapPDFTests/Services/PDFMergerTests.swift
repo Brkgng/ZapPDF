@@ -410,4 +410,34 @@ struct PDFMergerTests {
             Issue.record("Threw unexpected error: \(error)")
         }
     }
+
+    @Test("Merging several files preserves page totals (autoreleasepool regression)")
+    func mergingSeveralFilesPreservesPageTotals() async throws {
+        let id = UUID().uuidString
+        let urls = try [
+            PDFTestHelpers.createTestPDF(pageCount: 3, identifier: "multi_1_\(id)"),
+            PDFTestHelpers.createTestPDF(pageCount: 2, identifier: "multi_2_\(id)"),
+            PDFTestHelpers.createTestPDF(pageCount: 4, identifier: "multi_3_\(id)"),
+            PDFTestHelpers.createTestPDF(pageCount: 1, identifier: "multi_4_\(id)")
+        ]
+        defer { PDFTestHelpers.cleanup(urls: urls) }
+
+        let files: [PDFFile] = [
+            PDFFile(url: urls[0], fileName: "a.pdf", pageCount: 3, fileSize: 1000),
+            PDFFile(url: urls[1], fileName: "b.pdf", pageCount: 2, fileSize: 1000),
+            PDFFile(url: urls[2], fileName: "c.pdf", pageCount: 4, fileSize: 1000),
+            PDFFile(url: urls[3], fileName: "d.pdf", pageCount: 1, fileSize: 1000)
+        ]
+
+        let merger = PDFMerger()
+        let outputURL = try await merger.merge(
+            files: files,
+            options: .init(outputFileName: "multi_merged_\(id)"),
+            progress: { _ in }
+        )
+        defer { PDFTestHelpers.cleanup(url: outputURL) }
+
+        let document = PDFDocument(url: outputURL)
+        #expect(document?.pageCount == 10)
+    }
 }

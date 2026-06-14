@@ -81,6 +81,8 @@ struct DashboardView: View {
     @State private var splitMode: PDFSplitter.SplitMode = .splitEvery(n: 1)
     @State private var draggingFileID: UUID?  // For macOS drag-and-drop
     @State private var showClearConfirmation = false
+    @State private var showLargeMergeConfirmation = false
+    @State private var largeMergeSummary: MergePreflightSummary?
     @State private var showUndoToast = false
     @State private var clearedFiles: [PDFFile] = []
     @State private var clearedSelection: Set<UUID> = []
@@ -192,6 +194,26 @@ struct DashboardView: View {
                     Button(L10n.Action.cancel, role: .cancel) { }
                 } message: {
                     Text(L10n.Dashboard.clearAllMessage)
+                }
+                .confirmationDialog(
+                    L10n.Dashboard.largeMergeTitle,
+                    isPresented: $showLargeMergeConfirmation,
+                    titleVisibility: .visible
+                ) {
+                    Button(L10n.Action.continue) {
+                        largeMergeSummary = nil
+                        startMerge()
+                    }
+                    Button(L10n.Action.cancel, role: .cancel) {
+                        largeMergeSummary = nil
+                    }
+                } message: {
+                    if let summary = largeMergeSummary {
+                        Text(L10n.Dashboard.largeMergeConfirmation(
+                            pages: summary.totalPages,
+                            size: ByteCountFormatter.string(fromByteCount: summary.totalBytes, countStyle: .file)
+                        ))
+                    }
                 }
                 .task {
                     await viewModel.loadSubscriptionState()
@@ -762,8 +784,13 @@ struct DashboardView: View {
 
                     switch action {
                     case .merge:
-                        // Show processing directly for merge
-                        startAction(.merge, options: .merge(outputFileName: L10n.Dashboard.mergedOutputName))
+                        if let summary = viewModel.mergePreflightSummary(),
+                           summary.risk == .warn {
+                            largeMergeSummary = summary
+                            showLargeMergeConfirmation = true
+                        } else {
+                            startMerge()
+                        }
 
                     case .split:
                         // Show split options sheet
@@ -786,6 +813,10 @@ struct DashboardView: View {
         selectedAction = action
         processingOptions = options
         showProcessingView = true
+    }
+
+    private func startMerge() {
+        startAction(.merge, options: .merge(outputFileName: L10n.Dashboard.mergedOutputName))
     }
 
     // MARK: - Helpers
