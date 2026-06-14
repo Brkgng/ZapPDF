@@ -87,6 +87,9 @@ struct DashboardView: View {
     @State private var clearedFiles: [PDFFile] = []
     @State private var clearedSelection: Set<UUID> = []
     @State private var showSettings = false
+    @State private var showFileShareSheet = false
+    @State private var fileShareItems: [Any] = []
+    @State private var temporaryShareDirectories: [URL] = []
     #if os(iOS)
     @State private var iOSActionGridWidth: CGFloat = 0
     #endif
@@ -100,8 +103,9 @@ struct DashboardView: View {
     @State private var showPhotoImporter = false
     @State private var isProcessingScan = false
     @State private var scanProgress: Double? = nil
-    @State private var showScanShareSheet = false
-    @State private var scanShareItems: [Any] = []
+    @State private var showScanSuccessToast = false
+    @State private var scanSuccessToastID: UUID?
+    @State private var lastScanURL: URL?
     #endif
 
     // MARK: - Body
@@ -239,6 +243,12 @@ struct DashboardView: View {
                     }
                 }
                 #if os(iOS)
+                .overlay(alignment: .bottom) {
+                    if showScanSuccessToast {
+                        scanSuccessToast
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }
+                }
                 .fullScreenCover(isPresented: $showScanner) {
                     DocumentScannerView(
                         isPresented: $showScanner,
@@ -254,8 +264,10 @@ struct DashboardView: View {
                         onItemProvidersSelected: handlePhotoProvidersSelected
                     )
                 }
-                .sheet(isPresented: $showScanShareSheet) {
-                    ShareSheet(items: scanShareItems)
+                .sheet(isPresented: $showFileShareSheet, onDismiss: cleanupTemporaryShareFiles) {
+                    ShareSheet(items: fileShareItems) { _ in
+                        cleanupTemporaryShareFiles()
+                    }
                 }
                 .overlay {
                     if isProcessingScan {
@@ -389,6 +401,14 @@ struct DashboardView: View {
 
                         Divider()
 
+                        Button {
+                            shareFile(file)
+                        } label: {
+                            Label(L10n.ContextMenu.share, systemImage: "square.and.arrow.up")
+                        }
+
+                        Divider()
+
                         Button(role: .destructive) {
                             viewModel.removeFile(file)
                         } label: {
@@ -431,6 +451,14 @@ struct DashboardView: View {
                             viewModel.isSelected(file) ? L10n.Common.deselect : L10n.Common.select,
                             systemImage: viewModel.isSelected(file) ? "circle" : "checkmark.circle"
                         )
+                    }
+
+                    Divider()
+
+                    Button {
+                        shareFile(file)
+                    } label: {
+                        Label(L10n.ContextMenu.share, systemImage: "square.and.arrow.up")
                     }
 
                     Divider()
@@ -900,6 +928,154 @@ struct DashboardView: View {
         #endif
     }
 
+    // MARK: - File Sharing
+
+    private func shareFile(_ file: PDFFile) {
+        Task {
+            do {
+                let shareableFile: ShareableFile
+                if file.origin == .internalScan {
+                    shareableFile = ShareableFile(url: file.url, cleanupDirectory: nil)
+                } else {
+                    shareableFile = try await Task.detached(priority: .userInitiated) {
+                        try Self.prepareShareableFile(for: file)
+                    }.value
+                }
+
+                presentShareableFile(shareableFile)
+            } catch {
+                viewModel.errorMessage = error.localizedDescription
+            }
+        }
+    }
+
+    private func presentShareableFile(_ shareableFile: ShareableFile) {
+        #if os(iOS)
+        if let cleanupDirectory = shareableFile.cleanupDirectory {
+            temporaryShareDirectories.append(cleanupDirectory)
+        }
+        fileShareItems = [shareableFile.url]
+        showFileShareSheet = true
+        #else
+        guard let contentView = NSApp.keyWindow?.contentView else {
+            cleanupTemporaryShareDirectory(shareableFile.cleanupDirectory)
+            return
+        }
+
+        if let cleanupDirectory = shareableFile.cleanupDirectory {
+            temporaryShareDirectories.append(cleanupDirectory)
+            scheduleTemporaryShareCleanup(for: cleanupDirectory)
+        }
+
+        let picker = NSSharingServicePicker(items: [shareableFile.url])
+        picker.show(relativeTo: contentView.bounds, of: contentView, preferredEdge: .minY)
+        #endif
+    }
+
+    private struct ShareableFile: Sendable {
+        let url: URL
+        let cleanupDirectory: URL?
+    }
+
+    private nonisolated static func prepareShareableFile(for file: PDFFile) throws -> ShareableFile {
+        try file.withResolvedAccess { accessURL in
+            let fileManager = FileManager.default
+            let shareDirectory = fileManager.temporaryDirectory
+                .appendingPathComponent("ZapPDFShare-\(UUID().uuidString)", isDirectory: true)
+            let shareURL = shareDirectory.appendingPathComponent(file.fileName, isDirectory: false)
+
+            try fileManager.createDirectory(at: shareDirectory, withIntermediateDirectories: true)
+            try fileManager.copyItem(at: accessURL, to: shareURL)
+
+            return ShareableFile(url: shareURL, cleanupDirectory: shareDirectory)
+        }
+    }
+
+    private func cleanupTemporaryShareFiles() {
+        let directories = temporaryShareDirectories
+        temporaryShareDirectories.removeAll()
+        fileShareItems = []
+
+        for directory in directories {
+            cleanupTemporaryShareDirectory(directory)
+        }
+    }
+
+    private func cleanupTemporaryShareDirectory(_ directory: URL?) {
+        guard let directory else { return }
+
+        try? FileManager.default.removeItem(at: directory)
+        temporaryShareDirectories.removeAll { $0 == directory }
+    }
+
+    #if os(macOS)
+    private func scheduleTemporaryShareCleanup(for directory: URL) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(300))
+            cleanupTemporaryShareDirectory(directory)
+        }
+    }
+    #endif
+
+    // MARK: - Scan Success Toast
+
+    #if os(iOS)
+    private var scanSuccessToast: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.body)
+                .foregroundColor(.green)
+
+            Text(L10n.Scanner.scanAdded)
+                .font(.subheadline)
+
+            Spacer()
+
+            if let url = lastScanURL {
+                Button {
+                    fileShareItems = [url]
+                    showFileShareSheet = true
+                } label: {
+                    Text(L10n.ContextMenu.share)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundColor(.accentColor)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(.regularMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 16)
+    }
+
+    private func presentScanSuccessToast(for url: URL) {
+        let toastID = UUID()
+        scanSuccessToastID = toastID
+        lastScanURL = url
+
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+            showScanSuccessToast = true
+        }
+
+        Task {
+            try? await Task.sleep(for: .seconds(5))
+            await MainActor.run {
+                guard scanSuccessToastID == toastID else { return }
+
+                withAnimation(.easeOut(duration: 0.2)) {
+                    showScanSuccessToast = false
+                }
+                scanSuccessToastID = nil
+                lastScanURL = nil
+            }
+        }
+    }
+    #endif
+
     // MARK: - Scanning (iOS)
 
     #if os(iOS)
@@ -908,17 +1084,10 @@ struct DashboardView: View {
         scanProgress = nil  // Start with indeterminate progress
 
         Task {
-            var scanURLToShare: URL?
-
             // Ensure state is always reset, even if an unexpected error occurs
             defer {
                 isProcessingScan = false
                 scanProgress = nil
-
-                if let scanURLToShare {
-                    scanShareItems = [scanURLToShare]
-                    showScanShareSheet = true
-                }
             }
 
             do {
@@ -929,7 +1098,8 @@ struct DashboardView: View {
                     }
                 }
                 await viewModel.addFiles(urls: [result.pdfURL], origin: .internalScan)
-                scanURLToShare = result.pdfURL
+
+                presentScanSuccessToast(for: result.pdfURL)
 
                 // Show warning if some pages failed
                 if !result.isComplete {

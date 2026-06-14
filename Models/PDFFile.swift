@@ -161,7 +161,7 @@ struct PDFFile: Identifiable, Hashable, Sendable {
     /// bookmark to obtain a URL with a valid sandbox extension.
     ///
     /// - Returns: A resolved URL if bookmark exists, otherwise the original URL
-    func resolvedURL() throws -> URL {
+    nonisolated func resolvedURL() throws -> URL {
         // If no bookmark, return original URL (user-selected files work this way)
         guard let bookmarkData = self.bookmarkData else {
             return url
@@ -186,7 +186,7 @@ struct PDFFile: Identifiable, Hashable, Sendable {
     /// - Parameter operation: The operation to perform with file access
     /// - Returns: The result of the operation
     /// - Throws: Any error from bookmark resolution or the operation
-    func withResolvedAccess<T>(_ operation: (URL) throws -> T) throws -> T {
+    nonisolated func withResolvedAccess<T>(_ operation: (URL) throws -> T) throws -> T {
         let accessURL = try resolvedURL()
         return try accessURL.withSecurityScope {
             try operation(accessURL)

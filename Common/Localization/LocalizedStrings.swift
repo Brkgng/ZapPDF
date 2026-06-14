@@ -550,6 +550,7 @@ enum L10n {
     enum ContextMenu {
         static let showInFinder = String(localized: "contextMenu.showInFinder", defaultValue: "Show in Finder")
         static let copyName = String(localized: "contextMenu.copyName", defaultValue: "Copy Name")
+        static let share = String(localized: "contextMenu.share", defaultValue: "Share")
     }
     
     // MARK: - Help (Tooltips)
@@ -645,5 +646,7 @@ enum L10n {
         static func partialSuccess(_ saved: Int, _ total: Int) -> String {
             String(localized: "Saved \(saved) of \(total) pages", comment: "Partial conversion success message")
         }
+
+        static let scanAdded = String(localized: "scanner.scanAdded", defaultValue: "Scan added to list")
     }
 }

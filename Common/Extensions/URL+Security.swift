@@ -63,7 +63,7 @@ extension URL {
     ///     try Data(contentsOf: url)
     /// }
     /// ```
-    func withSecurityScope<T>(_ body: () throws -> T) rethrows -> T {
+    nonisolated func withSecurityScope<T>(_ body: () throws -> T) rethrows -> T {
         let didStartAccessing = self.startAccessingSecurityScopedResource()
         defer {
             if didStartAccessing {
@@ -165,7 +165,7 @@ extension URL {
     ///     }
     /// }
     /// ```
-    static func resolve(from bookmarkData: Data, isSecurityScoped: Bool = true) throws -> (url: URL, isStale: Bool) {
+    nonisolated static func resolve(from bookmarkData: Data, isSecurityScoped: Bool = true) throws -> (url: URL, isStale: Bool) {
         var isStale = false
         
         #if os(macOS)
