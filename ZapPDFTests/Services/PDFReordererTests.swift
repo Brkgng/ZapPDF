@@ -204,12 +204,13 @@ struct PDFReordererTests {
         
         let reorderer = PDFReorderer()
         
-        await #expect(throws: PDFEngineError.self) {
-            _ = try await reorderer.reorder(
-                file: file,
-                newOrder: [],
-                progress: { _ in }
-            )
+        do {
+            _ = try await reorderer.reorder(file: file, newOrder: [], progress: { _ in })
+            Issue.record("Should have thrown emptyInput")
+        } catch PDFEngineError.emptyInput {
+            // Expected
+        } catch {
+            Issue.record("Expected .emptyInput but got: \(error)")
         }
     }
     
@@ -221,32 +222,22 @@ struct PDFReordererTests {
         let file = PDFFile(url: url, fileName: "test.pdf", pageCount: 3, fileSize: 1000)
         
         let reorderer = PDFReorderer()
-        
-        // Out of bounds index
-        await #expect(throws: PDFEngineError.self) {
-            _ = try await reorderer.reorder(
-                file: file,
-                newOrder: [0, 99], // 99 is invalid
-                progress: { _ in }
-            )
-        }
-        
-        // Duplicate indices
-        await #expect(throws: PDFEngineError.self) {
-            _ = try await reorderer.reorder(
-                file: file,
-                newOrder: [0, 0, 1], // Duplicate 0
-                progress: { _ in }
-            )
-        }
-        
-        // Too many pages
-        await #expect(throws: PDFEngineError.self) {
-            _ = try await reorderer.reorder(
-                file: file,
-                newOrder: [0, 1, 2, 0], // 4 pages for 3 page doc
-                progress: { _ in }
-            )
+
+        let invalidOrders: [[Int]] = [
+            [0, 99],    // Out of bounds index
+            [0, 0, 1],  // Duplicate index
+            [0, 1, 2, 0] // Too many pages
+        ]
+
+        for order in invalidOrders {
+            do {
+                _ = try await reorderer.reorder(file: file, newOrder: order, progress: { _ in })
+                Issue.record("Should have thrown invalidPageRange for order \(order)")
+            } catch PDFEngineError.invalidPageRange {
+                // Expected
+            } catch {
+                Issue.record("Expected .invalidPageRange but got: \(error)")
+            }
         }
     }
     
@@ -292,5 +283,48 @@ struct PDFReordererTests {
         
         let document = PDFDocument(url: outputURL)
         #expect(document?.pageCount == 1)
+    }
+
+    // MARK: - Corrupt / Locked File Tests
+
+    @Test("Corrupt and empty files throw error")
+    func corruptFilesThrowError() async throws {
+        let id = UUID().uuidString
+        let fixtures: [(label: String, url: URL)] = try [
+            ("garbage",   PDFTestHelpers.createGarbagePDF(identifier: "reorder_garbage_\(id)")),
+            ("empty",     PDFTestHelpers.createEmptyPDF(identifier: "reorder_empty_\(id)")),
+            ("truncated", PDFTestHelpers.createTruncatedPDF(identifier: "reorder_trunc_\(id)"))
+        ]
+        defer { fixtures.forEach { PDFTestHelpers.cleanup(url: $0.url) } }
+
+        let reorderer = PDFReorderer()
+
+        for fixture in fixtures {
+            // pageCount: 1 + newOrder: [0] passes validation, so the engine
+            // reaches the file-open stage where corrupt input is detected.
+            let file = PDFFile(url: fixture.url, fileName: "\(fixture.label).pdf", pageCount: 1, fileSize: 100)
+            await #expect(throws: PDFEngineError.self) {
+                _ = try await reorderer.reorder(file: file, newOrder: [0], progress: { _ in })
+            }
+        }
+    }
+
+    @Test("Password-protected PDF throws passwordProtected")
+    func lockedPDFThrowsPasswordProtected() async throws {
+        let id = UUID().uuidString
+        let url = try PDFTestHelpers.createLockedPDF(identifier: "reorder_locked_\(id)")
+        defer { PDFTestHelpers.cleanup(url: url) }
+
+        let file = PDFFile(url: url, fileName: "locked.pdf", pageCount: 3, fileSize: 1000)
+        let reorderer = PDFReorderer()
+
+        do {
+            _ = try await reorderer.reorder(file: file, newOrder: [0, 1, 2], progress: { _ in })
+            Issue.record("Should have thrown passwordProtected")
+        } catch PDFEngineError.passwordProtected {
+            // Expected
+        } catch {
+            Issue.record("Expected .passwordProtected but got: \(error)")
+        }
     }
 }

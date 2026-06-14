@@ -126,13 +126,14 @@ struct PDFFlattenerTests {
         let file = PDFFile(url: nonExistentURL, fileName: "fake.pdf", pageCount: 1, fileSize: 1000)
         
         let flattener = PDFFlattener()
-        
-        await #expect(throws: PDFEngineError.self) {
-            _ = try await flattener.flatten(
-                file: file,
-                options: .init(),
-                progress: { _ in }
-            )
+
+        do {
+            _ = try await flattener.flatten(file: file, options: .init(), progress: { _ in })
+            Issue.record("Should have thrown invalidPDF")
+        } catch PDFEngineError.invalidPDF {
+            // Expected
+        } catch {
+            Issue.record("Expected .invalidPDF but got: \(error)")
         }
     }
     
@@ -280,6 +281,47 @@ struct PDFFlattenerTests {
     private static func removeLeftoverOutputs(matching prefix: String) {
         for url in leftoverOutputs(matching: prefix) {
             try? FileManager.default.removeItem(at: url)
+        }
+    }
+
+    // MARK: - Corrupt / Locked File Tests
+
+    @Test("Corrupt and empty files throw error")
+    func corruptFilesThrowError() async throws {
+        let id = UUID().uuidString
+        let fixtures: [(label: String, url: URL)] = try [
+            ("garbage",   PDFTestHelpers.createGarbagePDF(identifier: "flatten_garbage_\(id)")),
+            ("empty",     PDFTestHelpers.createEmptyPDF(identifier: "flatten_empty_\(id)")),
+            ("truncated", PDFTestHelpers.createTruncatedPDF(identifier: "flatten_trunc_\(id)"))
+        ]
+        defer { fixtures.forEach { PDFTestHelpers.cleanup(url: $0.url) } }
+
+        let flattener = PDFFlattener()
+
+        for fixture in fixtures {
+            let file = PDFFile(url: fixture.url, fileName: "\(fixture.label).pdf", pageCount: 1, fileSize: 100)
+            await #expect(throws: PDFEngineError.self) {
+                _ = try await flattener.flatten(file: file, options: .init(), progress: { _ in })
+            }
+        }
+    }
+
+    @Test("Password-protected PDF throws passwordProtected")
+    func lockedPDFThrowsPasswordProtected() async throws {
+        let id = UUID().uuidString
+        let url = try PDFTestHelpers.createLockedPDF(identifier: "flatten_locked_\(id)")
+        defer { PDFTestHelpers.cleanup(url: url) }
+
+        let file = PDFFile(url: url, fileName: "locked.pdf", pageCount: 3, fileSize: 1000)
+        let flattener = PDFFlattener()
+
+        do {
+            _ = try await flattener.flatten(file: file, options: .init(), progress: { _ in })
+            Issue.record("Should have thrown passwordProtected")
+        } catch PDFEngineError.passwordProtected {
+            // Expected
+        } catch {
+            Issue.record("Expected .passwordProtected but got: \(error)")
         }
     }
 }

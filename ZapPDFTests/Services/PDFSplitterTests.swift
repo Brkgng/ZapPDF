@@ -196,13 +196,17 @@ struct PDFSplitterTests {
         
         let splitter = PDFSplitter()
         
-        // Request pages beyond document length
-        await #expect(throws: PDFEngineError.self) {
+        do {
             _ = try await splitter.split(
                 file: file,
                 mode: .byPageRange(ranges: [3...10]),
                 progress: { _ in }
             )
+            Issue.record("Should have thrown invalidPageRange")
+        } catch PDFEngineError.invalidPageRange {
+            // Expected
+        } catch {
+            Issue.record("Expected .invalidPageRange but got: \(error)")
         }
     }
     
@@ -235,5 +239,69 @@ struct PDFSplitterTests {
         
         // Final should be 1.0
         #expect(progressValues.last == 1.0)
+    }
+
+    // MARK: - Corrupt / Locked File Tests
+
+    @Test("Non-existent file throws error")
+    func nonExistentFileThrowsError() async {
+        let nonExistentURL = URL(fileURLWithPath: "/nonexistent/file.pdf")
+        let file = PDFFile(url: nonExistentURL, fileName: "fake.pdf", pageCount: 1, fileSize: 1000)
+
+        let splitter = PDFSplitter()
+        await #expect(throws: PDFEngineError.self) {
+            _ = try await splitter.split(
+                file: file,
+                mode: .splitEvery(n: 1),
+                progress: { _ in }
+            )
+        }
+    }
+
+    @Test("Corrupt and empty files throw error")
+    func corruptFilesThrowError() async throws {
+        let id = UUID().uuidString
+        let fixtures: [(label: String, url: URL)] = try [
+            ("garbage",   PDFTestHelpers.createGarbagePDF(identifier: "split_garbage_\(id)")),
+            ("empty",     PDFTestHelpers.createEmptyPDF(identifier: "split_empty_\(id)")),
+            ("truncated", PDFTestHelpers.createTruncatedPDF(identifier: "split_trunc_\(id)"))
+        ]
+        defer { fixtures.forEach { PDFTestHelpers.cleanup(url: $0.url) } }
+
+        let splitter = PDFSplitter()
+
+        for fixture in fixtures {
+            let file = PDFFile(url: fixture.url, fileName: "\(fixture.label).pdf", pageCount: 1, fileSize: 100)
+            await #expect(throws: PDFEngineError.self) {
+                _ = try await splitter.split(
+                    file: file,
+                    mode: .splitEvery(n: 1),
+                    progress: { _ in }
+                )
+            }
+        }
+    }
+
+    @Test("Password-protected PDF throws passwordProtected")
+    func lockedPDFThrowsPasswordProtected() async throws {
+        let id = UUID().uuidString
+        let url = try PDFTestHelpers.createLockedPDF(identifier: "split_locked_\(id)")
+        defer { PDFTestHelpers.cleanup(url: url) }
+
+        let file = PDFFile(url: url, fileName: "locked.pdf", pageCount: 3, fileSize: 1000)
+        let splitter = PDFSplitter()
+
+        do {
+            _ = try await splitter.split(
+                file: file,
+                mode: .splitEvery(n: 1),
+                progress: { _ in }
+            )
+            Issue.record("Should have thrown passwordProtected")
+        } catch PDFEngineError.passwordProtected {
+            // Expected
+        } catch {
+            Issue.record("Expected .passwordProtected but got: \(error)")
+        }
     }
 }

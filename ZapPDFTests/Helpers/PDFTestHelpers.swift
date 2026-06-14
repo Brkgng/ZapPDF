@@ -230,6 +230,82 @@ enum PDFTestHelpers {
 
         return outputURL
     }
+
+    /// Create a file with deterministic garbage bytes and a `.pdf` extension.
+    ///
+    /// Simulates a misnamed or corrupted download that is not a valid PDF.
+    static func createGarbagePDF(
+        identifier: String = UUID().uuidString,
+        byteCount: Int = 256
+    ) throws -> URL {
+        let pattern = Array("not a valid pdf\n".utf8)
+        let bytes = (0..<max(0, byteCount)).map { pattern[$0 % pattern.count] }
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("garbage_\(identifier)")
+            .appendingPathExtension("pdf")
+        try Data(bytes).write(to: url)
+        return url
+    }
+
+    /// Create a 0-byte file with a `.pdf` extension.
+    static func createEmptyPDF(
+        identifier: String = UUID().uuidString
+    ) throws -> URL {
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("empty_\(identifier)")
+            .appendingPathExtension("pdf")
+        try Data().write(to: url)
+        return url
+    }
+
+    /// Create a valid multi-page PDF, then truncate it to ~40% of its size.
+    ///
+    /// The file starts with a real `%PDF-` header but the body is cut,
+    /// simulating a partial download or interrupted write.
+    static func createTruncatedPDF(
+        identifier: String = UUID().uuidString
+    ) throws -> URL {
+        let validURL = try createTestPDF(pageCount: 10, identifier: "trunc_src_\(identifier)")
+        defer { cleanup(url: validURL) }
+
+        let data = try Data(contentsOf: validURL)
+        let truncated = data.prefix(data.count / 5 * 2)
+
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("truncated_\(identifier)")
+            .appendingPathExtension("pdf")
+        try truncated.write(to: url)
+        return url
+    }
+
+    /// Create a password-protected PDF that requires a password to unlock.
+    ///
+    /// `PDFDocument(url:)` will return a non-nil document whose `isLocked`
+    /// property is `true`, allowing the `isLocked` guards in all engines
+    /// to be exercised.
+    static func createLockedPDF(
+        identifier: String = UUID().uuidString,
+        password: String = "zappdf-test-123"
+    ) throws -> URL {
+        let document = PDFDocument()
+        for pageNum in 1...3 {
+            if let page = createPage(number: pageNum) {
+                document.insert(page, at: document.pageCount)
+            }
+        }
+
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("locked_\(identifier)")
+            .appendingPathExtension("pdf")
+
+        guard document.write(to: url, withOptions: [
+            .userPasswordOption: password,
+            .ownerPasswordOption: password
+        ]) else {
+            throw TestHelperError.pdfCreationFailed
+        }
+        return url
+    }
     
     private static func createPage(number: Int) -> PDFPage? {
         // Create a simple page with text

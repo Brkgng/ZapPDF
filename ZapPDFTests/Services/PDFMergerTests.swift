@@ -144,13 +144,14 @@ struct PDFMergerTests {
         let file = PDFFile(url: nonExistentURL, fileName: "fake.pdf", pageCount: 1, fileSize: 1000)
         
         let merger = PDFMerger()
-        
-        await #expect(throws: PDFEngineError.self) {
-            _ = try await merger.merge(
-                files: [file],
-                options: .init(),
-                progress: { _ in }
-            )
+
+        do {
+            _ = try await merger.merge(files: [file], options: .init(), progress: { _ in })
+            Issue.record("Should have thrown invalidPDF")
+        } catch PDFEngineError.invalidPDF {
+            // Expected
+        } catch {
+            Issue.record("Expected .invalidPDF but got: \(error)")
         }
     }
 
@@ -439,5 +440,46 @@ struct PDFMergerTests {
 
         let document = PDFDocument(url: outputURL)
         #expect(document?.pageCount == 10)
+    }
+
+    // MARK: - Corrupt / Locked File Tests
+
+    @Test("Corrupt and empty files throw error")
+    func corruptFilesThrowError() async throws {
+        let id = UUID().uuidString
+        let fixtures: [(label: String, url: URL)] = try [
+            ("garbage",  PDFTestHelpers.createGarbagePDF(identifier: "merge_garbage_\(id)")),
+            ("empty",    PDFTestHelpers.createEmptyPDF(identifier: "merge_empty_\(id)")),
+            ("truncated", PDFTestHelpers.createTruncatedPDF(identifier: "merge_trunc_\(id)"))
+        ]
+        defer { fixtures.forEach { PDFTestHelpers.cleanup(url: $0.url) } }
+
+        let merger = PDFMerger()
+
+        for fixture in fixtures {
+            let file = PDFFile(url: fixture.url, fileName: "\(fixture.label).pdf", pageCount: 1, fileSize: 100)
+            await #expect(throws: PDFEngineError.self) {
+                _ = try await merger.merge(files: [file], options: .init(), progress: { _ in })
+            }
+        }
+    }
+
+    @Test("Password-protected PDF throws passwordProtected")
+    func lockedPDFThrowsPasswordProtected() async throws {
+        let id = UUID().uuidString
+        let url = try PDFTestHelpers.createLockedPDF(identifier: "merge_locked_\(id)")
+        defer { PDFTestHelpers.cleanup(url: url) }
+
+        let file = PDFFile(url: url, fileName: "locked.pdf", pageCount: 3, fileSize: 1000)
+        let merger = PDFMerger()
+
+        do {
+            _ = try await merger.merge(files: [file], options: .init(), progress: { _ in })
+            Issue.record("Should have thrown passwordProtected")
+        } catch PDFEngineError.passwordProtected {
+            // Expected
+        } catch {
+            Issue.record("Expected .passwordProtected but got: \(error)")
+        }
     }
 }
