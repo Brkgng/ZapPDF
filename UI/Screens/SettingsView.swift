@@ -23,9 +23,6 @@ struct SettingsView: View {
     // App Store subscription management URL
     private let subscriptionURL = URL(string: "https://apps.apple.com/account/subscriptions")
     
-    // Support form URL
-    private let supportURL = URL(string: "https://forms.gle/542Dty1NrMJcKCe98")
-    
     var body: some View {
         Group {
             #if os(macOS)
@@ -251,7 +248,7 @@ struct SettingsView: View {
     }
     
     private func contactSupport() {
-        if let url = supportURL {
+        if let url = SupportLink.mailtoURL(appName: "ZapPDF", appVersion: Bundle.main.appVersion) {
             openURL(url)
         }
     }
