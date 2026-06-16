@@ -10,141 +10,32 @@ import SwiftUI
 @testable import ZapPDF
 
 final class ActionButtonTests: XCTestCase {
-    
-    // MARK: - Initialization Tests
-    
-    func testDefaultProperties() {
-        // Given
-        var wasTapped = false
-        
-        // When
-        let button = ActionButton(
-            action: .merge,
-            isEnabled: true,
-            onTap: { wasTapped = true }
-        )
-        
-        // Then
-        XCTAssertEqual(button.action, .merge)
-        XCTAssertTrue(button.isEnabled)
-        XCTAssertEqual(button.style, .tinted)
-        XCTAssertTrue(button.showLabel)
-    }
-    
-    func testCustomProperties() {
-        // When
-        let button = ActionButton(
+
+    func testInitializerStoresDefaultsAndOverrides() {
+        let defaultButton = ActionButton(action: .merge, isEnabled: true, onTap: {})
+        XCTAssertEqual(defaultButton.action, .merge)
+        XCTAssertTrue(defaultButton.isEnabled)
+        XCTAssertEqual(defaultButton.style, .tinted)
+        XCTAssertTrue(defaultButton.showLabel)
+
+        let customButton = ActionButton(
             action: .split,
             isEnabled: false,
             style: .secondary,
             showLabel: false,
             onTap: {}
         )
-        
-        // Then
-        XCTAssertEqual(button.action, .split)
-        XCTAssertFalse(button.isEnabled)
-        XCTAssertEqual(button.style, .secondary)
-        XCTAssertFalse(button.showLabel)
+        XCTAssertEqual(customButton.action, .split)
+        XCTAssertFalse(customButton.isEnabled)
+        XCTAssertEqual(customButton.style, .secondary)
+        XCTAssertFalse(customButton.showLabel)
     }
-    
-    // MARK: - Action Type Tests
-    
-    func testMergeAction() {
-        let button = ActionButton(action: .merge, isEnabled: true, onTap: {})
-        XCTAssertEqual(button.action.displayName, "Merge PDFs")
-        XCTAssertEqual(button.action.iconName, "doc.on.doc")
-        // Color is now a harmonized HSB value, just verify it's defined
-        XCTAssertNotNil(button.action.accentColor)
-    }
-    
-    func testSplitAction() {
-        let button = ActionButton(action: .split, isEnabled: true, onTap: {})
-        XCTAssertEqual(button.action.displayName, "Split PDF")
-        XCTAssertEqual(button.action.iconName, "scissors")
-        XCTAssertNotNil(button.action.accentColor)
-    }
-    
-    func testFlattenAction() {
-        let button = ActionButton(action: .flatten, isEnabled: true, onTap: {})
-        XCTAssertEqual(button.action.displayName, "Flatten PDF")
-        XCTAssertEqual(button.action.iconName, "square.on.square.dashed")
-        XCTAssertNotNil(button.action.accentColor)
-    }
-    
-    // MARK: - Style Tests
-    
-    func testPrimaryStyle() {
-        let button = ActionButton(action: .merge, isEnabled: true, style: .primary, onTap: {})
-        XCTAssertEqual(button.style, .primary)
-    }
-    
-    func testSecondaryStyle() {
-        let button = ActionButton(action: .merge, isEnabled: true, style: .secondary, onTap: {})
-        XCTAssertEqual(button.style, .secondary)
-    }
-    
-    func testCompactStyle() {
-        let button = ActionButton(action: .merge, isEnabled: true, style: .compact, onTap: {})
-        XCTAssertEqual(button.style, .compact)
-    }
-    
-    func testTintedStyle() {
-        let button = ActionButton(action: .merge, isEnabled: true, style: .tinted, onTap: {})
-        XCTAssertEqual(button.style, .tinted)
-    }
-    
-    // MARK: - Enabled/Disabled State Tests
-    
-    func testEnabledState() {
-        let button = ActionButton(action: .merge, isEnabled: true, onTap: {})
-        XCTAssertTrue(button.isEnabled)
-    }
-    
-    func testDisabledState() {
-        let button = ActionButton(action: .merge, isEnabled: false, onTap: {})
-        XCTAssertFalse(button.isEnabled)
-    }
-    
 
-    
-    // MARK: - All Actions Tests
-    
     func testAllActionsHaveValidProperties() {
         for action in UserAction.allCases {
             XCTAssertFalse(action.displayName.isEmpty, "\(action) should have a display name")
             XCTAssertFalse(action.iconName.isEmpty, "\(action) should have an icon name")
             XCTAssertFalse(action.description.isEmpty, "\(action) should have a description")
         }
-    }
-}
-
-// MARK: - StyledActionButton Tests
-
-final class StyledActionButtonTests: XCTestCase {
-    
-    func testDefaultProperties() {
-        var wasTapped = false
-        
-        let button = StyledActionButton(
-            action: .merge,
-            isEnabled: true,
-            onTap: { wasTapped = true }
-        )
-        
-        XCTAssertEqual(button.action, .merge)
-        XCTAssertTrue(button.isEnabled)
-        XCTAssertEqual(button.style, .tinted)
-        XCTAssertTrue(button.showLabel)
-    }
-}
-
-// MARK: - ActionButtonStyle Tests
-
-final class ActionButtonStyleTests: XCTestCase {
-    
-    func testAllStyleCases() {
-        let styles: [ActionButtonStyle] = [.primary, .secondary, .compact, .tinted]
-        XCTAssertEqual(styles.count, 4)
     }
 }

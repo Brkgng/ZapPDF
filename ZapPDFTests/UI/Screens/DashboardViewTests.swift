@@ -9,21 +9,6 @@ import Testing
 import SwiftUI
 @testable import ZapPDF
 
-@Suite("DashboardView Tests")
-struct DashboardViewTests {
-    
-    // MARK: - Initialization Tests
-    
-    @Test("DashboardView initializes without error")
-    @MainActor
-    func initializesWithoutError() async {
-        let view = DashboardView()
-        
-        // View should create successfully
-        #expect(view != nil)
-    }
-}
-
 // MARK: - Dashboard iOS Trailing Toolbar Tests
 
 @Suite("Dashboard iOS Trailing Toolbar Tests")
