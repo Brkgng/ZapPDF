@@ -52,9 +52,9 @@ struct AppStoreReviewManagerTests {
         // Mark as shown for current version
         _ = await AppStoreReviewManager.shared.shouldShowAndMarkReviewPrompt()
 
-        // Simulate new launch by resetting only in-memory state
-        // Note: Can't fully test this without modifying actor internals
-        // This test verifies the Keychain persistence pattern
+        // Simulate a new launch by resetting only in-memory state.
+        await AppStoreReviewManager.shared.resetLaunchStateForTesting()
+
         let afterMark = await AppStoreReviewManager.shared.shouldShowAndMarkReviewPrompt()
 
         #expect(afterMark == false, "Should not show after version already prompted")
@@ -71,6 +71,11 @@ struct AppStoreReviewManagerTests {
 
         // Reset
         await AppStoreReviewManager.shared.resetForTesting()
+
+        #expect(
+            UserDefaults.standard.string(forKey: AppStoreReviewManager.lastPromptedVersionDefaultsKey) == nil,
+            "Reset should clear persisted review prompt version"
+        )
 
         // Should show again
         let afterReset = await AppStoreReviewManager.shared.shouldShowAndMarkReviewPrompt()

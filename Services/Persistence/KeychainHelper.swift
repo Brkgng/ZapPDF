@@ -76,9 +76,6 @@ enum KeychainHelper {
         
         /// Pro subscription status (cached for offline support)
         case proStatus = "com.zappdf.proStatus"
-        
-        /// Last app version that the review prompt was shown for
-        case lastReviewPromptVersion = "com.zappdf.review.lastPromptVersion"
 
         #if DEBUG
         /// Primary key used by KeychainHelper tests.

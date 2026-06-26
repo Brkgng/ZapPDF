@@ -30,6 +30,10 @@ actor AppStoreReviewManager: ReviewPromptManaging {
     /// Shared singleton instance.
     static let shared = AppStoreReviewManager()
 
+    // MARK: - Constants
+
+    static let lastPromptedVersionDefaultsKey = "com.zappdf.review.lastPromptVersion"
+
     // MARK: - Private Properties
 
     /// Track if review has been shown this app launch
@@ -58,16 +62,13 @@ actor AppStoreReviewManager: ReviewPromptManaging {
         guard let version = currentAppVersion else { return false }
 
         // Check if already prompted for this version
-        if let lastPromptedVersion = try? KeychainHelper.loadString(for: .lastReviewPromptVersion),
-           lastPromptedVersion == version {
+        if UserDefaults.standard.string(forKey: Self.lastPromptedVersionDefaultsKey) == version {
             return false
         }
 
         // Atomically mark as shown before returning true
         hasShownReviewThisLaunch = true
-        do {
-            try KeychainHelper.saveString(version, for: .lastReviewPromptVersion)
-        } catch {}
+        UserDefaults.standard.set(version, forKey: Self.lastPromptedVersionDefaultsKey)
 
         return true
     }
@@ -78,7 +79,13 @@ actor AppStoreReviewManager: ReviewPromptManaging {
     func resetForTesting() async {
         #if DEBUG
         hasShownReviewThisLaunch = false
-        try? KeychainHelper.delete(for: .lastReviewPromptVersion)
+        UserDefaults.standard.removeObject(forKey: Self.lastPromptedVersionDefaultsKey)
         #endif
     }
+
+    #if DEBUG
+    func resetLaunchStateForTesting() async {
+        hasShownReviewThisLaunch = false
+    }
+    #endif
 }
