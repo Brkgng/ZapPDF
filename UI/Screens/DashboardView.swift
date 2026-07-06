@@ -724,6 +724,13 @@ struct DashboardView: View {
         #endif
 
         #if os(macOS)
+        ToolbarItem(placement: .secondaryAction) {
+            SettingsLink {
+                Label(L10n.Settings.title, systemImage: "gearshape")
+            }
+            .help(L10n.Settings.title)
+        }
+
         if viewModel.hasFiles {
             ToolbarItem(placement: .secondaryAction) {
                 Menu {
