@@ -15,7 +15,7 @@ enum SupportLink {
     /// The support email address for ZapPDF.
     static let supportEmailAddress = "yasarberkergungor@gmail.com"
 
-    /// Builds a `mailto:` URL whose subject includes the app name and version.
+    /// Builds a `mailto:` URL whose subject includes the app name and public version.
     ///
     /// - Parameters:
     ///   - appName: The display name of the app (e.g. "ZapPDF").
@@ -33,13 +33,34 @@ enum SupportLink {
 
     /// Formats the prefilled support subject line.
     ///
-    /// When `appVersion` is non-empty the subject becomes `"<appName> Support (v<appVersion>)"`,
+    /// When `appVersion` is non-empty the subject becomes `"<appName> Support (v<version>)"`,
+    /// with any trailing numeric build suffix omitted.
     /// otherwise it falls back to `"<appName> Support"`.
     static func subject(appName: String, appVersion: String) -> String {
-        let trimmedVersion = appVersion.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmedVersion.isEmpty {
+        let publicVersion = publicVersion(from: appVersion)
+        if publicVersion.isEmpty {
             return "\(appName) Support"
         }
-        return "\(appName) Support (v\(trimmedVersion))"
+        return "\(appName) Support (v\(publicVersion))"
+    }
+
+    private static func publicVersion(from appVersion: String) -> String {
+        let trimmedVersion = appVersion.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmedVersion.hasSuffix(")") else {
+            return trimmedVersion
+        }
+        guard let buildPrefixRange = trimmedVersion.range(of: " (", options: .backwards) else {
+            return trimmedVersion
+        }
+
+        let buildStart = buildPrefixRange.upperBound
+        let buildEnd = trimmedVersion.index(before: trimmedVersion.endIndex)
+        let build = trimmedVersion[buildStart..<buildEnd]
+        guard !build.isEmpty, build.allSatisfy(\.isNumber) else {
+            return trimmedVersion
+        }
+
+        return String(trimmedVersion[..<buildPrefixRange.lowerBound])
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

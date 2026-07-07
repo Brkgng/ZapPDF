@@ -23,15 +23,14 @@ struct SupportLinkTests {
         #expect(components?.path == SupportLink.supportEmailAddress)
     }
 
-    @Test("Subject query item includes app name and version")
-    func subjectIncludesAppNameAndVersion() throws {
+    @Test("Subject query item includes app name and public version")
+    func subjectIncludesAppNameAndPublicVersion() throws {
         let url = try #require(SupportLink.mailtoURL(appName: "ZapPDF", appVersion: "1.2.3 (1)"))
 
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         let subject = try #require(components?.queryItems?.first { $0.name == "subject" }?.value)
 
-        #expect(subject.contains("ZapPDF"))
-        #expect(subject.contains("1.2.3 (1)"))
+        #expect(subject == "ZapPDF Support (v1.2.3)")
     }
 
     // MARK: - subject
@@ -42,10 +41,16 @@ struct SupportLinkTests {
         #expect(subject == "ZapPDF Support (v1.2.3)")
     }
 
-    @Test("Subject includes build when version string has one")
-    func subjectIncludesBuildWhenPresent() {
+    @Test("Subject omits build when version string has one")
+    func subjectOmitsBuildWhenPresent() {
         let subject = SupportLink.subject(appName: "ZapPDF", appVersion: "1.2.3 (1)")
-        #expect(subject == "ZapPDF Support (v1.2.3 (1))")
+        #expect(subject == "ZapPDF Support (v1.2.3)")
+    }
+
+    @Test("Subject omits build for single-component version")
+    func subjectOmitsBuildForSingleComponentVersion() {
+        let subject = SupportLink.subject(appName: "ZapPDF", appVersion: "1 (5)")
+        #expect(subject == "ZapPDF Support (v1)")
     }
 
     @Test("Subject omits version segment when version is empty")
